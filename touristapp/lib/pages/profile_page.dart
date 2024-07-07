@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:touristapp/pages/editprofilepage.dart';
+import 'settings.dart';
 
 class ProfilePage extends StatelessWidget {
 
@@ -53,6 +54,7 @@ class ProfilePage extends StatelessWidget {
               title: Text('Settings'),
               onTap: () {
                 // Navigate to Settings Page
+                Get.to(SettingsPage());
               },
             ),
             ListTile(
