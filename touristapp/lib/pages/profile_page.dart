@@ -32,12 +32,12 @@ class ProfilePage extends StatelessWidget {
               ),
             SizedBox(height: 16),
             Text(
-              'No Name',
+              'Name',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
-               'No Email',
+               'Email',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 24),
