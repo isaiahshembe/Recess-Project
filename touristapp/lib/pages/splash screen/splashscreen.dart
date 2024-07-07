@@ -11,7 +11,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MainPage()),
@@ -28,9 +28,9 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              'images/muchison.jpg',
-              height: 350.0,
-              width: 250.0,
+              'images/display_image1.jpg',
+             // height: 350.0,
+            // width: 250.0,
               
             ),
             SizedBox(height: 20.0),
