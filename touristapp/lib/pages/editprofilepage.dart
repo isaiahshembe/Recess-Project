@@ -43,10 +43,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
               controller: _nameController,
               decoration: InputDecoration(labelText: 'Name'),
             ),
+            
+            SizedBox(height: 10.0),
+
             TextField(
               controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
+
           ],
         ),
       ),
