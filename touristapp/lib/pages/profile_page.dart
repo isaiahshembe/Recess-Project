@@ -1,22 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:touristapp/utilities/bottom_nav.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:touristapp/pages/editprofilepage.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class ProfilePage extends StatelessWidget {
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      body: Center(
-        child: Text('Profile Page'),
+      appBar: AppBar(
+        title: Text('Profile'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Get.to(EditProfilePage());
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () async {},
+          ),
+        ],
       ),
-      bottomNavigationBar: BottomNav(),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 50,
+              ),
+            SizedBox(height: 16),
+            Text(
+              'No Name',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+               'No Email',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 24),
+            ListTile(
+              leading: Icon(Icons.history),
+              title: Text('Booking History'),
+              onTap: () {
+                // Navigate to Booking History Page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                // Navigate to Settings Page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.help),
+              title: Text('Help & Support'),
+              onTap: () {
+                // Navigate to Help & Support Page
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
