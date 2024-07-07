@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:touristapp/pages/editprofilepage.dart';
+import 'package:touristapp/pages/settings_page.dart';
 
 class ProfilePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50,
-              ),
+            ),
             SizedBox(height: 16),
             Text(
               'Name',
@@ -37,7 +37,7 @@ class ProfilePage extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-               'Email',
+              'Email',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 24),
@@ -52,7 +52,7 @@ class ProfilePage extends StatelessWidget {
               leading: Icon(Icons.settings),
               title: Text('Settings'),
               onTap: () {
-                // Navigate to Settings Page
+                Get.to(SettingsPage());
               },
             ),
             ListTile(
