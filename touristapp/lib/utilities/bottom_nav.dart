@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:touristapp/pages/booking_page.dart';
+
+import 'package:touristapp/pages/google_map.dart';
 import 'package:touristapp/pages/main_page.dart';
 import 'package:touristapp/pages/profile_page.dart';
 
@@ -21,7 +22,7 @@ class BottomNav extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-              Get.to(BookingPage());
+              Get.to(GoogleMapPage());
             },
             icon: Icon(Icons.place),
           ),

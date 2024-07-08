@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 
-class BookingPage extends StatefulWidget {
-  const BookingPage({super.key});
+class GoogleMapPage extends StatefulWidget {
+  const GoogleMapPage({super.key});
 
   @override
-  State<BookingPage> createState() => _BookingPageState();
+  State<GoogleMapPage> createState() => _GoogleMapPageState();
 }
 
-class _BookingPageState extends State<BookingPage> {
+class _GoogleMapPageState extends State<GoogleMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       
       body: Center(
-        child: Text('Bookings Page'),
+        child: Text('Google map page'),
       ),
       bottomNavigationBar: BottomNav(),
     );

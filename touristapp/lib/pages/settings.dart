@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:touristapp/pages/about_us_page.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -33,7 +35,6 @@ class _SettingsPageState extends State<SettingsPage> {
             onChanged: (bool value) {
               setState(() {
                 _darkModeEnabled = value;
-                
               });
             },
           ),
@@ -44,7 +45,6 @@ class _SettingsPageState extends State<SettingsPage> {
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedLanguage = newValue!;
-                
                 });
               },
               items: <String>['English', 'Spanish', 'French', 'German']
@@ -59,14 +59,12 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             title: Text('About'),
             onTap: () {
-              
+              Get.to(AboutUsPage());
             },
           ),
           ListTile(
             title: Text('Privacy Policy'),
-            onTap: () {
-
-            },
+            onTap: () {},
           ),
         ],
       ),
