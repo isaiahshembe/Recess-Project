@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:touristapp/pages/about_us_page.dart';
+import 'package:touristapp/pages/privacy_policy_page.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -64,7 +65,9 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           ListTile(
             title: Text('Privacy Policy'),
-            onTap: () {},
+            onTap: () {
+              Get.to(PrivacyPolicyPage());
+            },
           ),
         ],
       ),
