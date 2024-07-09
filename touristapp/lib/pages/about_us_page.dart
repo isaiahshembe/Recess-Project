@@ -43,6 +43,23 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   fontSize: 16,
                 ),
               ),
+              Text(
+              'Features:',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              '- Comprehensive information about destinations, attractions, accommodations, and local services.\n'
+              '- Personalized recommendations based on your preferences and current location.\n'
+              '- Real-time updates on weather, events, transportation, and safety alerts.\n'
+              '- Secure user authentication and profile management.\n'
+              '- Offline access to essential information and maps.\n'
+              '- Support for multiple languages.',
+              style: TextStyle(fontSize: 16),
+            ),
               SizedBox(height: 20),
               Text(
                 'Download Go Safari today and embark on your next adventure!',
@@ -66,6 +83,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
           ),
         ),
       ),
-    );;
+    );
   }
 }
