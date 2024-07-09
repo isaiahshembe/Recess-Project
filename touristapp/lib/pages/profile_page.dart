@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:touristapp/pages/editprofilepage.dart';
+import 'package:touristapp/pages/settings/helpsupport.dart';
 import 'settings.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -63,6 +63,7 @@ class ProfilePage extends StatelessWidget {
               title: Text('Help & Support'),
               onTap: () {
                 // Navigate to Help & Support Page
+                Get.to(HelpSupportPage());
               },
             ),
           ],

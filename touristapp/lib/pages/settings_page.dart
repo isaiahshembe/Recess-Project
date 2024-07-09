@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:touristapp/pages/about_us_page.dart';
+import 'package:touristapp/pages/privacy_policy_page.dart';
+import 'package:touristapp/pages/settings/localprovider.dart';
+import 'package:touristapp/pages/settings/themeprovider.dart';
+import 'package:touristapp/l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -6,105 +13,74 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _pushNotificationsEnabled = true;
-  bool _darkModeEnabled = false;
-  bool _offlineModeEnabled = false;
+  bool _notificationsEnabled = true;
+  String _selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.translate('settings')),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16.0),
         children: <Widget>[
+          SwitchListTile(
+            title: Text(AppLocalizations.of(context)!.translate('enableNotifications')),
+            value: _notificationsEnabled,
+            onChanged: (bool value) {
+              setState(() {
+                _notificationsEnabled = value;
+              });
+            },
+          ),
+          SwitchListTile(
+            title: Text(AppLocalizations.of(context)!.translate('darkMode')),
+            value: themeProvider.isDarkMode,
+            onChanged: (bool value) {
+              themeProvider.toggleDarkMode(value);
+            },
+          ),
           ListTile(
-            title: Text('Push Notifications'),
-            trailing: Switch(
-              value: _pushNotificationsEnabled,
-              onChanged: (value) {
+            title: Text(AppLocalizations.of(context)!.translate('language')),
+            trailing: DropdownButton<String>(
+              value: _selectedLanguage,
+              onChanged: (String? newValue) {
                 setState(() {
-                  _pushNotificationsEnabled = value;
+                  _selectedLanguage = newValue!;
+                  localeProvider.setLocale(Locale(
+                    _selectedLanguage == 'English' ? 'en' : 'es',
+                  ));
                 });
               },
+              items: <String>['English', 'Spanish']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ),
           ListTile(
-            title: Text('Dark Mode'),
-            trailing: Switch(
-              value: _darkModeEnabled,
-              onChanged: (value) {
-                setState(() {
-                  _darkModeEnabled = value;
-               
-                });
-              },
-            ),
-          ),
-          ListTile(
-            title: Text('Offline Mode'),
-            trailing: Switch(
-              value: _offlineModeEnabled,
-              onChanged: (value) {
-                setState(() {
-                  _offlineModeEnabled = value;
-                  
-                });
-              },
-            ),
-          ),
-          ListTile(
-            title: Text('Language'),
+            title: Text(AppLocalizations.of(context)!.translate('about')),
             onTap: () {
-              
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Select Language'),
-                    content: Text('Implement language selection here.'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text('OK'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutUsPage()),
               );
             },
           ),
           ListTile(
-            title: Text('Feedback and Support'),
+            title: Text(AppLocalizations.of(context)!.translate('privacyPolicy')),
             onTap: () {
-          
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Feedback and Support'),
-                    content: Text('Implement feedback and support options here.'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text('OK'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
+              Get.to(PrivacyPolicyPage());
             },
           ),
-  
         ],
       ),
     );
   }
 }
-
-
