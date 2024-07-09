@@ -65,7 +65,7 @@ class ProfilePage extends StatelessWidget {
               title: const Text('Help & Support'),
               onTap: () {
                 // Navigate to Help & Support Page
-                Get.to(HelpSupportPage());
+                Get.to(const HelpSupportPage());
               },
             ),
           ],

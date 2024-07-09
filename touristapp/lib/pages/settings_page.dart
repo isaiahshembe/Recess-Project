@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:touristapp/pages/about_us_page.dart';
-import 'package:touristapp/pages/privacy_policy_page.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
 import 'package:touristapp/l10n/app_localizations.dart';
@@ -16,7 +13,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool _notificationsEnabled = true;
-  String _selectedLanguage = 'English';
+  final String _selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {

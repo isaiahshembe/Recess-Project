@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpSupportPage extends StatelessWidget {
+  const HelpSupportPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Help & Support'),
+        title: const Text('Help & Support'),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         children: <Widget>[
           _buildSectionTitle(context, 'Frequently Asked Questions'),
           _buildFAQItem(
@@ -27,29 +29,29 @@ class HelpSupportPage extends StatelessWidget {
             'How to contact support?',
             'You can contact our support team through the Contact Us section below.',
           ),
-          SizedBox(height: 24.0),
+          const SizedBox(height: 24.0),
           _buildSectionTitle(context, 'Contact Us'),
           ListTile(
-            leading: Icon(Icons.email),
-            title: Text('Email'),
-            subtitle: Text('info@sofari.com'),
+            leading: const Icon(Icons.email),
+            title: const Text('Email'),
+            subtitle: const Text('info@sofari.com'),
             onTap: () {
               _launchEmail('info@sofari.com');
             },
           ),
           ListTile(
-            leading: Icon(Icons.phone),
-            title: Text('Phone'),
-            subtitle: Text('+256 752 160171'),
+            leading: const Icon(Icons.phone),
+            title: const Text('Phone'),
+            subtitle: const Text('+256 752 160171'),
             onTap: () {
               _launchPhone('+256 752 160171');
             },
           ),
-          SizedBox(height: 24.0),
+          const SizedBox(height: 24.0),
           _buildSectionTitle(context, 'More Help'),
           ListTile(
-            leading: Icon(Icons.web),
-            title: Text('Visit our support website'),
+            leading: const Icon(Icons.web),
+            title: const Text('Visit our support website'),
             onTap: () {
               _launchWebsite('https://github.com/isaiahshembe/Recess-Project');
             },

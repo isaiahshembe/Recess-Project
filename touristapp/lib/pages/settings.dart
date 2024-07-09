@@ -62,13 +62,13 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             title: const Text('About'),
             onTap: () {
-              Get.to(AboutUsPage());
+              Get.to(const AboutUsPage());
             },
           ),
           ListTile(
             title: const Text('Privacy Policy'),
             onTap: () {
-              Get.to(PrivacyPolicyPage());
+              Get.to(const PrivacyPolicyPage());
             },
           ),
         ],

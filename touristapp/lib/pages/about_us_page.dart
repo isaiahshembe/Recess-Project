@@ -12,7 +12,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Us'),
+        title: const Text('About Us'),
       ),
       body: Center(
         child: Padding(
@@ -25,16 +25,16 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 'images/display_image1.jpg', 
                 height: 100,
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Welcome to Go Safari!',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'At Go Safari, we are passionate about making your safari experience unforgettable. '
                 'Explore the wild and beautiful landscapes with ease, discover hidden gems, and '
                 'immerse yourself in local culture and wildlife.',
@@ -43,15 +43,15 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   fontSize: 16,
                 ),
               ),
-              Text(
+              const Text(
               'Features:',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               '- Comprehensive information about destinations, attractions, accommodations, and local services.\n'
               '- Personalized recommendations based on your preferences and current location.\n'
               '- Real-time updates on weather, events, transportation, and safety alerts.\n'
@@ -60,8 +60,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
               '- Support for multiple languages.',
               style: TextStyle(fontSize: 16),
             ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Download Go Safari today and embark on your next adventure!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -70,7 +70,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   color: Colors.blue,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 'Contact us: info@gosafari.com',
                 textAlign: TextAlign.center,

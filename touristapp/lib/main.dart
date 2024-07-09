@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:touristapp/localization/app_localizations.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
-import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
 
 void main() {
 <<<<<<< HEAD
@@ -17,7 +13,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 >>>>>>> 16779a3ac9759173de7cbabb6b8f77eaec2260c6

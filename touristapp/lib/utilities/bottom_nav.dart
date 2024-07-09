@@ -26,11 +26,7 @@ class BottomNav extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-<<<<<<< HEAD
               Get.to(const BookingPage());
-=======
-              Get.to(GoogleMapPage());
->>>>>>> 16779a3ac9759173de7cbabb6b8f77eaec2260c6
             },
             icon: const Icon(Icons.place),
           ),
