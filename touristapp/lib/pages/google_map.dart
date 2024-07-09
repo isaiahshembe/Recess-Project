@@ -4,13 +4,14 @@ import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 
-class BookingPage extends StatefulWidget {
-  const BookingPage({super.key});
+class GoogleMapPage extends StatefulWidget {
+  const GoogleMapPage({super.key});
 
   @override
-  State<BookingPage> createState() => _BookingPageState();
+  State<GoogleMapPage> createState() => _GoogleMapPageState();
 }
 
+<<<<<<< HEAD:touristapp/lib/pages/booking_page.dart
 class _BookingPageState extends State<BookingPage> {
   final MapController _mapController = MapController();
   final List<Marker> _markers = [];
@@ -21,6 +22,15 @@ class _BookingPageState extends State<BookingPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Map/Booking'),
+=======
+class _GoogleMapPageState extends State<GoogleMapPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      
+      body: Center(
+        child: Text('Google map page'),
+>>>>>>> 16779a3ac9759173de7cbabb6b8f77eaec2260c6:touristapp/lib/pages/google_map.dart
       ),
       body: Column(
         children: [

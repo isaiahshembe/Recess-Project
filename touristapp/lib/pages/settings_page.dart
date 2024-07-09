@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:touristapp/pages/about_us_page.dart';
+import 'package:touristapp/pages/privacy_policy_page.dart';
+import 'package:touristapp/pages/settings/localprovider.dart';
+import 'package:touristapp/pages/settings/themeprovider.dart';
+import 'package:touristapp/l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -8,31 +15,73 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _pushNotificationsEnabled = true;
-  bool _darkModeEnabled = false;
-  bool _offlineModeEnabled = false;
+  bool _notificationsEnabled = true;
+  String _selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: const Text('Settings'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
+=======
+        title: Text(AppLocalizations.of(context)!.translate('settings')),
+      ),
+      body: ListView(
+>>>>>>> 16779a3ac9759173de7cbabb6b8f77eaec2260c6
         children: <Widget>[
+          SwitchListTile(
+            title: Text(AppLocalizations.of(context)!.translate('enableNotifications')),
+            value: _notificationsEnabled,
+            onChanged: (bool value) {
+              setState(() {
+                _notificationsEnabled = value;
+              });
+            },
+          ),
+          SwitchListTile(
+            title: Text(AppLocalizations.of(context)!.translate('darkMode')),
+            value: themeProvider.isDarkMode,
+            onChanged: (bool value) {
+              themeProvider.toggleDarkMode(value);
+            },
+          ),
           ListTile(
+<<<<<<< HEAD
             title: const Text('Push Notifications'),
             trailing: Switch(
               value: _pushNotificationsEnabled,
               onChanged: (value) {
+=======
+            title: Text(AppLocalizations.of(context)!.translate('language')),
+            trailing: DropdownButton<String>(
+              value: _selectedLanguage,
+              onChanged: (String? newValue) {
+>>>>>>> 16779a3ac9759173de7cbabb6b8f77eaec2260c6
                 setState(() {
-                  _pushNotificationsEnabled = value;
+                  _selectedLanguage = newValue!;
+                  localeProvider.setLocale(Locale(
+                    _selectedLanguage == 'English' ? 'en' : 'es',
+                  ));
                 });
               },
+              items: <String>['English', 'Spanish']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ),
           ListTile(
+<<<<<<< HEAD
             title: const Text('Dark Mode'),
             trailing: Switch(
               value: _darkModeEnabled,
@@ -76,10 +125,18 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   );
                 },
+=======
+            title: Text(AppLocalizations.of(context)!.translate('about')),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutUsPage()),
+>>>>>>> 16779a3ac9759173de7cbabb6b8f77eaec2260c6
               );
             },
           ),
           ListTile(
+<<<<<<< HEAD
             title: const Text('Feedback and Support'),
             onTap: () {
           
@@ -100,13 +157,15 @@ class _SettingsPageState extends State<SettingsPage> {
                   );
                 },
               );
+=======
+            title: Text(AppLocalizations.of(context)!.translate('privacyPolicy')),
+            onTap: () {
+              Get.to(PrivacyPolicyPage());
+>>>>>>> 16779a3ac9759173de7cbabb6b8f77eaec2260c6
             },
           ),
-  
         ],
       ),
     );
   }
 }
-
-

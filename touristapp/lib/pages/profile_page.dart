@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:touristapp/pages/editprofilepage.dart';
+import 'package:touristapp/pages/settings/helpsupport.dart';
 import 'settings.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -31,6 +32,7 @@ class ProfilePage extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 50,
+              backgroundImage: AssetImage('images/display_image1.jpg'),
               ),
             const SizedBox(height: 16),
             const Text(
@@ -63,6 +65,7 @@ class ProfilePage extends StatelessWidget {
               title: const Text('Help & Support'),
               onTap: () {
                 // Navigate to Help & Support Page
+                Get.to(HelpSupportPage());
               },
             ),
           ],
