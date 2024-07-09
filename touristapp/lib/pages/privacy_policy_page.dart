@@ -132,7 +132,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           ],
         ),
       ),
-    );;
+    );
   }
 }
 

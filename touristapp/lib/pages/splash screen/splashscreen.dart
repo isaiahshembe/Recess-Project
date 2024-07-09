@@ -29,8 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             Image.asset(
               'images/display_image1.jpg',
-             // height: 350.0,
-            // width: 250.0,
+             height: 350.0,
+            width: 250.0,
               
             ),
             SizedBox(height: 20.0),
