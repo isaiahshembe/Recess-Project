@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:touristapp/pages/editprofilepage.dart';
 import 'settings.dart';
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () {
-              Get.to(EditProfilePage());
+              Get.to(const EditProfilePage());
             },
           ),
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () async {},
           ),
         ],
@@ -28,38 +29,38 @@ class ProfilePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 50,
               ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Name',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
                'Email',
               style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             ListTile(
-              leading: Icon(Icons.history),
-              title: Text('Booking History'),
+              leading: const Icon(Icons.history),
+              title: const Text('Booking History'),
               onTap: () {
                 // Navigate to Booking History Page
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
               onTap: () {
                 // Navigate to Settings Page
-                Get.to(SettingsPage());
+                Get.to(const SettingsPage());
               },
             ),
             ListTile(
-              leading: Icon(Icons.help),
-              title: Text('Help & Support'),
+              leading: const Icon(Icons.help),
+              title: const Text('Help & Support'),
               onTap: () {
                 // Navigate to Help & Support Page
               },

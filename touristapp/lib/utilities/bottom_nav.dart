@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:touristapp/pages/booking_page.dart';
 import 'package:touristapp/pages/main_page.dart';
 import 'package:touristapp/pages/profile_page.dart';
+import 'package:touristapp/pages/booking_page.dart';
 
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key});
@@ -10,10 +10,10 @@ class BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
           color: Colors.grey.shade300,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       height: 60,
       child: Row(
@@ -21,20 +21,20 @@ class BottomNav extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-              Get.to(BookingPage());
+              Get.to(const BookingPage());
             },
-            icon: Icon(Icons.place),
+            icon: const Icon(Icons.place),
           ),
           IconButton(
               onPressed: () {
-                Get.to(MainPage());
+                Get.to(const MainPage());
               },
-              icon: Icon(Icons.home)),
+              icon: const Icon(Icons.home)),
           IconButton(
               onPressed: () {
-                Get.to(ProfilePage());
+                Get.to(const ProfilePage());
               },
-              icon: Icon(Icons.person)),
+              icon: const Icon(Icons.person)),
         ],
       ),
     );

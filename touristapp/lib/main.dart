@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  GetMaterialApp(
+    return  const GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
 

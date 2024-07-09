@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -14,13 +16,13 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         children: <Widget>[
           ListTile(
-            title: Text('Push Notifications'),
+            title: const Text('Push Notifications'),
             trailing: Switch(
               value: _pushNotificationsEnabled,
               onChanged: (value) {
@@ -31,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           ListTile(
-            title: Text('Dark Mode'),
+            title: const Text('Dark Mode'),
             trailing: Switch(
               value: _darkModeEnabled,
               onChanged: (value) {
@@ -43,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           ListTile(
-            title: Text('Offline Mode'),
+            title: const Text('Offline Mode'),
             trailing: Switch(
               value: _offlineModeEnabled,
               onChanged: (value) {
@@ -55,18 +57,18 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           ListTile(
-            title: Text('Language'),
+            title: const Text('Language'),
             onTap: () {
               
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Select Language'),
-                    content: Text('Implement language selection here.'),
+                    title: const Text('Select Language'),
+                    content: const Text('Implement language selection here.'),
                     actions: <Widget>[
                       TextButton(
-                        child: Text('OK'),
+                        child: const Text('OK'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -78,18 +80,18 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           ListTile(
-            title: Text('Feedback and Support'),
+            title: const Text('Feedback and Support'),
             onTap: () {
           
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Feedback and Support'),
-                    content: Text('Implement feedback and support options here.'),
+                    title: const Text('Feedback and Support'),
+                    content: const Text('Implement feedback and support options here.'),
                     actions: <Widget>[
                       TextButton(
-                        child: Text('OK'),
+                        child: const Text('OK'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
