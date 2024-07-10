@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:carousel_slider/carousel_slider.dart'; // Import carousel_slider package
 import 'package:touristapp/pages/car_rentals.dart';
 import 'package:touristapp/pages/main_page.dart';
 import 'package:touristapp/pages/profile_page.dart';
-import 'package:touristapp/pages/settings.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -14,50 +14,76 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  // Example image URLs and captions
+  final List<Map<String, dynamic>> bannerImages = [
+    {'image': 'images/kidepo.jpeg', 'caption': 'Explore beautiful destinations'},
+    {'image': 'images/kampala-sheraton-hotel.jpg', 'caption': 'Find cozy stays'},
+    {'image': 'images/westnile.jpeg', 'caption': 'Discover exciting attractions'},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tourist App'),
+        title: const Text('Tourist App'),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              KeySectorsSection(),
-              SizedBox(height: 16),
-              Text(
-                'Find exclusive genius rewards in every corner of the world',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 40),
+            CarouselSlider.builder(
+              itemCount: bannerImages.length,
+              options: CarouselOptions(
+                autoPlay: true,
+                enlargeCenterPage: true,
+                viewportFraction: 0.9,
+                aspectRatio: 2.0,
+                autoPlayInterval: const Duration(seconds: 3),
               ),
-              SizedBox(height: 16),
-              TrendingDestinationsSection(),
-              SizedBox(height: 16),
-              OtherCitiesSection(),
-              SizedBox(height: 16),
-              Text(
-                'Explore Uganda.',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              MoreCitiesSection(),
-            ],
-          ),
+              itemBuilder: (BuildContext context, int index, int realIndex) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      image: NetworkImage(bannerImages[index]['image']),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      bannerImages[index]['caption'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 30),
+            KeySectorsSection(),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
-      bottomNavigationBar: BottomNav(),
+      bottomNavigationBar: const BottomNav(),
     );
   }
 }
 
 class KeySectorsSection extends StatelessWidget {
   final List<Map<String, dynamic>> keySectors = [
-    {'name': 'Stays', 'icon': Icons.hotel, 'page': ProfilePage()},
-    {'name': 'Attractions', 'icon': Icons.attractions, 'page': MainPage()},
-    {'name': 'Car Rentals', 'icon': Icons.directions_car, 'page': CarRentalsPage()},
+    {'name': 'Stays', 'icon': Icons.hotel, 'page': const ProfilePage()},
+    {'name': 'Attractions', 'icon': Icons.attractions, 'page': const MainPage()},
+    {'name': 'Car Rentals', 'icon': Icons.directions_car, 'page': const CarRentalsPage()},
   ];
+
+  KeySectorsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,109 +100,6 @@ class KeySectorsSection extends StatelessWidget {
               Text(sector['name']),
             ],
           ),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class TrendingDestinationsSection extends StatelessWidget {
-  final List<Map<String, String>> trendingDestinations = [
-    {'name': 'Kampala', 'image': 'images/muchison.jpg'},
-    {'name': 'Entebbe', 'image': 'images/muchison.jpg'},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: trendingDestinations.map((destination) {
-        return Stack(
-          children: [
-            Image.asset(destination['image']!, width: 150, height: 150, fit: BoxFit.cover),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Container(
-                color: Colors.black54,
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Text(
-                  destination['name']!,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        );
-      }).toList(),
-    );
-  }
-}
-
-class OtherCitiesSection extends StatelessWidget {
-  final List<Map<String, String>> otherCities = [
-    {'name': 'Toronto', 'image': 'images/muchison.jpg'},
-    {'name': 'Nairobi', 'image': 'images/muchison.jpg'},
-    {'name': 'Dubai', 'image': 'images/muchison.jpg'},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: otherCities.map((city) {
-        return Stack(
-          children: [
-            Image.asset(city['image']!, width: 100, height: 100, fit: BoxFit.cover),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Container(
-                color: Colors.black54,
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Text(
-                  city['name']!,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        );
-      }).toList(),
-    );
-  }
-}
-
-class MoreCitiesSection extends StatelessWidget {
-  final List<Map<String, String>> moreCities = [
-    {'name': 'Mbarara', 'image': 'images/muchison.jpg'},
-    {'name': 'Entebbe', 'image': 'images/muchison.jpg'},
-    {'name': 'Jinja', 'image': 'images/muchison.jpg'},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 3,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: moreCities.map((city) {
-        return Stack(
-          children: [
-            Image.asset(city['image']!, width: 100, height: 100, fit: BoxFit.cover),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Container(
-                color: Colors.black54,
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Text(
-                  city['name']!,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
         );
       }).toList(),
     );

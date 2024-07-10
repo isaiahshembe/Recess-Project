@@ -17,12 +17,11 @@ class _BookingPageState extends State<BookingPage> {
   final TextEditingController _searchController = TextEditingController();
 
   // Sample carousel items
-  final List<String> carouselItems = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
+  final List<Map<String, dynamic>> carouselItems = [
+    {'image': 'images/kampala-sheraton-hotel.jpg', 'caption': 'Cozy Hotels'},
+    {'image': 'images/kidepo.jpeg', 'caption': 'Tourist Attractions'},
+    {'image': 'images/murchision.jpg', 'caption': 'Beautiful Accomodation'},
+    {'image': 'images/westnile.jpeg', 'caption': 'Scenic Mountains'},
   ];
 
   @override
@@ -80,13 +79,13 @@ class _BookingPageState extends State<BookingPage> {
           ),
           SizedBox(
             height: 200,
-            child: CarouselSlider(
-              items: carouselItems.map((item) => _buildCarouselItem(item)).toList(),
+            child: CarouselSlider.builder(
+              itemCount: carouselItems.length,
               options: CarouselOptions(
                 autoPlay: true,
                 enlargeCenterPage: true,
                 viewportFraction: 0.8,
-                aspectRatio: 16/9,
+                aspectRatio: 16 / 9,
                 autoPlayCurve: Curves.fastOutSlowIn,
                 autoPlayAnimationDuration: const Duration(milliseconds: 800),
                 enableInfiniteScroll: true,
@@ -94,6 +93,28 @@ class _BookingPageState extends State<BookingPage> {
                 pauseAutoPlayOnTouch: true,
                 scrollDirection: Axis.horizontal,
               ),
+              itemBuilder: (BuildContext context, int index, int realIndex) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      image: AssetImage(carouselItems[index]['image']),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      carouselItems[index]['caption'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -199,22 +220,6 @@ class _BookingPageState extends State<BookingPage> {
     // Handle the booking logic here
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Place booked successfully!')),
-    );
-  }
-
-  Widget _buildCarouselItem(String item) {
-    return Container(
-      margin: const EdgeInsets.all(5.0),
-      decoration: BoxDecoration(
-        color: Colors.blueGrey,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Center(
-        child: Text(
-          item,
-          style: const TextStyle(fontSize: 20.0, color: Colors.white),
-        ),
-      ),
     );
   }
 }

@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }

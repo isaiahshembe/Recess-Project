@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      home: SplashScreen(), // Use your splash screen here
+      home: const SplashScreen(), // Use your splash screen here
     );
   }
 }
