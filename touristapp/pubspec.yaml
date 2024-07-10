@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  geocoding: ^3.0.0
   flutter_map: ^4.0.0
   latlong2: ^0.8.0
   get: ^4.6.6
@@ -46,7 +47,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
 
-  geocoding: any
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -47,7 +47,7 @@ class _BookingPageState extends State<BookingPage> {
             child: FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                center: LatLng(-33.865143, 151.209900),
+                center: LatLng(0.3152, 32.5816),
                 zoom: 10.0,
                 onTap: _handleTap,
               ),
@@ -118,33 +118,51 @@ class _BookingPageState extends State<BookingPage> {
 
   void _searchPlace() async {
     final query = _searchController.text;
-    if (query.isEmpty) return;
+    if (query.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a place to search')),
+      );
+      return;
+    }
 
     try {
-      final locations = await locationFromAddress(query);
-      if (locations.isNotEmpty) {
-        final location = locations.first;
-        final latlng = LatLng(location.latitude, location.longitude);
+      print('Searching for: $query');
+      final List<Location> locations = await locationFromAddress(query);
 
-        _mapController.move(latlng, 15.0);
-
-        final marker = Marker(
-          width: 80.0,
-          height: 80.0,
-          point: latlng,
-          builder: (ctx) => const Icon(
-            Icons.location_on,
-            color: Colors.blue,
-            size: 40.0,
-          ),
+      if (locations.isEmpty) {
+        print('No locations found for: $query');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No locations found')),
         );
-
-        setState(() {
-          _markers.add(marker);
-        });
+        return;
       }
+
+      final location = locations.first;
+      final latlng = LatLng(location.latitude, location.longitude);
+
+      print('Location found: ${location.latitude}, ${location.longitude}');
+
+      _mapController.move(latlng, 15.0);
+
+      final marker = Marker(
+        width: 80.0,
+        height: 80.0,
+        point: latlng,
+        builder: (ctx) => const Icon(
+          Icons.location_on,
+          color: Colors.blue,
+          size: 40.0,
+        ),
+      );
+
+      setState(() {
+        _markers.add(marker);
+      });
     } catch (e) {
       print('Error searching place: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error searching place: $e')),
+      );
     }
   }
 
