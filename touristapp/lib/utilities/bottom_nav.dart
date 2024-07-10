@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:touristapp/pages/main_page.dart';
+import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
 import 'package:touristapp/pages/profile_page.dart';
 import 'package:touristapp/pages/booking_page.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
@@ -78,7 +78,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to(const MainPage());
+              Get.to(const WelcomePage());
             },
             icon: const Icon(Icons.home),
           ),
