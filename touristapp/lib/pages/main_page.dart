@@ -15,6 +15,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
      
       body: SingleChildScrollView(
         child: Column(

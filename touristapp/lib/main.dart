@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
     
     return  GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      title: '',
       theme: ThemeData(
         brightness: themeProvider.isDarkMode ? Brightness.dark : Brightness.light,
         primarySwatch: Colors.blue,
