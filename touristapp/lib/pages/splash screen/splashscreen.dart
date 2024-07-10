@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
-import 'package:touristapp/pages/main_page.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
