@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:touristapp/pages/about_us_page.dart';
 import 'package:touristapp/pages/privacy_policy_page.dart';
@@ -73,14 +71,39 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AboutUsPage()),
+                MaterialPageRoute(builder: (context) => const AboutUsPage()),
               );
             },
           ),
           ListTile(
             title: Text(AppLocalizations.of(context)!.translate('privacyPolicy')),
             onTap: () {
-              Get.to(() => PrivacyPolicyPage());
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PrivacyPolicyPage()),
+              );
+            },
+          ),
+          ListTile(
+            title: Text(AppLocalizations.of(context)!.translate('feedbackSupport')),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(AppLocalizations.of(context)!.translate('feedbackSupport')),
+                    content: const Text('Implement feedback and support options here.'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('OK'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
