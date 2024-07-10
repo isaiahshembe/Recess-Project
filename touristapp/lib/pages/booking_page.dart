@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:touristapp/utilities/bottom_nav.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({super.key});
@@ -15,6 +15,15 @@ class _BookingPageState extends State<BookingPage> {
   final MapController _mapController = MapController();
   final List<Marker> _markers = [];
   final TextEditingController _searchController = TextEditingController();
+
+  // Sample carousel items
+  final List<String> carouselItems = [
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -69,13 +78,30 @@ class _BookingPageState extends State<BookingPage> {
               child: const Text('Book this place'),
             ),
           ),
+          SizedBox(
+            height: 200,
+            child: CarouselSlider(
+              items: carouselItems.map((item) => _buildCarouselItem(item)).toList(),
+              options: CarouselOptions(
+                autoPlay: true,
+                enlargeCenterPage: true,
+                viewportFraction: 0.8,
+                aspectRatio: 16/9,
+                autoPlayCurve: Curves.fastOutSlowIn,
+                autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                enableInfiniteScroll: true,
+                autoPlayInterval: const Duration(seconds: 3),
+                pauseAutoPlayOnTouch: true,
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMarker,
         child: const Icon(Icons.add_location),
       ),
-      bottomNavigationBar: const BottomNav(),
     );
   }
 
@@ -126,11 +152,9 @@ class _BookingPageState extends State<BookingPage> {
     }
 
     try {
-      print('Searching for: $query');
       final List<Location> locations = await locationFromAddress(query);
 
       if (locations.isEmpty) {
-        print('No locations found for: $query');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('No locations found')),
         );
@@ -139,8 +163,6 @@ class _BookingPageState extends State<BookingPage> {
 
       final location = locations.first;
       final latlng = LatLng(location.latitude, location.longitude);
-
-      print('Location found: ${location.latitude}, ${location.longitude}');
 
       _mapController.move(latlng, 15.0);
 
@@ -177,6 +199,22 @@ class _BookingPageState extends State<BookingPage> {
     // Handle the booking logic here
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Place booked successfully!')),
+    );
+  }
+
+  Widget _buildCarouselItem(String item) {
+    return Container(
+      margin: const EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+        color: Colors.blueGrey,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Center(
+        child: Text(
+          item,
+          style: const TextStyle(fontSize: 20.0, color: Colors.white),
+        ),
+      ),
     );
   }
 }
