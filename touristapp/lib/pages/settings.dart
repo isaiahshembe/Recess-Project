@@ -4,6 +4,8 @@ import 'package:touristapp/pages/about_us_page.dart';
 import 'package:touristapp/pages/privacy_policy_page.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -17,12 +19,12 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: ListView(
         children: <Widget>[
           SwitchListTile(
-            title: Text('Enable Notifications'),
+            title: const Text('Enable Notifications'),
             value: _notificationsEnabled,
             onChanged: (bool value) {
               setState(() {
@@ -31,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           SwitchListTile(
-            title: Text('Dark Mode'),
+            title: const Text('Dark Mode'),
             value: _darkModeEnabled,
             onChanged: (bool value) {
               setState(() {
@@ -40,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           ListTile(
-            title: Text('Language'),
+            title: const Text('Language'),
             trailing: DropdownButton<String>(
               value: _selectedLanguage,
               onChanged: (String? newValue) {
@@ -58,15 +60,15 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           ListTile(
-            title: Text('About'),
+            title: const Text('About'),
             onTap: () {
-              Get.to(AboutUsPage());
+              Get.to(const AboutUsPage());
             },
           ),
           ListTile(
-            title: Text('Privacy Policy'),
+            title: const Text('Privacy Policy'),
             onTap: () {
-              Get.to(PrivacyPolicyPage());
+              Get.to(const PrivacyPolicyPage());
             },
           ),
         ],

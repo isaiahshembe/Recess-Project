@@ -19,7 +19,7 @@ class AppLocalizations {
     ];
   }
 
-  static Map<String, Map<String, String>> _localizedValues = {
+  static final Map<String, Map<String, String>> _localizedValues = {
     'en': {
       'settings': 'Settings',
       'enableNotifications': 'Enable Notifications',

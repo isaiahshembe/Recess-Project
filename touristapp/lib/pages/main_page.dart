@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 
 class MainPage extends StatefulWidget {
@@ -34,34 +31,34 @@ class _MainPageState extends State<MainPage> {
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           hintText: 'What are you looking for?',
                           suffixIcon: IconButton(
-                              onPressed: () {}, icon: Icon(Icons.search)),
-                          hintStyle: TextStyle(
+                              onPressed: () {}, icon: const Icon(Icons.search)),
+                          hintStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold)),
                     ))
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Suggested',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-                      IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward))
+                      const Text('Suggested',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+                      IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward))
 
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   SingleChildScrollView(
@@ -85,14 +82,14 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               
                               Image.asset('images/muchison.jpg',),
-                              Text('Murchison Falls',style: TextStyle(
+                              const Text('Murchison Falls',style: TextStyle(
                                 fontWeight: FontWeight.bold,fontSize: 17
-                              ),),Text('Masindi',style: TextStyle(
+                              ),),const Text('Masindi',style: TextStyle(
                                 fontWeight: FontWeight.bold,fontSize: 14)
                           )],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Container(
@@ -103,7 +100,7 @@ class _MainPageState extends State<MainPage> {
                             borderRadius: BorderRadius.circular(17)
                           ) ,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Container(
@@ -117,15 +114,15 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-                   SizedBox(
+                   const SizedBox(
               height: 10,
             ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Top rated',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-                      IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward)),
+                      const Text('Top rated',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+                      IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward)),
                       
 
                     ],
@@ -151,23 +148,23 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               
                               Image.asset('images/muchison.jpg',),
-                              Text('Murchison Falls',style: TextStyle(
+                              const Text('Murchison Falls',style: TextStyle(
                                 fontWeight: FontWeight.bold,fontSize: 17
-                              ),),Text('Masindi',style: TextStyle(
+                              ),),const Text('Masindi',style: TextStyle(
                                 fontWeight: FontWeight.bold,fontSize: 14)
                           ),
                           Row(
                             children: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.grey,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.grey,)
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.grey,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.grey,)
                             ],
                           )
                           ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Container(
@@ -184,23 +181,23 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               
                               Image.asset('images/muchison.jpg',),
-                              Text('Lake Mburo',style: TextStyle(
+                              const Text('Lake Mburo',style: TextStyle(
                                 fontWeight: FontWeight.bold,fontSize: 17
-                              ),),Text('Toro',style: TextStyle(
+                              ),),const Text('Toro',style: TextStyle(
                                 fontWeight: FontWeight.bold,fontSize: 14)
                           ),
                           Row(
                             children: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.grey,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.grey,)
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.grey,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.grey,)
                             ],
                           )
                           ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Container(
@@ -215,17 +212,17 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               
                               Image.asset('images/muchison.jpg',),
-                              Text('Queen Elizabeth',style: TextStyle(
+                              const Text('Queen Elizabeth',style: TextStyle(
                                 fontWeight: FontWeight.bold,fontSize: 17
-                              ),),Text('Masindi',style: TextStyle(
+                              ),),const Text('Masindi',style: TextStyle(
                                 fontWeight: FontWeight.bold,fontSize: 14)
                           ),
                           Row(
                             children: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.yellow,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.grey,),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.star),color: Colors.grey,)
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.yellow,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.grey,),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.star),color: Colors.grey,)
                             ],
                           )
                           ],
@@ -240,7 +237,7 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNav(),
+      bottomNavigationBar: const BottomNav(),
     );
   }
 }
