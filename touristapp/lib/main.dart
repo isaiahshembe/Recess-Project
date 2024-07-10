@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
-import 'package:touristapp/pages/splash screen/splashscreen.dart';
+import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
+import 'package:touristapp/l10n/app_localizations.dart'; 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:touristapp/localization/app_localizations.dart';
 
 void main() {
   runApp(
@@ -29,10 +29,8 @@ class MyApp extends StatelessWidget {
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: themeProvider.isDarkMode ? Brightness.dark : Brightness.light,
-        primarySwatch: Colors.blue,
-      ),
+      title: 'Tourist App',
+      theme: themeProvider.isDarkMode ? ThemeData.dark() : ThemeData.light(),
       locale: localeProvider.locale,
       supportedLocales: const [
         Locale('en', 'US'),
@@ -43,7 +41,7 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      home: const SplashScreen(),
+      home: SplashScreen(), // Use your splash screen here
     );
   }
 }

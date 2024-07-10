@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
 import 'package:touristapp/pages/main_page.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -13,10 +12,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainPage()),
+        MaterialPageRoute(builder: (context) => WelcomePage()),
       );
     });
   }
@@ -35,8 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
             width: 250.0,
               
             ),
-            const SizedBox(height: 20.0),
-            const Text(
+            SizedBox(height: 20.0),
+            Text(
               'Welcome to TouristApp', 
               style: TextStyle(
                 fontSize: 24.0,
@@ -44,8 +43,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 10.0),
-            const CircularProgressIndicator(
+            SizedBox(height: 10.0),
+            CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
           ],

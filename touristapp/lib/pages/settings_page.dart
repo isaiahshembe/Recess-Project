@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:touristapp/pages/about_us_page.dart';
+import 'package:touristapp/pages/privacy_policy_page.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
 import 'package:touristapp/l10n/app_localizations.dart';
-import 'package:touristapp/pages/about_us_page.dart';
-import 'package:touristapp/pages/privacy_policy_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -15,8 +15,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool _notificationsEnabled = true;
-  final bool _darkModeEnabled = false;
-  final bool _offlineModeEnabled = false;
   String _selectedLanguage = 'English';
 
   @override
