@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:carousel_slider/carousel_slider.dart'; // Import carousel_slider package
+import 'package:carousel_slider/carousel_slider.dart'; 
 import 'package:touristapp/pages/car_rentals.dart';
 import 'package:touristapp/pages/main_page.dart';
-import 'package:touristapp/pages/profile_page.dart';
+import 'package:touristapp/pages/stay.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -78,7 +78,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
 class KeySectorsSection extends StatelessWidget {
   final List<Map<String, dynamic>> keySectors = [
-    {'name': 'Stays', 'icon': Icons.hotel, 'page': const ProfilePage()},
+    {'name': 'Stays', 'icon': Icons.hotel, 'page': StaysPage()},
     {'name': 'Attractions', 'icon': Icons.attractions, 'page': const MainPage()},
     {'name': 'Car Rentals', 'icon': Icons.directions_car, 'page': const CarRentalsPage()},
   ];
