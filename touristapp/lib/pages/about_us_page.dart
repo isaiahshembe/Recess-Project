@@ -15,7 +15,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
         title: const Text('About Us'),
       ),
       body: SingleChildScrollView(
-<<<<<<< HEAD
+
         child: Container(
           child: Center(
             child: Padding(
@@ -84,7 +84,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   ),
                 ],
               ),
-=======
+
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -151,7 +151,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   ),
                 ),
               ],
->>>>>>> fec6115d4fa4add7a3e189facf009e149201fd2d
+
             ),
           ),
         ),
