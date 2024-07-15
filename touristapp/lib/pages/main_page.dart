@@ -32,14 +32,14 @@ class _MainPageState extends State<MainPage> {
       'rating': 3,
       'type': 'Nature',
     },
-    // Add more items here
+    
   ];
   List<Map<String, dynamic>> filteredItems = [];
 
   @override
   void initState() {
     super.initState();
-    filteredItems = allItems; // Initially, display all items
+    filteredItems = allItems; 
   }
 
   void _filterResults(String query) {

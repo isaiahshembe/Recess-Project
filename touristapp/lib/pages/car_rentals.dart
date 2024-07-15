@@ -141,12 +141,14 @@ class _CarRentalsPageState extends State<CarRentalsPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                handleSearch();
-              },
-              child: const Text('Search'),
+            const SizedBox(height: 26),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  handleSearch();
+                },
+                child: const Text('Search'),
+              ),
             ),
           ],
         ),

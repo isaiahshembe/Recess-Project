@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
-import 'package:touristapp/pages/profile_page.dart';
+import 'package:touristapp/pages/profile/profile_page.dart';
 import 'package:touristapp/pages/booking_page.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';

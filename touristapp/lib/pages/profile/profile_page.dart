@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:touristapp/pages/editprofilepage.dart';
+import 'package:touristapp/pages/profile/editprofilepage.dart';
 import 'package:touristapp/pages/settings/helpsupport.dart';
-import 'settings.dart';
+import '../settings.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              Get.to(const EditProfilePage());
+              Get.to(const ProfileEditScreen());
             },
           ),
           IconButton(
