@@ -6,6 +6,24 @@ class StaysPage extends StatefulWidget {
 }
 
 class _StaysPageState extends State<StaysPage> {
+  final List<String> cities = ['Kampala', 'Jinja', 'Mbale', 'Lira', 'Entebbe'];
+  late List<String> filteredCities;
+
+  @override
+  void initState() {
+    super.initState();
+    filteredCities = cities;
+  }
+
+  void _filterCities(String query) {
+    final filtered = cities
+        .where((city) => city.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    setState(() {
+      filteredCities = filtered;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +48,8 @@ class _StaysPageState extends State<StaysPage> {
                 border: OutlineInputBorder(),
                 suffixIcon: Icon(Icons.search),
               ),
-              onSubmitted: (value) {
-                // Implement search functionality
+              onChanged: (value) {
+                _filterCities(value);
               },
             ),
           ),
@@ -63,24 +81,24 @@ class _StaysPageState extends State<StaysPage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 10, // Replace with your data count
+              itemCount: filteredCities.length,
               itemBuilder: (context, index) {
                 return Card(
                   margin: EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Image.network(
+                        leading: Image.asset(
                           'images/kampala-sheraton-hotel.jpg', 
                           width: 50,
                           height: 50,
                           fit: BoxFit.cover,
                         ),
-                        title: Text('Stay ${index + 1}'),
+                        title: Text(filteredCities[index]),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Description of stay ${index + 1}'),
+                            Text('Description of stay in ${filteredCities[index]}'),
                             Row(
                               children: [
                                 Icon(Icons.star, color: Colors.yellow, size: 16),
@@ -92,7 +110,7 @@ class _StaysPageState extends State<StaysPage> {
                         ),
                         trailing: Icon(Icons.arrow_forward),
                         onTap: () {
-                          
+                          // Implement navigation to stay details
                         },
                       ),
                     ],
@@ -116,4 +134,3 @@ class _StaysPageState extends State<StaysPage> {
     );
   }
 }
-
