@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
 import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
-import 'package:touristapp/l10n/app_localizations.dart'; 
+import 'package:touristapp/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 void main() {
   runApp(
