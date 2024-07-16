@@ -9,6 +9,7 @@ import 'package:touristapp/pages/settings/themeprovider.dart';
 import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
 import 'package:touristapp/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:touristapp/pages/stay.dart';
 
 void main() {
   runApp(
@@ -70,6 +71,12 @@ class BottomNav extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          IconButton(
+            onPressed: () {
+              Get.to( StaysPage());
+            },
+            icon: const Icon(Icons.search),
+          ),
           IconButton(
             onPressed: () {
               Get.to(const BookingPage());
