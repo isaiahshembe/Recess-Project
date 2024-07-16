@@ -56,6 +56,7 @@ class _BookingPageState extends State<BookingPage> {
                 options: MapOptions(
                   center: LatLng(0.3152, 32.5816), 
                   zoom: 10.0, 
+                  
                 ),
                 children: [
                   TileLayer(

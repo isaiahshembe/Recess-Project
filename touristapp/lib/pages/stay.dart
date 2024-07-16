@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StaysPage extends StatefulWidget {
   @override
@@ -6,21 +7,38 @@ class StaysPage extends StatefulWidget {
 }
 
 class _StaysPageState extends State<StaysPage> {
-  final List<String> cities = ['Kampala', 'Jinja', 'Mbale', 'Lira', 'Entebbe'];
-  late List<String> filteredCities;
+  List<Map<String, dynamic>> stays = [];
+  List<Map<String, dynamic>> filteredStays = [];
 
   @override
   void initState() {
     super.initState();
-    filteredCities = cities;
+    _fetchStays();
   }
 
-  void _filterCities(String query) {
-    final filtered = cities
-        .where((city) => city.toLowerCase().contains(query.toLowerCase()))
+  Future<void> _fetchStays() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Places').get();
+      List<Map<String, dynamic>> fetchedStays = querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+      setState(() {
+        stays = fetchedStays;
+        filteredStays = fetchedStays;
+      });
+    } catch (e) {
+      print('Error fetching stays: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching stays: $e')),
+      );
+    }
+  }
+
+  void _filterStays(String query) {
+    final filtered = stays
+        .where((stay) => stay['city'].toLowerCase().contains(query.toLowerCase()))
         .toList();
     setState(() {
-      filteredCities = filtered;
+      filteredStays = filtered;
     });
   }
 
@@ -49,7 +67,7 @@ class _StaysPageState extends State<StaysPage> {
                 suffixIcon: Icon(Icons.search),
               ),
               onChanged: (value) {
-                _filterCities(value);
+                _filterStays(value);
               },
             ),
           ),
@@ -81,31 +99,31 @@ class _StaysPageState extends State<StaysPage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: filteredCities.length,
+              itemCount: filteredStays.length,
               itemBuilder: (context, index) {
                 return Card(
                   margin: EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Image.asset(
-                          'images/kampala-sheraton-hotel.jpg', 
+                        leading: Image.network(
+                          filteredStays[index]['image_url'], // Assuming 'image_url' field in Firestore
                           width: 50,
                           height: 50,
                           fit: BoxFit.cover,
                         ),
-                        title: Text(filteredCities[index]),
+                        title: Text(filteredStays[index]['city']),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Description of stay in ${filteredCities[index]}'),
+                            Text(filteredStays[index]['description']),
                             Row(
                               children: [
                                 Icon(Icons.star, color: Colors.yellow, size: 16),
-                                Text('4.5'), 
+                                Text(filteredStays[index]['rating'].toString()), 
                               ],
                             ),
-                            Text('\$100 per night'), 
+                            Text('\$${filteredStays[index]['price']} per night'),
                           ],
                         ),
                         trailing: Icon(Icons.arrow_forward),
