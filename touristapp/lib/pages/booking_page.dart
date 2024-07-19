@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class BookingPage extends StatefulWidget {
-  const BookingPage({super.key});
+  const BookingPage({Key? key}) : super(key: key);
 
   @override
   State<BookingPage> createState() => _BookingPageState();
@@ -20,7 +20,7 @@ class _BookingPageState extends State<BookingPage> {
   final List<Map<String, dynamic>> carouselItems = [
     {'image': 'images/kampala-sheraton-hotel.jpg', 'caption': 'Cozy Hotels'},
     {'image': 'images/kidepo.jpeg', 'caption': 'Tourist Attractions'},
-    {'image': 'images/murchision.jpg', 'caption': 'Beautiful Accomodation'},
+    {'image': 'images/murchison.jpg', 'caption': 'Beautiful Accommodation'},
     {'image': 'images/westnile.jpeg', 'caption': 'Scenic Mountains'},
   ];
 
@@ -53,22 +53,31 @@ class _BookingPageState extends State<BookingPage> {
           ),
           Expanded(
             child: FlutterMap(
-              mapController: _mapController,
-              options: MapOptions(
-                center: LatLng(0.3152, 32.5816),
-                zoom: 10.0,
-                onTap: _handleTap,
+                options: MapOptions(
+                  center: LatLng(0.3152, 32.5816), 
+                  zoom: 10.0, 
+                  
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    subdomains: const ['a', 'b', 'c'],
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        width: 80.0,
+                        height: 80.0,
+                        point: LatLng(0.3152, 32.5816), 
+                        builder: (ctx) => const Icon(
+                          Icons.location_pin,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              children: [
-                TileLayer(
-                  urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: const ['a', 'b', 'c'],
-                ),
-                MarkerLayer(
-                  markers: _markers,
-                ),
-              ],
-            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -99,13 +108,13 @@ class _BookingPageState extends State<BookingPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     image: DecorationImage(
-                      image: AssetImage(carouselItems[index]['image']),
+                      image: AssetImage(carouselItems[index]['image']!),
                       fit: BoxFit.cover,
                     ),
                   ),
                   child: Center(
                     child: Text(
-                      carouselItems[index]['caption'],
+                      carouselItems[index]['caption']!,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
@@ -126,7 +135,7 @@ class _BookingPageState extends State<BookingPage> {
     );
   }
 
-  void _handleTap(TapPosition tapPosition, LatLng latlng) {
+  void _handleTap(LatLng latlng) {
     final marker = Marker(
       width: 80.0,
       height: 80.0,
@@ -175,12 +184,15 @@ class _BookingPageState extends State<BookingPage> {
     try {
       final List<Location> locations = await locationFromAddress(query);
 
-      if (locations.isEmpty) {
+      if (locations == null || locations.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('No locations found')),
         );
         return;
       }
+
+      // Clear existing markers before adding new ones
+      _markers.clear();
 
       final location = locations.first;
       final latlng = LatLng(location.latitude, location.longitude);
@@ -221,5 +233,11 @@ class _BookingPageState extends State<BookingPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Place booked successfully!')),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
