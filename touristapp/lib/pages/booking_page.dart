@@ -20,7 +20,7 @@ class _BookingPageState extends State<BookingPage> {
   final List<Map<String, dynamic>> carouselItems = [
     {'image': 'images/kampala-sheraton-hotel.jpg', 'caption': 'Cozy Hotels'},
     {'image': 'images/kidepo.jpeg', 'caption': 'Tourist Attractions'},
-    {'image': 'images/murchison.jpg', 'caption': 'Beautiful Accommodation'},
+    {'image': 'images/murchision.jpg', 'caption': 'Beautiful Accommodation'},
     {'image': 'images/westnile.jpeg', 'caption': 'Scenic Mountains'},
   ];
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:touristapp/pages/Welcomepage/features/features.dart';
 import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const WelcomePage()),
+        MaterialPageRoute(builder: (context) => TrendingFeaturesPage()),
       );
     });
   }
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent, // Set your desired background color
+      backgroundColor: Colors.blueAccent, 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
