@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:touristapp/pages/Welcomepage/features/features.dart';
-import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,20 +24,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent, 
+      backgroundColor: Colors.blueAccent,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset(
               'images/display_image1.jpg',
-             height: 350.0,
-            width: 250.0,
-              
+              height: 350.0,
+              width: 250.0,
             ),
             const SizedBox(height: 20.0),
             const Text(
-              'Welcome to TouristApp', 
+              'Welcome to TouristApp',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
