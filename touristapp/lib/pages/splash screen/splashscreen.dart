@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:touristapp/pages/signup_screen.dart';
+=======
+import 'package:touristapp/pages/Welcomepage/features/features.dart';
+>>>>>>> f0682adb89de1120f4fd51d419ac8e61738ae2eb
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
