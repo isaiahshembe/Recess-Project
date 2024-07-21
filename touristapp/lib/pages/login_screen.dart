@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -67,7 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child: Center(
+          child:Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: _emailController,
@@ -79,18 +79,25 @@ class _LoginScreenState extends State<LoginScreen> {
               obscureText: true,
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
+            ElevatedButton.icon(
               onPressed: _signInWithEmailAndPassword,
-              child: const Text('Login with Email'),
+              icon: const Icon(Icons.email),
+              label: const Text('Login with Email'),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
+            ElevatedButton.icon(
               onPressed: _signInWithGoogle,
-              child: const Text('Continue with Google'),
+              icon: Image.asset(
+                'images/icons8-google-48.png', // Path to your Google icon
+                height: 24.0, // Adjust the size if necessary
+              ),
+              label: const Text('Continue with Google'),
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
+    ),
     );
   }
 }
