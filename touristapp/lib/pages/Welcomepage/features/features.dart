@@ -3,6 +3,8 @@ import 'package:touristapp/pages/Welcomepage/features/searchresults.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 
 class TrendingFeaturesPage extends StatefulWidget {
+  const TrendingFeaturesPage({super.key});
+
   @override
   _TrendingFeaturesPageState createState() => _TrendingFeaturesPageState();
 }
@@ -19,7 +21,7 @@ class _TrendingFeaturesPageState extends State<TrendingFeaturesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Select Trending Features')),
+      appBar: AppBar(title: const Text('Select Trending Features')),
       body: ListView.builder(
         itemCount: trendingFeatures.length,
         itemBuilder: (context, index) {
@@ -39,7 +41,7 @@ class _TrendingFeaturesPageState extends State<TrendingFeaturesPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
+        child: const Icon(Icons.search),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => SearchResultsPage(selectedFeatures)));

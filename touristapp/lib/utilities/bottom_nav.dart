@@ -73,7 +73,7 @@ class BottomNav extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-              Get.to( StaysPage());
+              Get.to( const StaysPage());
             },
             icon: const Icon(Icons.search),
           ),

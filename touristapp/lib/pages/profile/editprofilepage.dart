@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class ProfileEditScreen extends StatefulWidget {
-  const ProfileEditScreen({Key? key}) : super(key: key);
+  const ProfileEditScreen({super.key});
 
   static const routeName = '/profile-edit-screen';
 
@@ -78,23 +78,23 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             inputType: TextInputType.name,
             hint: "name",
           ),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           formField(
             icon: Icons.email,
             controller: emailController,
             inputType: TextInputType.emailAddress,
             hint: "email",
           ),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           phoneField(),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           formField(
             icon: Icons.location_city_rounded,
             controller: addressController,
             inputType: TextInputType.text,
             hint: "address",
           ),
-          SizedBox(height: 25.0),
+          const SizedBox(height: 25.0),
           InkWell(
             onTap: () {
               getImageGally();
@@ -110,7 +110,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   : Image.asset("images/display_image1.jpg"),
             ),
           ),
-          SizedBox(height: 25.0),
+          const SizedBox(height: 25.0),
           InkWell(
             onTap: _isUpdating
                 ? null
@@ -120,7 +120,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     });
 
                     // Simulate a delay to mimic an update process
-                    await Future.delayed(Duration(seconds: 2));
+                    await Future.delayed(const Duration(seconds: 2));
 
                     try {
                       Fluttertoast.showToast(
@@ -151,7 +151,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 ),
               ),
               child: _isUpdating
-                  ? SizedBox(
+                  ? const SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
@@ -182,7 +182,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           phoneNumber = phone.number;
         });
       },
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Phone Number',
         border: OutlineInputBorder(
           borderSide: BorderSide(),
@@ -218,7 +218,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       decoration: InputDecoration(
         prefixIcon: Icon(icon),
         hintText: hint,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
     );
   }

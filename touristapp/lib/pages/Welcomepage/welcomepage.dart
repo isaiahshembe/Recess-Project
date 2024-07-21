@@ -78,7 +78,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
 class KeySectorsSection extends StatelessWidget {
   final List<Map<String, dynamic>> keySectors = [
-    {'name': 'Stays', 'icon': Icons.hotel, 'page': StaysPage()},
+    {'name': 'Stays', 'icon': Icons.hotel, 'page': const StaysPage()},
     {'name': 'Attractions', 'icon': Icons.attractions, 'page': const MainPage()},
     {'name': 'Car Rentals', 'icon': Icons.directions_car, 'page': const CarRentalsPage()},
   ];

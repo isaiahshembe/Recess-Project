@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'review.dart';
 
 class ReviewProvider with ChangeNotifier {
-  List<Review> _reviews = [];
+  final List<Review> _reviews = [];
 
   List<Review> get reviews => _reviews;
 

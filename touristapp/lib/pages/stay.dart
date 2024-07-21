@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StaysPage extends StatefulWidget {
+  const StaysPage({super.key});
+
   @override
   _StaysPageState createState() => _StaysPageState();
 }
@@ -46,10 +48,10 @@ class _StaysPageState extends State<StaysPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stays'),
+        title: const Text('Stays'),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               // Implement search functionality
             },
@@ -61,7 +63,7 @@ class _StaysPageState extends State<StaysPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search stays',
                 border: OutlineInputBorder(),
                 suffixIcon: Icon(Icons.search),
@@ -77,19 +79,19 @@ class _StaysPageState extends State<StaysPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 FilterChip(
-                  label: Text('Price'), 
+                  label: const Text('Price'), 
                   onSelected: (bool value) {
                     // Implement filter functionality
                   },
                 ),
                 FilterChip(
-                  label: Text('Rating'),
+                  label: const Text('Rating'),
                   onSelected: (bool value) {
                     // Implement filter functionality
                   },
                 ),
                 FilterChip(
-                  label: Text('Location'),
+                  label: const Text('Location'),
                   onSelected: (bool value) {
                     // Implement filter functionality
                   },
@@ -102,7 +104,7 @@ class _StaysPageState extends State<StaysPage> {
               itemCount: filteredStays.length,
               itemBuilder: (context, index) {
                 return Card(
-                  margin: EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       ListTile(
@@ -119,14 +121,14 @@ class _StaysPageState extends State<StaysPage> {
                             Text(filteredStays[index]['description']),
                             Row(
                               children: [
-                                Icon(Icons.star, color: Colors.yellow, size: 16),
+                                const Icon(Icons.star, color: Colors.yellow, size: 16),
                                 Text(filteredStays[index]['rating'].toString()), 
                               ],
                             ),
                             Text('\$${filteredStays[index]['price']} per night'),
                           ],
                         ),
-                        trailing: Icon(Icons.arrow_forward),
+                        trailing: const Icon(Icons.arrow_forward),
                         onTap: () {
                           // Implement navigation to stay details
                         },
@@ -143,8 +145,8 @@ class _StaysPageState extends State<StaysPage> {
               onPressed: () {
                 // Implement navigation to map view
               },
-              icon: Icon(Icons.map),
-              label: Text('View on Map'),
+              icon: const Icon(Icons.map),
+              label: const Text('View on Map'),
             ),
           ),
         ],
