@@ -101,29 +101,35 @@ class _StaysPageState extends State<StaysPage> {
             child: ListView.builder(
               itemCount: filteredStays.length,
               itemBuilder: (context, index) {
+                final stay = filteredStays[index];
                 return Card(
                   margin: EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Image.asset(
-                          filteredStays[index]['image_path'], // Use 'image_path' field from Firestore
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        title: Text(filteredStays[index]['name']),
+                        leading: stay['image'] != null
+                            ? Image.network(
+                                stay['image'], // Assuming 'image' field in Firestore
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(Icons.broken_image, size: 50);
+                                },
+                              )
+                            : Icon(Icons.image_not_supported, size: 50),
+                        title: Text(stay['name'] ?? 'No name'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(filteredStays[index]['description']),
+                            Text(stay['description'] ?? 'No description'),
                             Row(
                               children: [
                                 Icon(Icons.star, color: Colors.yellow, size: 16),
-                                Text(filteredStays[index]['rating'].toString()), 
+                                Text(stay['rating']?.toString() ?? 'No rating'), 
                               ],
                             ),
-                            Text('\$${filteredStays[index]['price']} per night'),
+                            Text('\$${stay['price']?.toString() ?? 'No price'} per night'),
                           ],
                         ),
                         trailing: Icon(Icons.arrow_forward),
