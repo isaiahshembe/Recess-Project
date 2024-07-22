@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+       
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,13 +69,21 @@ class _LoginScreenState extends State<LoginScreen> {
           child:Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+Spacer(),
+            Center(child: Text('Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),)),
+            
+            SizedBox(height: 20,),
             TextField(
               controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+              decoration: 
+              const InputDecoration(hintText: 'Email',border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(22)),borderSide: BorderSide.none), prefixIcon: Icon(Icons.email),filled: true,fillColor: Colors.grey),
             ),
+            SizedBox(height: 20,),
             TextField(
               controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(hintText: 'Password',
+              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(22)),borderSide: BorderSide.none),prefixIcon: Icon(Icons.key),fillColor: Colors.grey,filled: true),
+              
               obscureText: true,
             ),
             const SizedBox(height: 20),
@@ -94,6 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
               label: const Text('Continue with Google'),
             ),
             const SizedBox(height: 20),
+            Spacer()
           ],
         ),
       ),
