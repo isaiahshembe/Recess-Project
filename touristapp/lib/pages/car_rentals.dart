@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 
 class CarRentalContentPage extends StatefulWidget {
@@ -52,19 +53,35 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
   }
 
   void _performSearch() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('car_rentals')
-        .where('pickup_location', isEqualTo: pickupLocationController.text)
-        .where('pickup_date', isEqualTo: DateFormat('yyyy-MM-dd').format(pickupDate))
-        .where('pickup_time', isEqualTo: pickupTime.format(context))
-        .where('return_date', isEqualTo: DateFormat('yyyy-MM-dd').format(returnDate))
-        .where('return_time', isEqualTo: returnTime.format(context))
-        .get();
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
 
-    for (var doc in querySnapshot.docs) {
-      print(doc.data());
-    }
+    await FirebaseFirestore.instance.collection('car_rental_bookings').add({
+      'user_id': user?.uid,
+      'pickup_location': pickupLocationController.text,
+      'pickup_date': DateFormat('yyyy-MM-dd').format(pickupDate),
+      'pickup_time': pickupTime.format(context),
+      'return_date': DateFormat('yyyy-MM-dd').format(returnDate),
+      'return_time': returnTime.format(context),
+      'driver_age_range': {
+        'start': driverAgeRange.start.round(),
+        'end': driverAgeRange.end.round()
+      },
+      'return_to_same_location': returnToSameLocation,
+      'booking_created_at': Timestamp.now(),
+      'status': 'Active',  
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Booking details saved successfully!')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to save booking details: $e')),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +180,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _performSearch,
-              child: Text('Search'),
+              child: Text('Save Booking'),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
               ),
