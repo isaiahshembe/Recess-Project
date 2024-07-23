@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:carousel_slider/carousel_slider.dart'; 
 import 'package:touristapp/pages/car_rentals.dart';
 import 'package:touristapp/pages/main_page.dart';
 import 'package:touristapp/pages/stay.dart';
-import 'package:touristapp/utilities/bottom_nav.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+  const WelcomePage({Key? key}) : super(key: key);
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  int _currentIndex = 0;
+  PageController _pageController = PageController(initialPage: 0);
+
   // Example image URLs and captions
   final List<Map<String, dynamic>> bannerImages = [
     {'image': 'images/kidepo.jpeg', 'caption': 'Explore beautiful destinations'},
@@ -24,84 +24,83 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tourist App'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 40),
-            CarouselSlider.builder(
-              itemCount: bannerImages.length,
-              options: CarouselOptions(
-                autoPlay: true,
-                enlargeCenterPage: true,
-                viewportFraction: 0.9,
-                aspectRatio: 2.0,
-                autoPlayInterval: const Duration(seconds: 3),
-              ),
-              itemBuilder: (BuildContext context, int index, int realIndex) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    image: DecorationImage(
-                      image: NetworkImage(bannerImages[index]['image']),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      bannerImages[index]['caption'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                );
-              },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100.0), // Increased height for the app bar
+        child: Container(
+          color: Colors.blue, // Background color for the app bar
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildNavItem(Icons.hotel, 'Stays', 0),
+                _buildNavItem(Icons.attractions, 'Attractions', 1),
+                _buildNavItem(Icons.directions_car, 'Car Rentals', 2),
+              ],
             ),
-            const SizedBox(height: 30),
-            KeySectorsSection(),
-            const SizedBox(height: 16),
-          ],
+          ),
         ),
       ),
-      bottomNavigationBar: const BottomNav(),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        children: <Widget>[
+          StaysPage(),
+          MainPage(),
+          CarRentalContentPage(),
+        ],
+      ),
     );
   }
-}
 
-class KeySectorsSection extends StatelessWidget {
-  final List<Map<String, dynamic>> keySectors = [
-    {'name': 'Stays', 'icon': Icons.hotel, 'page': const StaysPage()},
-    {'name': 'Attractions', 'icon': Icons.attractions, 'page': const MainPage()},
-    {'name': 'Car Rentals', 'icon': Icons.directions_car, 'page': const CarRentalsPage()},
-  ];
-
-  KeySectorsSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: keySectors.map((sector) {
-        return GestureDetector(
-          onTap: () {
-            Get.to(sector['page']);
-          },
-          child: Column(
-            children: [
-              Icon(sector['icon'], size: 50),
-              Text(sector['name']),
-            ],
+  Widget _buildNavItem(IconData icon, String label, int index) {
+    bool isActive = _currentIndex == index;
+    return GestureDetector(
+      onTap: () {
+        _onNavItemTapped(index);
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: isActive ? Colors.white : Colors.transparent,
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Icon(
+              icon,
+              color: isActive ? Colors.blue : Colors.white,
+              size: 40,
+            ),
           ),
-        );
-      }).toList(),
+          SizedBox(height: 4.0),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Colors.white : Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  void _onNavItemTapped(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.ease,
     );
   }
 }
