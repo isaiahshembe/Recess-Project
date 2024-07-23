@@ -61,48 +61,43 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+       
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+          child:Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _signInWithEmailAndPassword,
+              icon: const Icon(Icons.email),
+              label: const Text('Login with Email'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _signInWithGoogle,
+              icon: Image.asset(
+                'images/icons8-google-48.png', // Path to your Google icon
+                height: 24.0, // Adjust the size if necessary
               ),
-              TextField(
-                controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _signInWithEmailAndPassword,
-                child: const Text('Continue'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: _signInWithEmailAndPassword,
-                icon: const Icon(Icons.email),
-                label: const Text('Login with Email'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: _signInWithGoogle,
-                icon: Image.asset(
-                  'images/icons8-google-48.png', // Path to your Google icon
-                  height: 24.0, // Adjust the size if necessary
-                ),
-                label: const Text('Continue with Google'),
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
+              label: const Text('Continue with Google'),
+            ),
+            const SizedBox(height: 20),
+          ],
         ),
       ),
+    ),
     );
   }
 }
