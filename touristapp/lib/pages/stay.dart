@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:touristapp/utilities/bottom_nav.dart';
 
 class StaysPage extends StatefulWidget {
   const StaysPage({super.key});
@@ -47,17 +48,6 @@ class _StaysPageState extends State<StaysPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Stays'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Implement search functionality
-            },
-          ),
-        ],
-      ),
       body: Column(
         children: [
           Padding(
@@ -157,6 +147,7 @@ class _StaysPageState extends State<StaysPage> {
           ),
         ],
       ),
+      bottomNavigationBar: const BottomNav(),
     );
   }
 }
