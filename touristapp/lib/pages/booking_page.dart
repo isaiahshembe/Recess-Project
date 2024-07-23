@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class BookingPage extends StatefulWidget {
-  const BookingPage({Key? key}) : super(key: key);
+  const BookingPage({super.key});
 
   @override
   State<BookingPage> createState() => _BookingPageState();
@@ -184,7 +184,7 @@ class _BookingPageState extends State<BookingPage> {
     try {
       final List<Location> locations = await locationFromAddress(query);
 
-      if (locations == null || locations.isEmpty) {
+      if (locations.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('No locations found')),
         );

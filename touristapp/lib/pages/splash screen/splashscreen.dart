@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:touristapp/pages/Welcomepage/features/features.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
+import 'package:touristapp/pages/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,10 +15,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkAuthStatus();
+  }
+
+  Future<void> _checkAuthStatus() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final User? user = _auth.currentUser;
+
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => TrendingFeaturesPage()),
+        MaterialPageRoute(
+          builder: (context) => user != null ? WelcomePage() : LoginScreen(),
+        ),
       );
     });
   }
