@@ -25,7 +25,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.example.touristapp"
-    compileSdkVersion  flutter.compileSdkVersion
+    compileSdkVersion  33
     ndkVersion flutter.ndkVersion // Ensure this matches your project's NDK version
 
     compileOptions {
