@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(onPressed: () {}, child: Text('Forgot password'))
+                    TextButton(onPressed: () {}, child: Text('Forgot password?'))
                   ],
                 ),
                 SizedBox(
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       backgroundColor:
                           const Color.fromARGB(255, 100, 180, 103)),
                   onPressed: () {},
-                  child: Text('Login'),
+                  child: Text('Login',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 19),),
                 )
               ],
             )),
