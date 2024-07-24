@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:touristapp/pages/Welcomepage/features/features.dart';
+import 'package:touristapp/pages/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,16 +26,9 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => TrendingFeaturesPage(),
+          builder: (context) => user != null ? const TrendingFeaturesPage() : const LoginScreen(),
         ),
       );
-      // Uncomment below if you want to navigate based on authentication status
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => user != null ? WelcomePage() : LoginScreen(),
-      //   ),
-      // );
     });
   }
 
