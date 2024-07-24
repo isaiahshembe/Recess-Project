@@ -66,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
+<<<<<<< HEAD
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -106,6 +107,49 @@ class _LoginScreenState extends State<LoginScreen> {
               const Spacer(),
             ],
           ),
+=======
+          child:Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+
+const Spacer(),
+            const Center(child: Text('Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),)),
+            
+            const SizedBox(height: 20,),
+
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+
+            const SizedBox(height: 20,),
+
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _signInWithEmailAndPassword,
+              icon: const Icon(Icons.email),
+              label: const Text('Login with Email'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _signInWithGoogle,
+              icon: Image.asset(
+                'images/icons8-google-48.png', // Path to your Google icon
+                height: 24.0, // Adjust the size if necessary
+              ),
+              label: const Text('Continue with Google'),
+            ),
+            const SizedBox(height: 20),
+
+            const Spacer()
+
+          ],
+>>>>>>> 839053b8eebb80d2fdb44a29397ecd105daf140d
         ),
       ),
     );
