@@ -106,10 +106,10 @@ class _StaysPageState extends State<StaysPage> {
                                 height: 50,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
-                                  return Icon(Icons.broken_image, size: 50);
+                                  return const Icon(Icons.broken_image, size: 50);
                                 },
                               )
-                            : Icon(Icons.image_not_supported, size: 50),
+                            : const Icon(Icons.image_not_supported, size: 50),
                         title: Text(stay['name'] ?? 'No name'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ class _StaysPageState extends State<StaysPage> {
                             Text(stay['description'] ?? 'No description'),
                             Row(
                               children: [
-                                Icon(Icons.star, color: Colors.yellow, size: 16),
+                                const Icon(Icons.star, color: Colors.yellow, size: 16),
                                 Text(filteredStays[index]['rating'].toString()), 
                               ],
                             ),

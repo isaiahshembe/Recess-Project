@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfileEditScreen(),
+                  builder: (context) => const ProfileEditScreen(),
                 ),
               );
 
@@ -58,7 +58,7 @@ class ProfilePage extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UserBookingsPage(),
+                    builder: (context) => const UserBookingsPage(),
                   ),
                 );
               },
@@ -70,7 +70,7 @@ class ProfilePage extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SettingsPage(),
+                    builder: (context) => const SettingsPage(),
                   ),
                 );
               },
@@ -82,7 +82,7 @@ class ProfilePage extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HelpSupportPage(),
+                    builder: (context) => const HelpSupportPage(),
                   ),
                 );
               },

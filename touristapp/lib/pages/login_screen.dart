@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:touristapp/pages/Welcomepage/welcomepage.dart'; 
+import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      // Navigate to HomePage on successful login
+      // Navigate to WelcomePage on successful login
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const WelcomePage()),
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         idToken: googleAuth.idToken,
       );
       UserCredential userCredential = await _auth.signInWithCredential(credential);
-      // Navigate to HomePage on successful login
+      // Navigate to WelcomePage on successful login
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const WelcomePage()),
@@ -61,58 +61,53 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-       
+        title: const Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-          child:Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-<<<<<<< HEAD
-const Spacer(),
-            const Center(child: Text('Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),)),
-            
-            const SizedBox(height: 20,),
-=======
->>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-<<<<<<< HEAD
-            const SizedBox(height: 20,),
-=======
->>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: _signInWithEmailAndPassword,
-              icon: const Icon(Icons.email),
-              label: const Text('Login with Email'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: _signInWithGoogle,
-              icon: Image.asset(
-                'images/icons8-google-48.png', // Path to your Google icon
-                height: 24.0, // Adjust the size if necessary
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 50),
+              const Center(
+                child: Text(
+                  'Login',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                ),
               ),
-              label: const Text('Continue with Google'),
-            ),
-            const SizedBox(height: 20),
-<<<<<<< HEAD
-            const Spacer()
-=======
->>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
-          ],
+              const SizedBox(height: 20),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _signInWithEmailAndPassword,
+                icon: const Icon(Icons.email),
+                label: const Text('Login with Email'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _signInWithGoogle,
+                icon: Image.asset(
+                  'images/icons8-google-48.png', // Path to your Google icon
+                  height: 24.0, // Adjust the size if necessary
+                ),
+                label: const Text('Continue with Google'),
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 }

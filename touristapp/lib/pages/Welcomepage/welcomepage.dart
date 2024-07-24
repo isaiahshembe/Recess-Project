@@ -4,7 +4,7 @@ import 'package:touristapp/pages/main_page.dart';
 import 'package:touristapp/pages/stay.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+  const WelcomePage({super.key});
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -12,7 +12,7 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   int _currentIndex = 0;
-  PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
 
   // Example image URLs and captions
   final List<Map<String, dynamic>> bannerImages = [
@@ -25,7 +25,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.0), // Increased height for the app bar
+        preferredSize: const Size.fromHeight(100.0), // Increased height for the app bar
         child: Container(
           color: Colors.blue, // Background color for the app bar
           child: Center(
@@ -43,7 +43,7 @@ class _WelcomePageState extends State<WelcomePage> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        children: <Widget>[
+        children: const <Widget>[
           StaysPage(),
           MainPage(),
           CarRentalContentPage(),
@@ -62,7 +62,7 @@ class _WelcomePageState extends State<WelcomePage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color: isActive ? Colors.white : Colors.transparent,
               border: Border.all(
@@ -77,7 +77,7 @@ class _WelcomePageState extends State<WelcomePage> {
               size: 40,
             ),
           ),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           Text(
             label,
             style: TextStyle(
@@ -99,7 +99,7 @@ class _WelcomePageState extends State<WelcomePage> {
   void _onNavItemTapped(int index) {
     _pageController.animateToPage(
       index,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.ease,
     );
   }
