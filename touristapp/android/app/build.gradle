@@ -25,8 +25,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.example.touristapp"
-    compileSdkVersion 33 // Specify the SDK version directly
-    ndkVersion "27.0.12077973" // Ensure this matches your project's NDK version
+    compileSdkVersion  flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion // Ensure this matches your project's NDK version
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
