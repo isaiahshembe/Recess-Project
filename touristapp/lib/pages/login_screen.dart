@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:touristapp/pages/Welcomepage/features/features.dart';
+import 'package:touristapp/pages/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -101,12 +104,35 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 27,
                       width: 27,
                     ),SizedBox(width: 10,),
-                    Text('Continue with google')
+                    Text('Continue with google'),
+
                   ],
                 ),
               ),
-            )
-          ],
+            ), SizedBox(
+                      width: 10,
+                    )
+            ,Center(
+              child: GestureDetector(
+                onTap: () {
+                  print('hi');
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Already have an account?'),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          Get.to(SignupScreen());
+                        },
+                        child: Text('Signup'))
+                  ],
+                ),
+              ),
+        )],
         ),
       ),
     );
