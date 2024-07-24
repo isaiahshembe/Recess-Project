@@ -5,44 +5,30 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader("UTF-8") { reader ->
-        localProperties.load(reader)
-    }
-}
-
-def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
-if (flutterVersionCode == null) {
-    flutterVersionCode = "1"
-}
-
-def flutterVersionName = localProperties.getProperty("flutter.versionName")
-if (flutterVersionName == null) {
-    flutterVersionName = "1.0"
-}
-
 android {
     namespace = "com.example.touristapp"
-    compileSdk = 34 // Define a specific version if flutter.compileSdkVersion is not defined
+    compileSdk = 34
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     defaultConfig {
         applicationId = "com.example.touristapp"
-        minSdk = 21 // Define a specific minimum SDK version if flutter.minSdkVersion is not defined
-        targetSdk = 34 // Define a specific target SDK version if flutter.targetSdkVersion is not defined
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        minSdk = 23
+        targetSdk = 34
+        versionCode = 1 // Or use flutterVersionCode if it's defined correctly
+        versionName = "1.0" // Or use flutterVersionName if it's defined correctly
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.debug // Use your own signing config for release builds
+            signingConfig = signingConfigs.debug
         }
     }
 }
@@ -52,8 +38,12 @@ flutter {
 }
 
 dependencies {
-    // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    // Add Firebase dependencies here, for example:
+    // Import the BoM for the Firebase platform
+    implementation platform("com.google.firebase:firebase-bom:33.1.2")
+
+    // Add the dependency for the Firebase Authentication library
     implementation "com.google.firebase:firebase-auth"
+
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation "com.google.android.gms:play-services-auth:21.2.0"
 }
