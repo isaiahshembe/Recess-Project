@@ -69,21 +69,19 @@ class _LoginScreenState extends State<LoginScreen> {
           child:Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-<<<<<<< HEAD
+
 const Spacer(),
             const Center(child: Text('Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),)),
             
             const SizedBox(height: 20,),
-=======
->>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
+
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
-<<<<<<< HEAD
+
             const SizedBox(height: 20,),
-=======
->>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
+
             TextField(
               controller: _passwordController,
               decoration: const InputDecoration(labelText: 'Password'),
@@ -105,10 +103,9 @@ const Spacer(),
               label: const Text('Continue with Google'),
             ),
             const SizedBox(height: 20),
-<<<<<<< HEAD
+
             const Spacer()
-=======
->>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
+
           ],
         ),
       ),
