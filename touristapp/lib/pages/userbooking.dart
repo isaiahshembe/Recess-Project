@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:touristapp/pages/car_rentals.dart';
 
 class UserBookingsPage extends StatefulWidget {
+  const UserBookingsPage({super.key});
+
   @override
   _UserBookingsPageState createState() => _UserBookingsPageState();
 }
@@ -26,7 +28,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> with SingleTickerPr
   void _navigateToAddBooking() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CarRentalContentPage()),
+      MaterialPageRoute(builder: (context) => const CarRentalContentPage()),
     );
   }
 
@@ -34,10 +36,10 @@ class _UserBookingsPageState extends State<UserBookingsPage> with SingleTickerPr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Bookings'),
+        title: const Text('My Bookings'),
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(text: 'Active'),
             Tab(text: 'Past'),
             Tab(text: 'Canceled'),
@@ -45,14 +47,14 @@ class _UserBookingsPageState extends State<UserBookingsPage> with SingleTickerPr
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: _navigateToAddBooking,
           ),
         ],
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           BookingsList(status: 'Active', emptyMessage: 'Where to next?', emptySubMessage: "You haven't started any trips yet. Once you make a booking, it'll appear here."),
           BookingsList(status: 'Past', emptyMessage: 'Revisit past trips', emptySubMessage: 'Here you can refer to all past trips and get inspiration for your next ones.'),
           BookingsList(status: 'Canceled', emptyMessage: 'Sometimes plans change', emptySubMessage: "Here you can refer to all trips you've cancelled--maybe next time."),
@@ -67,7 +69,7 @@ class BookingsList extends StatelessWidget {
   final String emptyMessage;
   final String emptySubMessage;
 
-  BookingsList({required this.status, required this.emptyMessage, required this.emptySubMessage});
+  const BookingsList({super.key, required this.status, required this.emptyMessage, required this.emptySubMessage});
 
   Future<void> _cancelBooking(DocumentSnapshot booking) async {
     await FirebaseFirestore.instance
@@ -88,7 +90,7 @@ class BookingsList extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -100,13 +102,13 @@ class BookingsList extends StatelessWidget {
                 children: [
                   Text(
                     emptyMessage,
-                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Text(
                     emptySubMessage,
-                    style: TextStyle(fontSize: 16.0),
+                    style: const TextStyle(fontSize: 16.0),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -136,7 +138,7 @@ class BookingsList extends StatelessWidget {
                   ? Tooltip(
                       message: 'Cancel Trip',
                       child: IconButton(
-                        icon: Icon(Icons.cancel),
+                        icon: const Icon(Icons.cancel),
                         onPressed: () async {
                           await _cancelBooking(booking);
                         },

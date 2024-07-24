@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfileEditScreen(),
+                  builder: (context) => const ProfileEditScreen(),
                 ),
               );
             },
@@ -107,7 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UserBookingsPage(),
+                    builder: (context) => const UserBookingsPage(),
                   ),
                 );
               },
@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SettingsPage(),
+                    builder: (context) => const SettingsPage(),
                   ),
                 );
               },
@@ -131,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HelpSupportPage(),
+                    builder: (context) => const HelpSupportPage(),
                   ),
                 );
               },
