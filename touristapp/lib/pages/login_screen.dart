@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+      await _createOrUpdateUserDocument(userCredential.user!);
       // Navigate to HomePage on successful login
       Navigator.pushReplacement(
         context,
@@ -40,12 +41,17 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+      if (googleUser == null) {
+        // The user canceled the sign-in
+        return;
+      }
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
       UserCredential userCredential = await _auth.signInWithCredential(credential);
+      await _createOrUpdateUserDocument(userCredential.user!);
       // Navigate to HomePage on successful login
       Navigator.pushReplacement(
         context,
@@ -89,38 +95,38 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-          child:Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: _signInWithEmailAndPassword,
-              icon: const Icon(Icons.email),
-              label: const Text('Login with Email'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: _signInWithGoogle,
-              icon: Image.asset(
-                'images/icons8-google-48.png', // Path to your Google icon
-                height: 24.0, // Adjust the size if necessary
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
               ),
-              label: const Text('Continue with Google'),
-            ),
-            const SizedBox(height: 20),
-          ],
+              TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _signInWithEmailAndPassword,
+                icon: const Icon(Icons.email),
+                label: const Text('Login with Email'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _signInWithGoogle,
+                icon: Image.asset(
+                  'images/icons8-google-48.png', // Path to your Google icon
+                  height: 24.0, // Adjust the size if necessary
+                ),
+                label: const Text('Continue with Google'),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 }
