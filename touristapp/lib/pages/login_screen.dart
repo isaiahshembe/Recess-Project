@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:touristapp/pages/Welcomepage/welcomepage.dart'; // Import your home or main content page
+import 'package:touristapp/pages/Welcomepage/welcomepage.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -69,21 +69,24 @@ class _LoginScreenState extends State<LoginScreen> {
           child:Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+<<<<<<< HEAD
 const Spacer(),
             const Center(child: Text('Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),)),
             
             const SizedBox(height: 20,),
+=======
+>>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
             TextField(
               controller: _emailController,
-              decoration: 
-              const InputDecoration(hintText: 'Email',border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(22)),borderSide: BorderSide.none), prefixIcon: Icon(Icons.email),filled: true,fillColor: Colors.grey),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
+<<<<<<< HEAD
             const SizedBox(height: 20,),
+=======
+>>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
             TextField(
               controller: _passwordController,
-              decoration: const InputDecoration(hintText: 'Password',
-              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(22)),borderSide: BorderSide.none),prefixIcon: Icon(Icons.key),fillColor: Colors.grey,filled: true),
-              
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
             const SizedBox(height: 20),
@@ -102,7 +105,10 @@ const Spacer(),
               label: const Text('Continue with Google'),
             ),
             const SizedBox(height: 20),
+<<<<<<< HEAD
             const Spacer()
+=======
+>>>>>>> 135333e024973cdcfdf3af71abfaaf95049dbe3c
           ],
         ),
       ),

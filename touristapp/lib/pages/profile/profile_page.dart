@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:touristapp/pages/profile/editprofilepage.dart';
 import 'package:touristapp/pages/settings/helpsupport.dart';
+import 'package:touristapp/pages/userbooking.dart';
 import '../settings.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -17,7 +17,13 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              Get.to(const ProfileEditScreen());
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileEditScreen(),
+                ),
+              );
+
             },
           ),
           IconButton(
@@ -49,23 +55,36 @@ class ProfilePage extends StatelessWidget {
               leading: const Icon(Icons.history),
               title: const Text('Booking History'),
               onTap: () {
-                // Navigate to Booking History Page
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserBookingsPage(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text('Settings'),
               onTap: () {
-                // Navigate to Settings Page
-                Get.to(const SettingsPage());
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsPage(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.help),
               title: const Text('Help & Support'),
               onTap: () {
-                // Navigate to Help & Support Page
-                Get.to(const HelpSupportPage());
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HelpSupportPage(),
+                  ),
+                );
               },
             ),
           ],
