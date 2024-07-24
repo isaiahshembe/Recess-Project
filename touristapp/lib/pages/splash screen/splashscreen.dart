@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
 
+    // Simulating a delay using Timer for demonstration
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
@@ -36,31 +37,39 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueAccent,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'images/display_image1.jpg',
-              height: 350.0,
-              width: 250.0,
+      body: Stack(
+        fit: StackFit.expand, // Expand stack to cover entire screen
+        children: <Widget>[
+          // Background image
+          Image.asset(
+            'images/display_image1.jpg',
+            fit: BoxFit.cover, // Cover the entire screen
+          ),
+          // Content on top of the image
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Text and CircularProgressIndicator
+                Text(
+                  'Welcome to TouristApp',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ],
             ),
-            const SizedBox(height: 20.0),
-            const Text(
-              'Welcome to TouristApp',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
