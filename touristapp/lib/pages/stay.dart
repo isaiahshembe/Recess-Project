@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:touristapp/utilities/bottom_nav.dart';
 
 class StaysPage extends StatefulWidget {
   const StaysPage({super.key});
@@ -47,17 +48,6 @@ class _StaysPageState extends State<StaysPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Stays'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Implement search functionality
-            },
-          ),
-        ],
-      ),
       body: Column(
         children: [
           Padding(
@@ -103,29 +93,35 @@ class _StaysPageState extends State<StaysPage> {
             child: ListView.builder(
               itemCount: filteredStays.length,
               itemBuilder: (context, index) {
+                final stay = filteredStays[index];
                 return Card(
                   margin: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Image.asset(
-                          filteredStays[index]['image_path'], // Use 'image_path' field from Firestore
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        title: Text(filteredStays[index]['name']),
+                        leading: stay['image'] != null
+                            ? Image.network(
+                                stay['image'], // Assuming 'image' field in Firestore
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(Icons.broken_image, size: 50);
+                                },
+                              )
+                            : Icon(Icons.image_not_supported, size: 50),
+                        title: Text(stay['name'] ?? 'No name'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(filteredStays[index]['description']),
+                            Text(stay['description'] ?? 'No description'),
                             Row(
                               children: [
-                                const Icon(Icons.star, color: Colors.yellow, size: 16),
+                                Icon(Icons.star, color: Colors.yellow, size: 16),
                                 Text(filteredStays[index]['rating'].toString()), 
                               ],
                             ),
-                            Text('\$${filteredStays[index]['price']} per night'),
+                            Text('\$${stay['price']?.toString() ?? 'No price'} per night'),
                           ],
                         ),
                         trailing: const Icon(Icons.arrow_forward),
@@ -151,6 +147,7 @@ class _StaysPageState extends State<StaysPage> {
           ),
         ],
       ),
+      bottomNavigationBar: const BottomNav(),
     );
   }
 }

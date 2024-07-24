@@ -11,9 +11,10 @@ class TrendingFeaturesPage extends StatefulWidget {
 
 class _TrendingFeaturesPageState extends State<TrendingFeaturesPage> {
   final List<String> trendingFeatures = [
-    'Feature 1',
-    'Feature 2',
-    'Feature 3',
+    'Kampala',
+    'Jinja',
+    'FortPortal',
+    'Entebbe',
     
   ];
   final List<String> selectedFeatures = [];
@@ -21,24 +22,42 @@ class _TrendingFeaturesPageState extends State<TrendingFeaturesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Trending Features')),
-      body: ListView.builder(
-        itemCount: trendingFeatures.length,
-        itemBuilder: (context, index) {
-          return CheckboxListTile(
-            title: Text(trendingFeatures[index]),
-            value: selectedFeatures.contains(trendingFeatures[index]),
-            onChanged: (bool? value) {
-              setState(() {
-                if (value == true) {
-                  selectedFeatures.add(trendingFeatures[index]);
-                } else {
-                  selectedFeatures.remove(trendingFeatures[index]);
-                }
-              });
-            },
-          );
-        },
+      appBar: AppBar(title: const Text('Select Trending Features'),
+      centerTitle: true,),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Top visited and best tour areas',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: trendingFeatures.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  title: Text(trendingFeatures[index]),
+                  value: selectedFeatures.contains(trendingFeatures[index]),
+                  onChanged: (bool? value) {
+                    setState(() {
+                      if (value == true) {
+                        selectedFeatures.add(trendingFeatures[index]);
+                      } else {
+                        selectedFeatures.remove(trendingFeatures[index]);
+                      }
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.search),

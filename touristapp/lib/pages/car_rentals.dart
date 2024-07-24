@@ -1,183 +1,194 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:intl/intl.dart';
+import 'package:touristapp/utilities/bottom_nav.dart';
 
-class CarRentalsPage extends StatefulWidget {
-  const CarRentalsPage({super.key});
-
+class CarRentalContentPage extends StatefulWidget {
   @override
-  _CarRentalsPageState createState() => _CarRentalsPageState();
+  _CarRentalContentPageState createState() => _CarRentalContentPageState();
 }
 
-class _CarRentalsPageState extends State<CarRentalsPage> {
-  TextEditingController locationController = TextEditingController();
-  DateTime? pickupDate;
-  DateTime? returnDate;
+class _CarRentalContentPageState extends State<CarRentalContentPage> {
+  bool returnToSameLocation = true;
+  TextEditingController pickupLocationController = TextEditingController();
+  DateTime pickupDate = DateTime.now();
+  DateTime returnDate = DateTime.now().add(Duration(days: 3));
+  TimeOfDay pickupTime = TimeOfDay(hour: 10, minute: 0);
+  TimeOfDay returnTime = TimeOfDay(hour: 10, minute: 0);
+  RangeValues driverAgeRange = RangeValues(30, 65);
 
-  void selectPickupDate() async {
+  Future<void> _selectDate(BuildContext context, bool isPickup) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: pickupDate ?? DateTime.now(),
+      initialDate: isPickup ? pickupDate : returnDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)), 
+      lastDate: DateTime(2101),
     );
-
-    if (picked != null && picked != pickupDate) {
+    if (picked != null && picked != (isPickup ? pickupDate : returnDate)) {
       setState(() {
-        pickupDate = picked;
+        if (isPickup) {
+          pickupDate = picked;
+        } else {
+          returnDate = picked;
+        }
       });
     }
   }
 
-  void selectReturnDate() async {
-    final DateTime? picked = await showDatePicker(
+  Future<void> _selectTime(BuildContext context, bool isPickup) async {
+    final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialDate: returnDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)), 
+      initialTime: isPickup ? pickupTime : returnTime,
     );
-
-    if (picked != null && picked != returnDate) {
+    if (picked != null && picked != (isPickup ? pickupTime : returnTime)) {
       setState(() {
-        returnDate = picked;
+        if (isPickup) {
+          pickupTime = picked;
+        } else {
+          returnTime = picked;
+        }
       });
     }
   }
+
+  void _performSearch() async {
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    await FirebaseFirestore.instance.collection('car_rental_bookings').add({
+      'user_id': user?.uid,
+      'pickup_location': pickupLocationController.text,
+      'pickup_date': DateFormat('yyyy-MM-dd').format(pickupDate),
+      'pickup_time': pickupTime.format(context),
+      'return_date': DateFormat('yyyy-MM-dd').format(returnDate),
+      'return_time': returnTime.format(context),
+      'driver_age_range': {
+        'start': driverAgeRange.start.round(),
+        'end': driverAgeRange.end.round()
+      },
+      'return_to_same_location': returnToSameLocation,
+      'booking_created_at': Timestamp.now(),
+      'status': 'Active',  
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Booking details saved successfully!')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to save booking details: $e')),
+    );
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Car Rentals'),
-      ),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Select Pickup Location on Map',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            SwitchListTile(
+              title: Text('Return to same location'),
+              value: returnToSameLocation,
+              onChanged: (bool value) {
+                setState(() {
+                  returnToSameLocation = value;
+                });
+              },
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 200, 
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(0.3152, 32.5816), 
-                  zoom: 10.0, 
-                ),
-                children: [
-                  TileLayer(
-                    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    subdomains: const ['a', 'b', 'c'],
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        width: 80.0,
-                        height: 80.0,
-                        point: LatLng(0.3152, 32.5816), 
-                        builder: (ctx) => const Icon(
-                          Icons.location_pin,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
             TextField(
-              controller: locationController,
-              decoration: const InputDecoration(
-                labelText: 'Pickup Location',
-                border: OutlineInputBorder(),
+              controller: pickupLocationController,
+              decoration: InputDecoration(
+                labelText: 'Pickup location',
+                prefixIcon: Icon(Icons.location_on),
               ),
             ),
-            const SizedBox(height: 16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: GestureDetector(
-                    onTap: selectPickupDate,
-                    child: AbsorbPointer(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'Pickup Date',
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.calendar_today),
-                        ),
-                        controller: TextEditingController(
-                          text: pickupDate != null
-                              ? '${pickupDate!.day}/${pickupDate!.month}/${pickupDate!.year}'
-                              : '',
-                        ),
-                      ),
+                  child: ListTile(
+                    title: Text('Pickup date'),
+                    subtitle: Text(DateFormat.yMMMd().format(pickupDate)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () => _selectDate(context, true),
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
                 Expanded(
-                  child: GestureDetector(
-                    onTap: selectReturnDate,
-                    child: AbsorbPointer(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'Return Date',
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.calendar_today),
-                        ),
-                        controller: TextEditingController(
-                          text: returnDate != null
-                              ? '${returnDate!.day}/${returnDate!.month}/${returnDate!.year}'
-                              : '',
-                        ),
-                      ),
+                  child: ListTile(
+                    title: Text('Time'),
+                    subtitle: Text(pickupTime.format(context)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.access_time),
+                      onPressed: () => _selectTime(context, true),
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 26),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  handleSearch();
-                },
-                child: const Text('Search'),
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    title: Text('Return date'),
+                    subtitle: Text(DateFormat.yMMMd().format(returnDate)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () => _selectDate(context, false),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: Text('Time'),
+                    subtitle: Text(returnTime.format(context)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.access_time),
+                      onPressed: () => _selectTime(context, false),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                "Driver's age: ${driverAgeRange.start.round()}-${driverAgeRange.end.round()}",
+                style: TextStyle(fontSize: 16.0),
+              ),
+            ),
+            RangeSlider(
+              values: driverAgeRange,
+              min: 18,
+              max: 100,
+              divisions: 82,
+              labels: RangeLabels(
+                driverAgeRange.start.round().toString(),
+                driverAgeRange.end.round().toString(),
+              ),
+              onChanged: (RangeValues values) {
+                setState(() {
+                  driverAgeRange = values;
+                });
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _performSearch,
+              child: Text('Save Booking'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
               ),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNav(),
     );
-  }
-
-  void handleSearch() {
-    String location = locationController.text;
-    String? pickupDateString = pickupDate != null
-        ? '${pickupDate!.day}/${pickupDate!.month}/${pickupDate!.year}'
-        : null;
-    String? returnDateString = returnDate != null
-        ? '${returnDate!.day}/${returnDate!.month}/${returnDate!.year}'
-        : null;
-
-    // Perform validation
-    if (location.isEmpty || pickupDate == null || returnDate == null) {
-      // Handle validation error (e.g., show error message)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
-      return;
-    }
-
-    // Perform search operation here (e.g., call an API or navigate to search results page)
-    // For demonstration, just print search details
-    print('Location: $location');
-    print('Pickup Date: $pickupDateString');
-    print('Return Date: $returnDateString');
   }
 }
