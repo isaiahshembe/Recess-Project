@@ -6,7 +6,6 @@ import 'package:touristapp/pages/profile/editprofilepage.dart';
 import 'package:touristapp/pages/settings/helpsupport.dart';
 import 'package:touristapp/pages/settings_page.dart';
 import 'package:touristapp/pages/userbooking.dart';
-import '../settings.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
