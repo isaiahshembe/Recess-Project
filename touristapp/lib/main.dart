@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:touristapp/firebase_options.dart';
-import 'package:touristapp/pages/admin/admin_page.dart';
-import 'package:touristapp/pages/main_page.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
 import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
