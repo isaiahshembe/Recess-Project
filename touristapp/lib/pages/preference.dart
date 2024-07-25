@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:touristapp/pages/signup_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:touristapp/pages/main_page.dart'; // Import your MainPage here
 
 class PreferencesScreen extends StatefulWidget {
@@ -48,7 +48,6 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to the main page
           savePreferences();
           Navigator.push(
             context,
@@ -60,14 +59,22 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     );
   }
 
-  void savePreferences() {
+  void savePreferences() async {
     List<String> selectedCategories = categories
         .where((category) => category.isSelected)
         .map((category) => category.name)
         .toList();
 
-    // Here you can save selectedCategories to your database or use it to filter attractions
-    print('Selected Categories: $selectedCategories');
+    // Save selected preferences to Firestore
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final firestore = FirebaseFirestore.instance;
+      await firestore.collection('users').doc(user.uid).set({
+        'preferences': selectedCategories,
+      }, SetOptions(merge: true));
+
+      print('Preferences saved: $selectedCategories');
+    }
   }
 }
 

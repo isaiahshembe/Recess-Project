@@ -51,7 +51,7 @@ class _MainPageState extends State<MainPage> {
 
       setState(() {
         allItems = places;
-        filteredItems = allItems;
+        filteredItems = allItems; // No filtering by category
       });
     } catch (e) {
       print('Error fetching data: $e');
@@ -100,7 +100,7 @@ class _MainPageState extends State<MainPage> {
           Stack(
             children: [
               Image.asset(
-                'images/display_image1.jpg',
+                'images/display_image1.jpg', // Update path if necessary
               ),
               Positioned(
                 top: 10,
@@ -201,19 +201,6 @@ class _MainPageState extends State<MainPage> {
                                     ),
                                   ),
                                 ),
-                                // Uncomment the below block if you want to display ratings
-                                // Padding(
-                                //   padding: const EdgeInsets.all(8.0),
-                                //   child: Row(
-                                //     children: List.generate(
-                                //       5,
-                                //       (index) => Icon(
-                                //         index < place.rating ? Icons.star : Icons.star_border,
-                                //         color: index < place.rating ? Colors.yellow : Colors.grey,
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
