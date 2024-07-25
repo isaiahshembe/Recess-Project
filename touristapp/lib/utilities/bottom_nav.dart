@@ -93,7 +93,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to(const SettingsPage());
+              Get.to(const ProfilePage());
             },
             icon: const Icon(Icons.person),
           ),
