@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
 import 'package:touristapp/pages/booking_page.dart';
+import 'package:touristapp/pages/profile/profile_page.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
-import 'package:touristapp/pages/settings_page.dart';
 import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
 import 'package:touristapp/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -91,7 +91,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to(const SettingsPage());
+              Get.to( ProfilePage());
             },
             icon: const Icon(Icons.person),
           ),
