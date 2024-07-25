@@ -32,6 +32,15 @@ class _MainPageState extends State<MainPage> {
       'rating': 3,
       'type': 'Nature',
     },
+
+    {
+      'name': 'Jinja',
+      'location': 'Masindi',
+      'image': 'images/kidepo valley np.jpg',
+      'rating': 3,
+      'type': 'Nature',}
+      
+    
     
   ];
   List<Map<String, dynamic>> filteredItems = [];
