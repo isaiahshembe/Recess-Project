@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:touristapp/pages/login_screen.dart'; // Import your LoginScreen
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -20,8 +21,13 @@ class ProfilePage extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.logout),
-            onPressed: () {
-              // Implement logout functionality here
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (route) => false,
+              );
             },
           ),
         ],
