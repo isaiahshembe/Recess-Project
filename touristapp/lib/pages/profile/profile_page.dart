@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:touristapp/pages/admin/admin_page.dart';
 import 'package:touristapp/pages/login_screen.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -39,7 +41,8 @@ class ProfilePage extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/images/default_profile_image.jpg'),
+              backgroundImage:
+                  AssetImage('assets/images/default_profile_image.jpg'),
             ),
             SizedBox(height: 16),
             Text(
@@ -75,6 +78,14 @@ class ProfilePage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Implement FAB functionality here
+          // Example: Navigate to edit profile page
+          Get.to(AdminPage());
+        },
+        child: Icon(Icons.add), // Replace with appropriate icon
       ),
     );
   }
