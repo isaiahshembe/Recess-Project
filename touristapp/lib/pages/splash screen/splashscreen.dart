@@ -24,11 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final User? user = auth.currentUser;
 
     // Simulating a delay using Timer for demonstration
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 1), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => user != null ? const TrendingFeaturesPage() : const MainPage(),
+          builder: (context) => user != null ? const TrendingFeaturesPage() : const SignupScreen(),
         ),
       );
     });

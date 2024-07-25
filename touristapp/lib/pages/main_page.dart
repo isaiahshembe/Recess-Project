@@ -1,66 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
+import 'package:touristapp/tourism_place.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({Key? key}) : super(key: key);
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> allItems = [
-    {
-      'name': 'Murchison Falls',
-      'location': 'Masindi',
-      'image': 'images/muchison.jpg',
-      'rating': 4,
-      'type': 'Nature',
-    },
-    {
-      'name': 'Lake Mburo',
-      'location': 'Toro',
-      'image': 'images/muchison.jpg',
-      'rating': 4,
-      'type': 'Nature',
-    },
-    {
-      'name': 'Queen Elizabeth',
-      'location': 'Masindi',
-      'image': 'images/muchison.jpg',
-      'rating': 3,
-      'type': 'Nature',
-    },
-
-    {
-      'name': 'Jinja',
-      'location': 'Masindi',
-      'image': 'images/kidepo valley np.jpg',
-      'rating': 3,
-      'type': 'Nature',}
-      
-    
-    
-  ];
-  List<Map<String, dynamic>> filteredItems = [];
+  List<TourismPlace> allItems = [];
+  List<TourismPlace> filteredItems = [];
 
   @override
   void initState() {
     super.initState();
-    filteredItems = allItems; 
+    fetchTourismPlaces();
+  }
+
+  Future<void> fetchTourismPlaces() async {
+    try {
+      // Fetch all documents from "tourism_places" collection
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('tourism_places').get();
+
+      List<TourismPlace> places = [];
+      querySnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        TourismPlace place = TourismPlace(
+          name: data['name'],
+          image: data['image'],
+          location: data['location'],
+          rating: data['rating'],
+        );
+        places.add(place);
+      });
+
+      setState(() {
+        allItems = places;
+        filteredItems = allItems;
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+      // Handle error
+    }
   }
 
   void _filterResults(String query) {
-    List<Map<String, dynamic>> results = [];
+    List<TourismPlace> results = [];
     if (query.isEmpty) {
       results = allItems;
     } else {
-      results = allItems
-          .where((item) =>
-              item['name']!.toLowerCase().contains(query.toLowerCase()) ||
-              item['location']!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      results = allItems.where((place) =>
+          place.name.toLowerCase().contains(query.toLowerCase()) ||
+          place.location.toLowerCase().contains(query.toLowerCase())).toList();
     }
 
     setState(() {
@@ -68,15 +64,18 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  List<Map<String, dynamic>> _rankResults(List<Map<String, dynamic>> results, String query) {
+  List<TourismPlace> _rankResults(List<TourismPlace> results, String query) {
     // Example ranking logic: rank by rating
-    results.sort((a, b) => b['rating'].compareTo(a['rating']));
+    results.sort((a, b) => b.rating.compareTo(a.rating));
     return results;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Tourism Places'),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +122,7 @@ class _MainPageState extends State<MainPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Recommended for you',
+                    'Explore',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                   ),
                   const SizedBox(height: 10),
@@ -132,7 +131,7 @@ class _MainPageState extends State<MainPage> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: filteredItems.map((item) {
+                      children: filteredItems.map((place) {
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
@@ -145,34 +144,44 @@ class _MainPageState extends State<MainPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(item['image']),
-                              Text(
-                                item['name'],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                ),
+                              Image.network(
+                                place.image,
+                                height: 100,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
                               ),
-                              Text(
-                                item['location'],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Row(
-                                children: List.generate(
-                                  5,
-                                  (index) => Icon(
-                                    index < item['rating']
-                                        ? Icons.star
-                                        : Icons.star_border,
-                                    color: index < item['rating']
-                                        ? Colors.yellow
-                                        : Colors.grey,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  place.name,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
                                   ),
                                 ),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  place.location,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.all(8.0),
+                              //   child: Row(
+                              //     children: List.generate(
+                              //       5,
+                              //       (index) => Icon(
+                              //         index < place.rating ? Icons.star : Icons.star_border,
+                              //         color: index < place.rating ? Colors.yellow : Colors.grey,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         );
