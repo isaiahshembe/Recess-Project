@@ -80,7 +80,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:touristapp/pages/resultpref.dart'; // Import your ResultsScreen here
+import 'package:touristapp/pages/resultpref.dart'; 
 
 class PreferencesScreen extends StatefulWidget {
   @override
@@ -162,7 +162,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         QuerySnapshot categorySnapshot = await FirebaseFirestore.instance
             .collection('preferences')
             .doc(category)
-            .collection('places') // Assuming 'places' is the sub-collection
+            .collection('places') 
             .get();
 
         for (var doc in categorySnapshot.docs) {
