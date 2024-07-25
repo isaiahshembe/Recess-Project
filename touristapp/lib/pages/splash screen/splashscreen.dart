@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:touristapp/pages/Welcomepage/features/features.dart';
+import 'package:touristapp/pages/login_screen.dart';
 import 'package:touristapp/pages/main_page.dart';
 import 'package:touristapp/pages/signup_screen.dart';
 
@@ -24,11 +25,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final User? user = auth.currentUser;
 
     // Simulating a delay using Timer for demonstration
-    Timer(const Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => user != null ? const TrendingFeaturesPage() : const SignupScreen(),
+          builder: (context) => user != null ? const TrendingFeaturesPage() : const LoginScreen(),
         ),
       );
     });
