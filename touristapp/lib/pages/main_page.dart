@@ -83,47 +83,47 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text('Tourism Places'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Image.asset(
-                  'images/display_image1.jpg',
-                ),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  right: 10,
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: const OutlineInputBorder(),
-                      hintText: 'What are you looking for?',
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          _filterResults(_searchController.text);
-                        },
-                        icon: const Icon(Icons.search),
-                      ),
-                      hintStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Image.asset(
+                'images/display_image1.jpg',
+              ),
+              Positioned(
+                top: 10,
+                left: 10,
+                right: 10,
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: const OutlineInputBorder(),
+                    hintText: 'What are you looking for?',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        _filterResults(_searchController.text);
+                      },
+                      icon: const Icon(Icons.search),
                     ),
-                    onChanged: (text) {
-                      _filterResults(text);
-                    },
+                    hintStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                  onChanged: (text) {
+                    _filterResults(text);
+                  },
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Container(
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,8 +144,8 @@ class _MainPageState extends State<MainPage> {
                             color: Colors.grey.shade300,
                             borderRadius: BorderRadius.circular(17),
                           ),
-                          height: 160,
-                          width: 150,
+                          height: 200,
+                          width: 200,
                           margin: const EdgeInsets.only(right: 10),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -199,8 +199,8 @@ class _MainPageState extends State<MainPage> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: const BottomNav(),
     );

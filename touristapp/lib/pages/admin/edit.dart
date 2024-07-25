@@ -40,40 +40,30 @@ class _TourismPageEditState extends State<TourismPageEdit> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextFormField(
+            _buildTextField(
               controller: _nameController,
-              decoration: InputDecoration(
-                labelText: 'Name of the Tourism Place',
-              ),
+              labelText: 'Name of the Tourism Place',
             ),
             SizedBox(height: 16.0),
-            TextFormField(
+            _buildTextField(
               controller: _imageController,
-              decoration: InputDecoration(
-                labelText: 'Image URL of the Tourism Place',
-              ),
+              labelText: 'Image URL of the Tourism Place',
             ),
             SizedBox(height: 16.0),
-            TextFormField(
+            _buildTextField(
               controller: _descriptionController,
-              decoration: InputDecoration(
-                labelText: 'Description of the Tourism Place',
-              ),
-              maxLines: 3, // Adjust according to your design
+              labelText: 'Description of the Tourism Place',
+              maxLines: 3,
             ),
             SizedBox(height: 16.0),
-            TextFormField(
+            _buildTextField(
               controller: _locationController,
-              decoration: InputDecoration(
-                labelText: 'Location of the Tourism Place',
-              ),
+              labelText: 'Location of the Tourism Place',
             ),
             SizedBox(height: 16.0),
-            TextFormField(
+            _buildTextField(
               controller: _priceController,
-              decoration: InputDecoration(
-                labelText: 'Price of the Tourism Place',
-              ),
+              labelText: 'Price of the Tourism Place',
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 32.0),
@@ -89,6 +79,30 @@ class _TourismPageEditState extends State<TourismPageEdit> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    int maxLines = 1,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[300], // Grey fill color
+        borderRadius: BorderRadius.circular(27.0), // Circular border radius
+      ),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+          labelText: labelText,
+          border: InputBorder.none, // Remove the default border
+        ),
+        maxLines: maxLines,
+        keyboardType: keyboardType,
       ),
     );
   }

@@ -13,10 +13,12 @@ class _EditingPageState extends State<EditingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Container(
-      
+      padding:EdgeInsets.all(15),
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -26,6 +28,7 @@ class _EditingPageState extends State<EditingPage> {
                     Get.to(PlaceEditingPage());
                   },
                   child: Text('Tourism Places')),
+                  SizedBox(height: 20,),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 70),
