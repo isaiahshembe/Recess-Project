@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:touristapp/pages/tourism_detailPage.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 import 'package:touristapp/tourism_place.dart';
 
@@ -23,7 +24,6 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> fetchTourismPlaces() async {
     try {
-      // Fetch all documents from "tourism_places" collection
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('tourism_places').get();
 
@@ -31,17 +31,20 @@ class _MainPageState extends State<MainPage> {
       querySnapshot.docs.forEach((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        // Handle null values and provide default values if necessary
         String name = data['name'] ?? 'Unknown Name';
-        String image = data['image'] ?? 'https://via.placeholder.com/150'; // Provide a default image URL
+        String image = data['image'] ?? 'https://via.placeholder.com/150';
         String location = data['location'] ?? 'Unknown Location';
         int rating = data['rating'] ?? 0;
+        double price = data['price'] ?? 0.0;
+        String description = data['description'] ?? '';
 
         TourismPlace place = TourismPlace(
           name: name,
           image: image,
           location: location,
           rating: rating,
+          price: price,
+          description: description,
         );
         places.add(place);
       });
@@ -72,9 +75,17 @@ class _MainPageState extends State<MainPage> {
   }
 
   List<TourismPlace> _rankResults(List<TourismPlace> results, String query) {
-    // Example ranking logic: rank by rating
     results.sort((a, b) => b.rating.compareTo(a.rating));
     return results;
+  }
+
+  void _navigateToDetails(TourismPlace place) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TourismDetailsPage(place: place),
+      ),
+    );
   }
 
   @override
@@ -139,58 +150,72 @@ class _MainPageState extends State<MainPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: filteredItems.map((place) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(17),
-                          ),
-                          height: 200,
-                          width: 200,
-                          margin: const EdgeInsets.only(right: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                place.image,
-                                height: 100,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  place.name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
+                        return GestureDetector(
+                          onTap: () => _navigateToDetails(place),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(17),
+                            ),
+                            height: 200,
+                            width: 200,
+                            margin: const EdgeInsets.only(right: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.network(
+                                  place.image,
+                                  height: 100,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    place.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(
-                                  place.location,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Text(
+                                    place.location,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              // Uncomment the below block if you want to display ratings
-                              // Padding(
-                              //   padding: const EdgeInsets.all(8.0),
-                              //   child: Row(
-                              //     children: List.generate(
-                              //       5,
-                              //       (index) => Icon(
-                              //         index < place.rating ? Icons.star : Icons.star_border,
-                              //         color: index < place.rating ? Colors.yellow : Colors.grey,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Text(
+                                    '\$${place.price.toStringAsFixed(2)}', // Format price
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                                // Uncomment the below block if you want to display ratings
+                                // Padding(
+                                //   padding: const EdgeInsets.all(8.0),
+                                //   child: Row(
+                                //     children: List.generate(
+                                //       5,
+                                //       (index) => Icon(
+                                //         index < place.rating ? Icons.star : Icons.star_border,
+                                //         color: index < place.rating ? Colors.yellow : Colors.grey,
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ),
                           ),
                         );
                       }).toList(),
