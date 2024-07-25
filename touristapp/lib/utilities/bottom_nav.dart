@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
-import 'package:touristapp/pages/profile/profile_page.dart';
 import 'package:touristapp/pages/booking_page.dart';
+import 'package:touristapp/pages/profile/profile_page.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
 import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
@@ -91,7 +91,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to(const ProfilePage());
+              Get.to( ProfilePage());
             },
             icon: const Icon(Icons.person),
           ),
