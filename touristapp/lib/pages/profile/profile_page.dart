@@ -16,6 +16,8 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
+    final bool isAdmin = user != null &&
+        (user.email == 'john@gmail.com' || user.email == 'nuweisaiah@gmail.com');
 
     return Scaffold(
       appBar: AppBar(
@@ -93,14 +95,16 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement FAB functionality here
-          // Example: Navigate to edit profile page
-          Get.to(AdminPage());
-        },
-        child: Icon(Icons.add), // Replace with appropriate icon
-      ),
+      floatingActionButton: isAdmin
+          ? FloatingActionButton(
+              onPressed: () {
+                // Implement FAB functionality here
+                // Example: Navigate to admin page
+                Get.to(AdminPage());
+              },
+              child: Icon(Icons.add), // Replace with appropriate icon
+            )
+          : null, // Hide FAB for non-admin users
     );
   }
 }
