@@ -15,15 +15,16 @@ class _TrendingFeaturesPageState extends State<TrendingFeaturesPage> {
     'Jinja',
     'FortPortal',
     'Entebbe',
-    
   ];
   final List<String> selectedFeatures = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Trending Features'),
-      centerTitle: true,),
+      appBar: AppBar(
+        title: const Text('Select Trending Features'),
+        centerTitle: true,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
