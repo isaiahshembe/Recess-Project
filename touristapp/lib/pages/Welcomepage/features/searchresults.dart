@@ -30,6 +30,12 @@ class SearchResultsPage extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return ListTile(
+                leading: Image.network(
+                  doc['image'],
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                ),
                 title: Text(doc['name']),
                 subtitle: Text(doc['description']),
               );
