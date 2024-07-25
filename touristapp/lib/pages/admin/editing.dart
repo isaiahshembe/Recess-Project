@@ -13,24 +13,27 @@ class _EditingPageState extends State<EditingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 70),
-                    backgroundColor: Color.fromARGB(255, 114, 197, 118)),
-                onPressed: () {
-                  Get.to(PlaceEditingPage());
-                },
-                child: Text('Tourism Places')),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 70),
-                    backgroundColor: Color.fromARGB(255, 114, 197, 118)),
-                onPressed: () {},
-                child: Text('Hotels'))
-          ],
+      body: Container(
+      
+        child: Center(
+          child: Column(
+            children: [
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 70),
+                      backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                  onPressed: () {
+                    Get.to(PlaceEditingPage());
+                  },
+                  child: Text('Tourism Places')),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 70),
+                      backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                  onPressed: () {},
+                  child: Text('Hotels'))
+            ],
+          ),
         ),
       ),
     );
