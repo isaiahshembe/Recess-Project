@@ -151,20 +151,26 @@ class _LoginScreenState extends State<LoginScreen> {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
 
-      UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Navigate to home screen or do something else on successful login
+      // Check if email is verified
       if (userCredential.user != null) {
-        // Navigate to MainPage or any other screen after successful login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => MainPage()),
-        );
-        print('User logged in: ${userCredential.user!.uid}');
+        if (userCredential.user!.emailVerified) {
+          // Navigate to MainPage or any other screen after successful login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => MainPage()),
+          );
+          print('User logged in: ${userCredential.user!.uid}');
+        } else {
+          // Email is not verified
+          _showErrorDialog('Please verify your email to continue.');
+          await _auth.signOut();
+          _showVerificationDialog(userCredential.user!);
+        }
       } else {
         _showErrorDialog('Failed to authenticate');
       }
@@ -181,6 +187,33 @@ class _LoginScreenState extends State<LoginScreen> {
           title: Text('Error'),
           content: Text(message),
           actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showVerificationDialog(User user) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Email Verification'),
+          content: Text('A verification email has been sent to ${user.email}. Please check your inbox and verify your email.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                await user.sendEmailVerification();
+                Navigator.of(context).pop();
+              },
+              child: Text('Resend Email'),
+            ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();

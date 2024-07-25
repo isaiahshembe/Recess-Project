@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/pages/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -15,8 +16,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   bool _obscurePassword = true;
 
@@ -88,9 +88,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       prefixIcon: Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                          _obscurePassword ? Icons.visibility : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -114,9 +112,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       prefixIcon: Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                          _obscurePassword ? Icons.visibility : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -179,6 +175,7 @@ class _SignupScreenState extends State<SignupScreen> {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
       final String confirmPassword = _confirmPasswordController.text.trim();
+      final String username = _usernameController.text.trim();
 
       // Validate email format
       if (email.isEmpty || !email.contains('@')) {
@@ -192,15 +189,25 @@ class _SignupScreenState extends State<SignupScreen> {
         return;
       }
 
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
+      // Register user
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Navigate to login screen on successful registration
+      // Send email verification
+      await userCredential.user!.sendEmailVerification();
+
+      // Store user information in Firestore
       if (userCredential.user != null) {
-        // Navigate to login screen
+        await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+          'email': email,
+          'username': username,
+          'phoneNumber': '', // Optional: Capture phone number if needed
+          'photoURL': '', // Optional: Default or empty URL for profile picture
+        });
+
+        // Navigate to login screen on successful registration
         Get.off(LoginScreen());
       } else {
         _showErrorDialog('Failed to create user');
