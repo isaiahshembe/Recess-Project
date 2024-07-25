@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:touristapp/pages/car_rentals.dart';
-import 'package:touristapp/pages/main_page.dart';
+import 'package:touristapp/pages/preference.dart'; // Updated import for PreferencesScreen
 import 'package:touristapp/pages/stay.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -43,9 +43,9 @@ class _WelcomePageState extends State<WelcomePage> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        children: const <Widget>[
+        children: <Widget>[
           StaysPage(),
-          MainPage(),
+          PreferencesScreen(), // Replaced MainPage with PreferencesScreen
           CarRentalContentPage(),
         ],
       ),
