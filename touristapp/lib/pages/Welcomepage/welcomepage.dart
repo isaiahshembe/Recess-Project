@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:touristapp/pages/car_rentals.dart';
 import 'package:touristapp/pages/preference.dart'; // Updated import for PreferencesScreen
 import 'package:touristapp/pages/stay.dart';
+import 'package:touristapp/add.dart'; // Import for AddCategoriesPage
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -40,13 +41,32 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ),
       ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        children: <Widget>[
-          StaysPage(),
-          PreferencesScreen(), // Replaced MainPage with PreferencesScreen
-          CarRentalContentPage(),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              children: <Widget>[
+                StaysPage(),
+                PreferencesScreen(), // Replaced MainPage with PreferencesScreen
+                CarRentalContentPage(),
+              ],
+            ),
+          ),
+          // Button to add categories
+          ElevatedButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddCategoriesPage(),
+                ),
+              );
+            },
+            child: Text('Add Categories to Firebase'),
+          ),
         ],
       ),
     );
