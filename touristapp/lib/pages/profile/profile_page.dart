@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:touristapp/pages/booking_page.dart';
 import 'package:touristapp/pages/login_screen.dart';
 import 'package:touristapp/pages/profile/editprofilepage.dart';
 import 'package:touristapp/pages/settings/helpsupport.dart';
@@ -52,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              // Implement edit profile functionality here
+              Get.to(ProfileEditScreen());
             },
           ),
           IconButton(
@@ -70,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/images/default_profile_image.jpg'),
+              backgroundImage: AssetImage('images/profile.jpg'),
             ),
             SizedBox(height: 16),
             Text(
@@ -87,21 +90,30 @@ class _ProfilePageState extends State<ProfilePage> {
               leading: Icon(Icons.history),
               title: Text('Booking History'),
               onTap: () {
-                // Implement booking history navigation
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => UserBookingsPage()),
+                  );
               },
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Settings'),
               onTap: () {
-                // Implement settings navigation
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => SettingsPage()),
+                  );
               },
             ),
             ListTile(
               leading: Icon(Icons.help),
               title: Text('Help & Support'),
               onTap: () {
-                // Implement help & support navigation
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => HelpSupportPage()),
+                  );
               },
             ),
           ],
