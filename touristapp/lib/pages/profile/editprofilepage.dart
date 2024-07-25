@@ -37,11 +37,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
 
   Future<void> _uploadImageAndSaveProfile() async {
-    if (_image != null) {
-      setState(() {
-        _isLoading = true;
-      });
-      try {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      if (_image != null) {
         // Upload image to Firebase Storage
         String fileName = 'profile_pictures/${user!.uid}.jpg';
         UploadTask uploadTask = FirebaseStorage.instance.ref(fileName).putFile(_image!);
@@ -59,39 +59,26 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         // Update FirebaseAuth user profile
         await user!.updateProfile(displayName: _nameController!.text, photoURL: downloadURL);
 
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile updated successfully')));
-      } catch (e) {
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile: $e')));
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } else {
-      // If no new image, just update the profile information
-      try {
-        // Update Firestore user document
+      } else {
+        // If no new image, just update the profile information
         await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
           'displayName': _nameController!.text,
           'email': _emailController!.text,
           'phoneNumber': _phoneController!.text,
         });
 
-        // Update FirebaseAuth user profile
         await user!.updateProfile(displayName: _nameController!.text);
-
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile updated successfully')));
-      } catch (e) {
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile: $e')));
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
       }
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile updated successfully')));
+    } catch (e) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile: $e')));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
