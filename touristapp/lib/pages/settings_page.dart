@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:touristapp/pages/about_us_page.dart';
 import 'package:touristapp/pages/privacy_policy_page.dart';
 import 'package:touristapp/pages/settings/localprovider.dart';
 import 'package:touristapp/pages/settings/themeprovider.dart';
 import 'package:touristapp/l10n/app_localizations.dart';
+import 'package:touristapp/pages/login_screen.dart'; // Import your login screen
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -16,6 +18,37 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool _notificationsEnabled = true;
   String _selectedLanguage = 'English';
+  String _userEmail = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserEmail();
+  }
+
+  void _getUserEmail() {
+    // Fetch the current user's email from Firebase Authentication
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _userEmail = user.email ?? '';
+      });
+    }
+  }
+
+  void _logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+        (route) => false,
+      );
+    } catch (e) {
+      print('Error logging out: $e');
+      // Handle error logging out
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +139,24 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
+          const SizedBox(height: 20),
+          Center(
+            child: Text(
+              'Logged in as: $_userEmail',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 20),
+          ListTile(
+            title: Text(
+              AppLocalizations.of(context)!.translate('logout'),
+              style: TextStyle(color: Colors.red),
+            ),
+            onTap: () {
+              _logout();
+            },
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );

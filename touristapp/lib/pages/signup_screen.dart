@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:touristapp/pages/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -10,7 +11,13 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  // Whether to obscure the password text
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
   bool _obscurePassword = true;
 
   @override
@@ -36,6 +43,7 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Column(
                 children: [
                   TextFormField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -45,9 +53,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       hintText: 'Email',
                       prefixIcon: Icon(Icons.email),
                     ),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || !value.contains('@')) {
+                        return 'Please enter a valid email address';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 15),
                   TextFormField(
+                    controller: _usernameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -60,6 +76,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   SizedBox(height: 15),
                   TextFormField(
+                    controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -68,10 +85,12 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       hintText: 'Password',
                       filled: true,
-                      prefixIcon: Icon(Icons.key),
+                      prefixIcon: Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                          _obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -83,6 +102,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   SizedBox(height: 15),
                   TextFormField(
+                    controller: _confirmPasswordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -91,10 +111,12 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       hintText: 'Confirm password',
                       filled: true,
-                      prefixIcon: Icon(Icons.key),
+                      prefixIcon: Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                          _obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
                         onPressed: () {
                           setState(() {
@@ -110,7 +132,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       minimumSize: Size(double.infinity, 50),
                       backgroundColor: Color.fromARGB(255, 100, 180, 103),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      _register();
+                    },
                     child: Text(
                       'Sign Up',
                       style: TextStyle(
@@ -127,7 +151,7 @@ class _SignupScreenState extends State<SignupScreen> {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  print('hi');
+                  Get.to(LoginScreen());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -147,6 +171,63 @@ class _SignupScreenState extends State<SignupScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _register() async {
+    try {
+      final String email = _emailController.text.trim();
+      final String password = _passwordController.text.trim();
+      final String confirmPassword = _confirmPasswordController.text.trim();
+
+      // Validate email format
+      if (email.isEmpty || !email.contains('@')) {
+        _showErrorDialog('Please enter a valid email address');
+        return;
+      }
+
+      // Validate password match
+      if (password != confirmPassword) {
+        _showErrorDialog('Passwords do not match');
+        return;
+      }
+
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Navigate to login screen on successful registration
+      if (userCredential.user != null) {
+        // Navigate to login screen
+        Get.off(LoginScreen());
+      } else {
+        _showErrorDialog('Failed to create user');
+      }
+
+    } catch (e) {
+      _showErrorDialog('Error registering user: $e');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

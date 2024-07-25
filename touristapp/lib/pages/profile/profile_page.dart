@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/pages/login_screen.dart';
 import 'package:touristapp/pages/profile/editprofilepage.dart';
 import 'package:touristapp/pages/settings/helpsupport.dart';
+import 'package:touristapp/pages/settings_page.dart';
 import 'package:touristapp/pages/userbooking.dart';
 import '../settings.dart';
 

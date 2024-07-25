@@ -1,78 +1,67 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:touristapp/pages/about_us_page.dart';
-import 'package:touristapp/pages/privacy_policy_page.dart';
+// import 'package:flutter/material.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:get/get.dart';
+// import 'package:touristapp/pages/login_screen.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+// class SettingsPage extends StatelessWidget {
+//   const SettingsPage({Key? key}) : super(key: key);
 
-  @override
-  _SettingsPageState createState() => _SettingsPageState();
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         // title: const Text('Settings'),
+//       ),
+//       body: ListView(
+//         padding: const EdgeInsets.all(16),
+//         children: [
+//           ListTile(
+//             leading: Icon(Icons.person),
+//             title: const Text('Profile'),
+//             onTap: () {
+//               // Navigate to profile editing screen
+//               // Example: Get.to(ProfilePage());
+//               print('Navigate to profile editing screen');
+//             },
+//           ),
+//           ListTile(
+//             leading: Icon(Icons.notifications),
+//             title: const Text('Notifications'),
+//             onTap: () {
+//               // Navigate to notification settings screen
+//               // Example: Get.to(NotificationSettingsPage());
+//               print('Navigate to notification settings screen');
+//             },
+//           ),
+//           ListTile(
+//             leading: Icon(Icons.language),
+//             title: const Text('Language'),
+//             onTap: () {
+//               // Navigate to language settings screen
+//               // Example: Get.to(LanguageSettingsPage());
+//               print('Navigate to language settings screen');
+//             },
+//           ),
+//           ListTile(
+//             leading: Icon(Icons.logout),
+//             title: const Text('Logout'),
+//             onTap: () {
+//               _logout(context);
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
-class _SettingsPageState extends State<SettingsPage> {
-  bool _notificationsEnabled = true;
-  bool _darkModeEnabled = false;
-  String _selectedLanguage = 'English';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
-      body: ListView(
-        children: <Widget>[
-          SwitchListTile(
-            title: const Text('Enable Notifications'),
-            value: _notificationsEnabled,
-            onChanged: (bool value) {
-              setState(() {
-                _notificationsEnabled = value;
-              });
-            },
-          ),
-          SwitchListTile(
-            title: const Text('Dark Mode'),
-            value: _darkModeEnabled,
-            onChanged: (bool value) {
-              setState(() {
-                _darkModeEnabled = value;
-              });
-            },
-          ),
-          ListTile(
-            title: const Text('Language'),
-            trailing: DropdownButton<String>(
-              value: _selectedLanguage,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedLanguage = newValue!;
-                });
-              },
-              items: <String>['English', 'Spanish', 'French', 'German']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ),
-          ListTile(
-            title: const Text('About'),
-            onTap: () {
-              Get.to(const AboutUsPage());
-            },
-          ),
-          ListTile(
-            title: const Text('Privacy Policy'),
-            onTap: () {
-              Get.to(const PrivacyPolicyPage());
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   void _logout(BuildContext context) async {
+//     try {
+//       await FirebaseAuth.instance.signOut();
+//       Get.offAll(LoginScreen()); // Redirect to LoginScreen and remove all previous routes
+//     } catch (e) {
+//       print('Error logging out: $e');
+//       // Show error message or handle error as needed
+//       // Example: showDialog(...);
+//     }
+//   }
+// }
