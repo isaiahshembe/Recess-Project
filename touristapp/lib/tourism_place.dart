@@ -1,5 +1,3 @@
-
-
 class TourismPlace {
   final String name;
   final String image;

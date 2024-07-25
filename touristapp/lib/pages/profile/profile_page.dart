@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:touristapp/pages/admin/admin_page.dart';
 import 'package:touristapp/pages/login_screen.dart';
+import 'package:touristapp/pages/profile/editprofilepage.dart';
+import 'package:touristapp/pages/settings/helpsupport.dart';
+import 'package:touristapp/pages/settings_page.dart';
+import 'package:touristapp/pages/userbooking.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -10,6 +16,8 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
+    final bool isAdmin = user != null &&
+        (user.email == 'john@gmail.com' || user.email == 'nuweisaiah@gmail.com');
 
     return Scaffold(
       appBar: AppBar(
@@ -18,7 +26,7 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              // Implement edit profile functionality here
+              Get.to(ProfileEditScreen());
             },
           ),
           IconButton(
@@ -41,8 +49,7 @@ class ProfilePage extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage:
-                  AssetImage('assets/images/default_profile_image.jpg'),
+              backgroundImage: AssetImage('assets/images/default_profile_image.jpg'),
             ),
             SizedBox(height: 16),
             Text(
@@ -59,34 +66,45 @@ class ProfilePage extends StatelessWidget {
               leading: Icon(Icons.history),
               title: Text('Booking History'),
               onTap: () {
-                // Implement booking history navigation
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => UserBookingsPage()),
+                  );
               },
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Settings'),
               onTap: () {
-                // Implement settings navigation
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => SettingsPage()),
+                  );
               },
             ),
             ListTile(
               leading: Icon(Icons.help),
               title: Text('Help & Support'),
               onTap: () {
-                // Implement help & support navigation
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => HelpSupportPage()),
+                  );
               },
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement FAB functionality here
-          // Example: Navigate to edit profile page
-          Get.to(AdminPage());
-        },
-        child: Icon(Icons.add), // Replace with appropriate icon
-      ),
+      floatingActionButton: isAdmin
+          ? FloatingActionButton(
+              onPressed: () {
+                // Implement FAB functionality here
+                // Example: Navigate to admin page
+                Get.to(AdminPage());
+              },
+              child: Icon(Icons.add), // Replace with appropriate icon
+            )
+          : null, // Hide FAB for non-admin users
     );
   }
 }

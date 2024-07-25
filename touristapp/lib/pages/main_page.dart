@@ -30,11 +30,18 @@ class _MainPageState extends State<MainPage> {
       List<TourismPlace> places = [];
       querySnapshot.docs.forEach((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        // Handle null values and provide default values if necessary
+        String name = data['name'] ?? 'Unknown Name';
+        String image = data['image'] ?? 'https://via.placeholder.com/150'; // Provide a default image URL
+        String location = data['location'] ?? 'Unknown Location';
+        int rating = data['rating'] ?? 0;
+
         TourismPlace place = TourismPlace(
-          name: data['name'],
-          image: data['image'],
-          location: data['location'],
-          rating: data['rating'],
+          name: name,
+          image: image,
+          location: location,
+          rating: rating,
         );
         places.add(place);
       });
@@ -170,6 +177,7 @@ class _MainPageState extends State<MainPage> {
                                   ),
                                 ),
                               ),
+                              // Uncomment the below block if you want to display ratings
                               // Padding(
                               //   padding: const EdgeInsets.all(8.0),
                               //   child: Row(

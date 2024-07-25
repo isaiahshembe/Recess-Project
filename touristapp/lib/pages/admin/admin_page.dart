@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:touristapp/pages/admin/editing.dart';
 import 'package:touristapp/pages/admin/tourism_page.dart';
 
 class AdminPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _AdminPageState extends State<AdminPage> {
                 onPressed: () {
                   Get.to(TourismPageEdit());
                 },
-                child: Text('Tourism site')),
+                child: Text('Add a tourism site')),
             SizedBox(
               height: 20,
             ),
@@ -42,7 +43,18 @@ class _AdminPageState extends State<AdminPage> {
                     minimumSize: Size(double.infinity, 70),
                     backgroundColor: Color.fromARGB(255, 114, 197, 118)),
                 onPressed: () {},
-                child: Text('Hotel'))
+                child: Text('Add a hotel')),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 70),
+                    backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                onPressed: () {
+                  Get.to(EditingPage());
+                },
+                child: Text('Editing'))
           ],
         ),
       ),

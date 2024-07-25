@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:touristapp/pages/admin/admin_page.dart';
- // Import your admin page
+import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore package
 
 class TourismPageEdit extends StatefulWidget {
-  const TourismPageEdit({Key? key}) : super(key: key);
+  final Map<String, dynamic> initialData; // Initial data from Firestore
+  final String documentId; // Document ID for Firestore document
+
+  const TourismPageEdit({Key? key, required this.initialData, required this.documentId}) : super(key: key);
 
   @override
   State<TourismPageEdit> createState() => _TourismPageEditState();
 }
 
 class _TourismPageEditState extends State<TourismPageEdit> {
-  // Controllers for text editing
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize text controllers with initial data
+    _nameController.text = widget.initialData['name'] ?? '';
+    _imageController.text = widget.initialData['image'] ?? '';
+    _descriptionController.text = widget.initialData['description'] ?? '';
+    _locationController.text = widget.initialData['location'] ?? '';
+    _priceController.text = widget.initialData['price'].toString() ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +79,11 @@ class _TourismPageEditState extends State<TourismPageEdit> {
             SizedBox(height: 32.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 70),
-                    backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                minimumSize: Size(double.infinity, 70),
+                backgroundColor: Color.fromARGB(255, 114, 197, 118),
+              ),
               onPressed: () {
-                _saveTourismPlace();
+                _saveChanges();
               },
               child: Text('Save'),
             ),
@@ -81,8 +93,8 @@ class _TourismPageEditState extends State<TourismPageEdit> {
     );
   }
 
-  void _saveTourismPlace() async {
-    // Get values from controllers
+  void _saveChanges() async {
+    // Get updated values from controllers
     String name = _nameController.text.trim();
     String image = _imageController.text.trim();
     String description = _descriptionController.text.trim();
@@ -90,8 +102,8 @@ class _TourismPageEditState extends State<TourismPageEdit> {
     String price = _priceController.text.trim();
 
     try {
-      // Add a new document with auto-generated ID to "tourism_places" collection
-      await FirebaseFirestore.instance.collection('tourism_places').add({
+      // Update the document in Firestore
+      await FirebaseFirestore.instance.collection('tourism_places').doc(widget.documentId).update({
         'name': name,
         'image': image,
         'description': description,
@@ -101,26 +113,16 @@ class _TourismPageEditState extends State<TourismPageEdit> {
 
       // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Tourism place saved successfully')),
+        SnackBar(content: Text('Changes saved successfully')),
       );
 
-      // Navigate to AdminPage after saving
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AdminPage()),
-      );
-
-      // Clear text fields after saving
-      _nameController.clear();
-      _imageController.clear();
-      _descriptionController.clear();
-      _locationController.clear();
-      _priceController.clear();
+      // Optionally, navigate back to previous page after saving
+      Navigator.pop(context);
     } catch (e) {
       // Handle errors here
-      print('Error saving tourism place: $e');
+      print('Error saving changes: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save tourism place')),
+        SnackBar(content: Text('Failed to save changes')),
       );
     }
   }
