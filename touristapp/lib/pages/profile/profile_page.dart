@@ -42,78 +42,63 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
       body: user != null
-          ? StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance.collection('users').doc(user.uid).snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return const Center(child: Text('User data not found'));
-                }
-
-                var userData = snapshot.data!.data() as Map<String, dynamic>?;
-
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: userData?['photoURL'] != null && userData!['photoURL'].isNotEmpty
-                            ? NetworkImage(userData['photoURL'])
-                            : const AssetImage('images/profile.jpg') as ImageProvider,
-                        child: userData?['photoURL'] == null || userData!['photoURL'].isEmpty
-                            ? const Icon(Icons.camera_alt, size: 50, color: Colors.white70)
-                            : null,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        user.email ?? 'No email',
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        userData?['displayName'] ?? 'No name', // Display updated name
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 24),
-                      ListTile(
-                        leading: const Icon(Icons.history),
-                        title: const Text('Booking History'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const UserBookingsPage()),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.settings),
-                        title: const Text('Settings'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const SettingsPage()),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.help),
-                        title: const Text('Help & Support'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const HelpSupportPage()),
-                          );
-                        },
-                      ),
-                    ],
+          ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: user.photoURL != null && user.photoURL!.isNotEmpty
+                        ? NetworkImage(user.photoURL!)
+                        : const AssetImage('images/profile.jpg') as ImageProvider,
+                    child: user.photoURL == null || user.photoURL!.isEmpty
+                        ? const Icon(Icons.camera_alt, size: 50, color: Colors.white70)
+                        : null,
                   ),
-                );
-              },
+                  const SizedBox(height: 16),
+                  Text(
+                    user.email ?? 'No email',
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    user.displayName ?? 'No name',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 24),
+                  ListTile(
+                    leading: const Icon(Icons.history),
+                    title: const Text('Booking History'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const UserBookingsPage()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.settings),
+                    title: const Text('Settings'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SettingsPage()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.help),
+                    title: const Text('Help & Support'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const HelpSupportPage()),
+                      );
+                    },
+                  ),
+                ],
+              ),
             )
           : const Center(child: Text('Loading...')),
       floatingActionButton: isAdmin

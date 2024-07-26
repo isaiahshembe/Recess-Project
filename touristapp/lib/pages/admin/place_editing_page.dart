@@ -70,7 +70,7 @@ class _PlaceEditingPageState extends State<PlaceEditingPage> {
         print('Document does not exist');
       }
     } catch (e) {
-      // Handle errors here
+
       print('Error fetching document: $e');
     }
   }
