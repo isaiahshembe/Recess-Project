@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:touristapp/pages/admin/edit_hotel.dart';
 import 'package:touristapp/pages/admin/place_editing_page.dart';
 
 class EditingPage extends StatefulWidget {
@@ -33,7 +34,9 @@ class _EditingPageState extends State<EditingPage> {
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 70),
                       backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(HostelsPage());
+                  },
                   child: const Text('Hotels'))
             ],
           ),
