@@ -48,7 +48,7 @@ class _WelcomePageState extends State<WelcomePage> {
             child: PageView(
               controller: _pageController,
               onPageChanged: _onPageChanged,
-              children: <Widget>[
+              children: const <Widget>[
                 StaysPage(),
                 PreferencesScreen(), // Replaced MainPage with PreferencesScreen
                 CarRentalContentPage(),
@@ -56,17 +56,17 @@ class _WelcomePageState extends State<WelcomePage> {
             ),
           ),
           // Button to add categories
-          ElevatedButton(
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddCategoriesPage(),
-                ),
-              );
-            },
-            child: Text('Add Categories to Firebase'),
-          ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     await Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => const AddCategoriesPage(),
+          //       ),
+          //     );
+          //   },
+          //   child: const Text('Add Categories to Firebase'),
+          // ),
         ],
       ),
     );

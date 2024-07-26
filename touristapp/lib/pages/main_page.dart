@@ -5,7 +5,7 @@ import 'package:touristapp/utilities/bottom_nav.dart';
 import 'package:touristapp/tourism_place.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
           await FirebaseFirestore.instance.collection('tourism_places').get();
 
       List<TourismPlace> places = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
         String name = data['name'] ?? 'Unknown Name';
@@ -47,11 +47,11 @@ class _MainPageState extends State<MainPage> {
           description: description,
         );
         places.add(place);
-      });
+      }
 
       setState(() {
         allItems = places;
-        filteredItems = allItems;
+        filteredItems = allItems; // No filtering by category
       });
     } catch (e) {
       print('Error fetching data: $e');
@@ -92,7 +92,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tourism Places'),
+        title: const Text('Tourism Places'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +100,7 @@ class _MainPageState extends State<MainPage> {
           Stack(
             children: [
               Image.asset(
-                'images/display_image1.jpg',
+                'images/display_image1.jpg', // Update path if necessary
               ),
               Positioned(
                 top: 10,
@@ -201,19 +201,6 @@ class _MainPageState extends State<MainPage> {
                                     ),
                                   ),
                                 ),
-                                // Uncomment the below block if you want to display ratings
-                                // Padding(
-                                //   padding: const EdgeInsets.all(8.0),
-                                //   child: Row(
-                                //     children: List.generate(
-                                //       5,
-                                //       (index) => Icon(
-                                //         index < place.rating ? Icons.star : Icons.star_border,
-                                //         color: index < place.rating ? Colors.yellow : Colors.grey,
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),

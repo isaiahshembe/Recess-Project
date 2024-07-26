@@ -4,7 +4,7 @@ import 'package:touristapp/pages/signup_screen.dart';
 import 'package:touristapp/pages/main_page.dart'; // Import your MainPage here
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -21,21 +21,21 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+        padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
         child: Column(
           children: [
-            Center(
+            const Center(
               child: CircleAvatar(
                 radius: 150,
                 backgroundImage: AssetImage('images/display_image1.jpg'),
               ),
             ),
-            SizedBox(height: 15),
-            Text(
+            const SizedBox(height: 15),
+            const Text(
               'Login',
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Form(
               child: Column(
                 children: [
@@ -49,10 +49,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       filled: true,
                       hintText: 'Email',
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       filled: true,
                       hintText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                       suffixIcon: GestureDetector(
                         onTap: () {
                           setState(() {
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -87,20 +87,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Implement forgot password functionality
                           // You can add reset password logic here
                         },
-                        child: Text('Forgot password?'),
+                        child: const Text('Forgot password?'),
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: const Size(double.infinity, 50),
                       backgroundColor: const Color.fromARGB(255, 100, 180, 103),
                     ),
                     onPressed: () {
                       _login();
                     },
-                    child: Text(
+                    child: const Text(
                       'Login',
                       style: TextStyle(
                         color: Colors.white,
@@ -112,29 +112,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Center(
               child: GestureDetector(
                 onTap: () {
                   print('Navigate to Signup screen');
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => SignupScreen()),
+                    MaterialPageRoute(builder: (_) => const SignupScreen()),
                   );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account?"),
-                    SizedBox(width: 10),
+                    const Text("Don't have an account?"),
+                    const SizedBox(width: 10),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => SignupScreen()),
+                          MaterialPageRoute(builder: (_) => const SignupScreen()),
                         );
                       },
-                      child: Text('Signup'),
+                      child: const Text('Signup'),
                     ),
                   ],
                 ),
@@ -151,20 +151,26 @@ class _LoginScreenState extends State<LoginScreen> {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
 
-      UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Navigate to home screen or do something else on successful login
+      // Check if email is verified
       if (userCredential.user != null) {
-        // Navigate to MainPage or any other screen after successful login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => MainPage()),
-        );
-        print('User logged in: ${userCredential.user!.uid}');
+        if (userCredential.user!.emailVerified) {
+          // Navigate to MainPage or any other screen after successful login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const MainPage()),
+          );
+          print('User logged in: ${userCredential.user!.uid}');
+        } else {
+          // Email is not verified
+          _showErrorDialog('Please verify your email to continue.');
+          await _auth.signOut();
+          _showVerificationDialog(userCredential.user!);
+        }
       } else {
         _showErrorDialog('Failed to authenticate');
       }
@@ -178,14 +184,41 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: const Text('Error'),
           content: Text(message),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showVerificationDialog(User user) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Email Verification'),
+          content: Text('A verification email has been sent to ${user.email}. Please check your inbox and verify your email.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                await user.sendEmailVerification();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Resend Email'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
             ),
           ],
         );

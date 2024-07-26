@@ -4,7 +4,7 @@ import 'package:touristapp/pages/admin/admin_page.dart';
  // Import your admin page
 
 class TourismPageEdit extends StatefulWidget {
-  const TourismPageEdit({Key? key}) : super(key: key);
+  const TourismPageEdit({super.key});
 
   @override
   State<TourismPageEdit> createState() => _TourismPageEditState();
@@ -22,58 +22,58 @@ class _TourismPageEditState extends State<TourismPageEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Tourism Place'),
+        title: const Text('Edit Tourism Place'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
               controller: _nameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Name of the Tourism Place',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _imageController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Image URL of the Tourism Place',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _descriptionController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Description of the Tourism Place',
               ),
               maxLines: 3, // Adjust according to your design
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _locationController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Location of the Tourism Place',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _priceController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Price of the Tourism Place',
               ),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 32.0),
+            const SizedBox(height: 32.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 70),
-                    backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                    minimumSize: const Size(double.infinity, 70),
+                    backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
               onPressed: () {
                 _saveTourismPlace();
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         ),
@@ -101,13 +101,13 @@ class _TourismPageEditState extends State<TourismPageEdit> {
 
       // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Tourism place saved successfully')),
+        const SnackBar(content: Text('Tourism place saved successfully')),
       );
 
       // Navigate to AdminPage after saving
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AdminPage()),
+        MaterialPageRoute(builder: (context) => const AdminPage()),
       );
 
       // Clear text fields after saving
@@ -120,7 +120,7 @@ class _TourismPageEditState extends State<TourismPageEdit> {
       // Handle errors here
       print('Error saving tourism place: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save tourism place')),
+        const SnackBar(content: Text('Failed to save tourism place')),
       );
     }
   }
