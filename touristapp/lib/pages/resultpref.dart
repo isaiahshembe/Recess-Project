@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touristapp/pages/details.dart';
 
 class ResultsScreen extends StatelessWidget {
   final List<Map<String, dynamic>> results;
@@ -26,6 +27,14 @@ class ResultsScreen extends StatelessWidget {
                     : Container(width: 50, height: 50, color: Colors.grey), // Placeholder for missing images
                   title: Text(result['name'] ?? 'No name'),
                   subtitle: Text(result['description'] ?? 'No description'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailScreen(place: result),
+                      ),
+                    );
+                  },
                 );
               },
             ),
