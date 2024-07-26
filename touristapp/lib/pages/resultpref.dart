@@ -9,7 +9,7 @@ class ResultsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Search Results')),
+      appBar: AppBar(title: const Text('Tailored Insights')),
       body: results.isEmpty
           ? const Center(child: Text('No results found'))
           : ListView.builder(
