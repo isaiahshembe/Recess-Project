@@ -16,45 +16,45 @@ class _AdminPageState extends State<AdminPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Center(
+            const Center(
                 child: Text(
               'Welcome Admin',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
             )),
-            SizedBox(
+            const SizedBox(
               height: 70,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 70),
-                    backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                    minimumSize: const Size(double.infinity, 70),
+                    backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
                 onPressed: () {
-                  Get.to(TourismPageEdit());
+                  Get.to(const TourismPageEdit());
                 },
-                child: Text('Add a tourism site')),
-            SizedBox(
+                child: const Text('Add a tourism site')),
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 70),
-                    backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                    minimumSize: const Size(double.infinity, 70),
+                    backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
                 onPressed: () {},
-                child: Text('Add a hotel')),
-            SizedBox(
+                child: const Text('Add a hotel')),
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 70),
-                    backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                    minimumSize: const Size(double.infinity, 70),
+                    backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
                 onPressed: () {
-                  Get.to(EditingPage());
+                  Get.to(const EditingPage());
                 },
-                child: Text('Editing'))
+                child: const Text('Editing'))
           ],
         ),
       ),

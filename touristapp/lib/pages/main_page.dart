@@ -5,7 +5,7 @@ import 'package:touristapp/utilities/bottom_nav.dart';
 import 'package:touristapp/tourism_place.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
           await FirebaseFirestore.instance.collection('tourism_places').get();
 
       List<TourismPlace> places = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
         String name = data['name'] ?? 'Unknown Name';
@@ -47,7 +47,7 @@ class _MainPageState extends State<MainPage> {
           description: description,
         );
         places.add(place);
-      });
+      }
 
       setState(() {
         allItems = places;
@@ -92,7 +92,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tourism Places'),
+        title: const Text('Tourism Places'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

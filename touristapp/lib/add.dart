@@ -2,18 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddCategoriesPage extends StatelessWidget {
+  const AddCategoriesPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Categories to Firebase'),
+        title: const Text('Add Categories to Firebase'),
       ),
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
             await addCategoriesToFirebase();
           },
-          child: Text('Add Categories'),
+          child: const Text('Add Categories'),
         ),
       ),
     );

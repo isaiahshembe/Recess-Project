@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/pages/admin/edit.dart'; // Import your editing page
 
 class PlaceEditingPage extends StatefulWidget {
-  const PlaceEditingPage({Key? key}) : super(key: key);
+  const PlaceEditingPage({super.key});
 
   @override
   State<PlaceEditingPage> createState() => _PlaceEditingPageState();
@@ -12,7 +12,7 @@ class PlaceEditingPage extends StatefulWidget {
 class _PlaceEditingPageState extends State<PlaceEditingPage> {
   List<String> tourismPlaces = [];
   List<String> filteredPlaces = [];
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -79,7 +79,7 @@ class _PlaceEditingPageState extends State<PlaceEditingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Tourism Places'),
+        title: const Text('Edit Tourism Places'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class _PlaceEditingPageState extends State<PlaceEditingPage> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               controller: _searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search',
                 prefixIcon: Icon(Icons.search),
               ),

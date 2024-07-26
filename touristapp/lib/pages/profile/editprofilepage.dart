@@ -6,6 +6,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileEditScreen extends StatefulWidget {
+  const ProfileEditScreen({super.key});
+
   @override
   _ProfileEditScreenState createState() => _ProfileEditScreenState();
 }
@@ -71,7 +73,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       }
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile updated successfully')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profile updated successfully')));
     } catch (e) {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile: $e')));
@@ -86,16 +88,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: const Text('Edit Profile'),
         actions: [
           IconButton(
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
             onPressed: _uploadImageAndSaveProfile,
           ),
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -108,27 +110,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           ? FileImage(_image!)
                           : (user!.photoURL != null
                               ? NetworkImage(user!.photoURL!)
-                              : AssetImage('images/default_profile_image.jpg')) as ImageProvider,
+                              : const AssetImage('images/default_profile_image.jpg')) as ImageProvider,
                       child: _image == null
-                          ? Icon(Icons.camera_alt, size: 50, color: Colors.white70)
+                          ? const Icon(Icons.camera_alt, size: 50, color: Colors.white70)
                           : null,
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _nameController,
-                    decoration: InputDecoration(labelText: 'Name'),
+                    decoration: const InputDecoration(labelText: 'Name'),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _emailController,
-                    decoration: InputDecoration(labelText: 'Email'),
+                    decoration: const InputDecoration(labelText: 'Email'),
                     readOnly: true, // Email is not editable
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _phoneController,
-                    decoration: InputDecoration(labelText: 'Phone Number'),
+                    decoration: const InputDecoration(labelText: 'Phone Number'),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(

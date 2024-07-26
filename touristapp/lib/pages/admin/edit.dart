@@ -5,7 +5,7 @@ class TourismPageEdit extends StatefulWidget {
   final Map<String, dynamic> initialData; // Initial data from Firestore
   final String documentId; // Document ID for Firestore document
 
-  const TourismPageEdit({Key? key, required this.initialData, required this.documentId}) : super(key: key);
+  const TourismPageEdit({super.key, required this.initialData, required this.documentId});
 
   @override
   State<TourismPageEdit> createState() => _TourismPageEditState();
@@ -33,10 +33,10 @@ class _TourismPageEditState extends State<TourismPageEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Tourism Place'),
+        title: const Text('Edit Tourism Place'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -44,38 +44,38 @@ class _TourismPageEditState extends State<TourismPageEdit> {
               controller: _nameController,
               labelText: 'Name of the Tourism Place',
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _buildTextField(
               controller: _imageController,
               labelText: 'Image URL of the Tourism Place',
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _buildTextField(
               controller: _descriptionController,
               labelText: 'Description of the Tourism Place',
               maxLines: 3,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _buildTextField(
               controller: _locationController,
               labelText: 'Location of the Tourism Place',
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _buildTextField(
               controller: _priceController,
               labelText: 'Price of the Tourism Place',
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 32.0),
+            const SizedBox(height: 32.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 70),
-                backgroundColor: Color.fromARGB(255, 114, 197, 118),
+                minimumSize: const Size(double.infinity, 70),
+                backgroundColor: const Color.fromARGB(255, 114, 197, 118),
               ),
               onPressed: () {
                 _saveChanges();
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         ),
@@ -97,7 +97,7 @@ class _TourismPageEditState extends State<TourismPageEdit> {
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
           labelText: labelText,
           border: InputBorder.none, // Remove the default border
         ),
@@ -127,7 +127,7 @@ class _TourismPageEditState extends State<TourismPageEdit> {
 
       // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Changes saved successfully')),
+        const SnackBar(content: Text('Changes saved successfully')),
       );
 
       // Optionally, navigate back to previous page after saving
@@ -136,7 +136,7 @@ class _TourismPageEditState extends State<TourismPageEdit> {
       // Handle errors here
       print('Error saving changes: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save changes')),
+        const SnackBar(content: Text('Failed to save changes')),
       );
     }
   }

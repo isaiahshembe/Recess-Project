@@ -9,7 +9,7 @@ import 'package:touristapp/l10n/app_localizations.dart';
 import 'package:touristapp/pages/login_screen.dart'; // Import your login screen
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -41,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
       await FirebaseAuth.instance.signOut();
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
         (route) => false,
       );
     } catch (e) {
@@ -143,14 +143,14 @@ class _SettingsPageState extends State<SettingsPage> {
           Center(
             child: Text(
               'Logged in as: $_userEmail',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 20),
           ListTile(
             title: Text(
               AppLocalizations.of(context)!.translate('logout'),
-              style: TextStyle(color: Colors.red),
+              style: const TextStyle(color: Colors.red),
             ),
             onTap: () {
               _logout();
