@@ -83,6 +83,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/pages/resultpref.dart'; 
 
 class PreferencesScreen extends StatefulWidget {
+  const PreferencesScreen({super.key});
+
   @override
   _PreferencesScreenState createState() => _PreferencesScreenState();
 }
@@ -109,7 +111,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Preferred Attractions'),
+        title: const Text('Your Preferred Attractions'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -143,7 +145,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             MaterialPageRoute(builder: (context) => ResultsScreen(results: results)),
           );
         },
-        child: _isLoading ? CircularProgressIndicator() : Icon(Icons.arrow_forward),
+        child: _isLoading ? const CircularProgressIndicator() : const Icon(Icons.arrow_forward),
       ),
     );
   }

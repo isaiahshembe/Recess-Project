@@ -15,26 +15,26 @@ class _EditingPageState extends State<EditingPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Container(
-      padding:EdgeInsets.all(15),
+      padding:const EdgeInsets.all(15),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 70),
-                      backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                      minimumSize: const Size(double.infinity, 70),
+                      backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
                   onPressed: () {
-                    Get.to(PlaceEditingPage());
+                    Get.to(const PlaceEditingPage());
                   },
-                  child: Text('Tourism Places')),
-                  SizedBox(height: 20,),
+                  child: const Text('Tourism Places')),
+                  const SizedBox(height: 20,),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 70),
-                      backgroundColor: Color.fromARGB(255, 114, 197, 118)),
+                      minimumSize: const Size(double.infinity, 70),
+                      backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
                   onPressed: () {},
-                  child: Text('Hotels'))
+                  child: const Text('Hotels'))
             ],
           ),
         ),

@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/pages/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -24,21 +24,21 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+        padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
         child: Column(
           children: [
-            Center(
+            const Center(
               child: CircleAvatar(
                 radius: 130,
                 backgroundImage: AssetImage('images/display_image1.jpg'),
               ),
             ),
-            SizedBox(height: 15),
-            Text(
+            const SizedBox(height: 15),
+            const Text(
               'Sign Up',
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Form(
               child: Column(
                 children: [
@@ -51,7 +51,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       filled: true,
                       hintText: 'Email',
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
@@ -61,7 +61,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   TextFormField(
                     controller: _usernameController,
                     decoration: InputDecoration(
@@ -71,10 +71,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       filled: true,
                       hintText: 'Username',
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.person),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
@@ -85,7 +85,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       hintText: 'Password',
                       filled: true,
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -98,7 +98,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   TextFormField(
                     controller: _confirmPasswordController,
                     obscureText: _obscurePassword,
@@ -109,7 +109,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       hintText: 'Confirm password',
                       filled: true,
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -122,16 +122,16 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
-                      backgroundColor: Color.fromARGB(255, 100, 180, 103),
+                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: const Color.fromARGB(255, 100, 180, 103),
                     ),
                     onPressed: () {
                       _register();
                     },
-                    child: Text(
+                    child: const Text(
                       'Sign Up',
                       style: TextStyle(
                         color: Colors.white,
@@ -143,22 +143,22 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Get.to(LoginScreen());
+                  Get.to(const LoginScreen());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account?'),
-                    SizedBox(width: 10),
+                    const Text('Already have an account?'),
+                    const SizedBox(width: 10),
                     TextButton(
                       onPressed: () {
-                        Get.to(LoginScreen());
+                        Get.to(const LoginScreen());
                       },
-                      child: Text('Login'),
+                      child: const Text('Login'),
                     ),
                   ],
                 ),
@@ -208,7 +208,7 @@ class _SignupScreenState extends State<SignupScreen> {
         });
 
         // Navigate to login screen on successful registration
-        Get.off(LoginScreen());
+        Get.off(const LoginScreen());
       } else {
         _showErrorDialog('Failed to create user');
       }
@@ -223,14 +223,14 @@ class _SignupScreenState extends State<SignupScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: const Text('Error'),
           content: Text(message),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );

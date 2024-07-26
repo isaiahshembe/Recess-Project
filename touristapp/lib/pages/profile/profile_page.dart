@@ -10,7 +10,7 @@ import 'package:touristapp/pages/settings_page.dart';
 import 'package:touristapp/pages/userbooking.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +20,21 @@ class ProfilePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () {
-              Get.to(ProfileEditScreen());
+              Get.to(const ProfileEditScreen());
             },
           ),
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
                 (route) => false,
               );
             },
@@ -46,11 +46,11 @@ class ProfilePage extends StatelessWidget {
               stream: FirebaseFirestore.instance.collection('users').doc(user.uid).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return Center(child: Text('User data not found'));
+                  return const Center(child: Text('User data not found'));
                 }
 
                 var userData = snapshot.data!.data() as Map<String, dynamic>?;
@@ -64,49 +64,49 @@ class ProfilePage extends StatelessWidget {
                         radius: 50,
                         backgroundImage: userData?['photoURL'] != null && userData!['photoURL'].isNotEmpty
                             ? NetworkImage(userData['photoURL'])
-                            : AssetImage('images/profile.jpg') as ImageProvider,
+                            : const AssetImage('images/profile.jpg') as ImageProvider,
                         child: userData?['photoURL'] == null || userData!['photoURL'].isEmpty
-                            ? Icon(Icons.camera_alt, size: 50, color: Colors.white70)
+                            ? const Icon(Icons.camera_alt, size: 50, color: Colors.white70)
                             : null,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         user.email ?? 'No email',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         userData?['displayName'] ?? 'No name', // Display updated name
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       ListTile(
-                        leading: Icon(Icons.history),
-                        title: Text('Booking History'),
+                        leading: const Icon(Icons.history),
+                        title: const Text('Booking History'),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => UserBookingsPage()),
+                            MaterialPageRoute(builder: (_) => const UserBookingsPage()),
                           );
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.settings),
-                        title: Text('Settings'),
+                        leading: const Icon(Icons.settings),
+                        title: const Text('Settings'),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => SettingsPage()),
+                            MaterialPageRoute(builder: (_) => const SettingsPage()),
                           );
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.help),
-                        title: Text('Help & Support'),
+                        leading: const Icon(Icons.help),
+                        title: const Text('Help & Support'),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => HelpSupportPage()),
+                            MaterialPageRoute(builder: (_) => const HelpSupportPage()),
                           );
                         },
                       ),
@@ -115,13 +115,13 @@ class ProfilePage extends StatelessWidget {
                 );
               },
             )
-          : Center(child: Text('Loading...')),
+          : const Center(child: Text('Loading...')),
       floatingActionButton: isAdmin
           ? FloatingActionButton(
               onPressed: () {
-                Get.to(AdminPage());
+                Get.to(const AdminPage());
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );
