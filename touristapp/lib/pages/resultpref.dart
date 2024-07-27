@@ -26,12 +26,24 @@ class ResultsScreen extends StatelessWidget {
                       )
                     : Container(width: 50, height: 50, color: Colors.grey), // Placeholder for missing images
                   title: Text(result['name'] ?? 'No name'),
-                  subtitle: Text(result['description'] ?? 'No description'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(result['description'] ?? 'No description'),
+                      // if (result['location'] != null) 
+                      //   Text(
+                      //     'Location: ${result['location']}',
+                      //     style: TextStyle(color: Colors.grey[600]), // Optional styling
+                      //   ),
+                    ],
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailScreen(place: result),
+                        builder: (context) => DetailScreen(
+                          place: result,
+                        ),
                       ),
                     );
                   },
