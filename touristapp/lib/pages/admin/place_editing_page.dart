@@ -70,8 +70,55 @@ class _PlaceEditingPageState extends State<PlaceEditingPage> {
         print('Document does not exist');
       }
     } catch (e) {
-      // Handle errors here
+
       print('Error fetching document: $e');
+    }
+  }
+
+  Future<void> deletePlace(String placeName) async {
+    try {
+      // Fetch the specific document using the place name
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('tourism_places')
+          .where('name', isEqualTo: placeName)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Extract document ID from the query result
+        DocumentSnapshot documentSnapshot = querySnapshot.docs.first;
+        String documentId = documentSnapshot.id;
+
+        // Confirm deletion
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Delete Place'),
+            content: const Text('Are you sure you want to delete this place?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+        );
+
+        if (confirmed == true) {
+          // Delete the document from Firestore
+          await FirebaseFirestore.instance.collection('tourism_places').doc(documentId).delete();
+
+          // Refresh the list of places
+          fetchTourismPlaces();
+        }
+      } else {
+        print('Document does not exist');
+      }
+    } catch (e) {
+      // Handle errors here
+      print('Error deleting document: $e');
     }
   }
 
@@ -101,6 +148,13 @@ class _PlaceEditingPageState extends State<PlaceEditingPage> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(filteredPlaces[index]),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () async {
+                      // Handle delete
+                      await deletePlace(filteredPlaces[index]);
+                    },
+                  ),
                   onTap: () {
                     // Handle item tap
                     editPlace(filteredPlaces[index]); // Pass place name to edit method

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:touristapp/pages/admin/editing.dart';
+import 'package:touristapp/pages/admin/hotel_add.dart';
 import 'package:touristapp/pages/admin/tourism_page.dart';
 
 class AdminPage extends StatefulWidget {
@@ -42,7 +43,7 @@ class _AdminPageState extends State<AdminPage> {
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 70),
                     backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
-                onPressed: () {},
+                onPressed: () {Get.to(HotelAdd());},
                 child: const Text('Add a hotel')),
             const SizedBox(
               height: 20,

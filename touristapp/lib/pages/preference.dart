@@ -111,7 +111,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Preferred Attractions'),
+        title: const Text('Tailor Your Experiences'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

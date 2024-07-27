@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:touristapp/pages/admin/admin_page.dart';
- // Import your admin page
+import 'package:touristapp/pages/admin/admin_page.dart'; // Import your admin page
 
 class TourismPageEdit extends StatefulWidget {
   const TourismPageEdit({super.key});
@@ -18,6 +17,9 @@ class _TourismPageEditState extends State<TourismPageEdit> {
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
+  // Focus nodes to manage focus states
+  final FocusNode _priceFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,55 +31,55 @@ class _TourismPageEditState extends State<TourismPageEdit> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name of the Tourism Place',
-              ),
+            _buildTextField(_nameController, 'Name of the Tourism Place'),
+            const SizedBox(height: 16.0),
+            _buildTextField(_imageController, 'Image URL of the Tourism Place'),
+            const SizedBox(height: 16.0),
+            _buildTextField(
+              _descriptionController,
+              'Description of the Tourism Place',
+              maxLines: 3,
             ),
             const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _imageController,
-              decoration: const InputDecoration(
-                labelText: 'Image URL of the Tourism Place',
-              ),
-            ),
+            _buildTextField(_locationController, 'Location of the Tourism Place'),
             const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description of the Tourism Place',
-              ),
-              maxLines: 3, // Adjust according to your design
-            ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _locationController,
-              decoration: const InputDecoration(
-                labelText: 'Location of the Tourism Place',
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _priceController,
-              decoration: const InputDecoration(
-                labelText: 'Price of the Tourism Place',
-              ),
+            _buildTextField(
+              _priceController,
+              'Price of the Tourism Place',
               keyboardType: TextInputType.number,
+              focusNode: _priceFocusNode,
             ),
             const SizedBox(height: 32.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 70),
-                    backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
-              onPressed: () {
-                _saveTourismPlace();
-              },
+                minimumSize: const Size(double.infinity, 70),
+                backgroundColor: const Color.fromARGB(255, 114, 197, 118),
+              ),
+              onPressed: _saveTourismPlace,
               child: const Text('Save'),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  // Helper method for building TextFormFields
+  Widget _buildTextField(
+    TextEditingController controller,
+    String labelText, {
+    int? maxLines,
+    TextInputType? keyboardType,
+    FocusNode? focusNode,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+      ),
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      focusNode: focusNode,
     );
   }
 
@@ -87,7 +89,26 @@ class _TourismPageEditState extends State<TourismPageEdit> {
     String image = _imageController.text.trim();
     String description = _descriptionController.text.trim();
     String location = _locationController.text.trim();
-    String price = _priceController.text.trim();
+    String priceText = _priceController.text.trim();
+
+    // Simple validation
+    if (name.isEmpty || image.isEmpty || description.isEmpty || location.isEmpty || priceText.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    // Try to parse price
+    double? price;
+    try {
+      price = double.parse(priceText);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid price format')),
+      );
+      return;
+    }
 
     try {
       // Add a new document with auto-generated ID to "tourism_places" collection
@@ -96,7 +117,7 @@ class _TourismPageEditState extends State<TourismPageEdit> {
         'image': image,
         'description': description,
         'location': location,
-        'price': double.parse(price), // Convert price to double if necessary
+        'price': price,
       });
 
       // Show a success message
@@ -127,12 +148,13 @@ class _TourismPageEditState extends State<TourismPageEdit> {
 
   @override
   void dispose() {
-    // Clean up controllers when the widget is disposed
+    // Clean up controllers and focus nodes when the widget is disposed
     _nameController.dispose();
     _imageController.dispose();
     _descriptionController.dispose();
     _locationController.dispose();
     _priceController.dispose();
+    _priceFocusNode.dispose();
     super.dispose();
   }
 }
