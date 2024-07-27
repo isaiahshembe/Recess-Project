@@ -8,8 +8,7 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double? latitude = place['latitude'];
-    final double? longitude = place['longitude'];
+    final String? location = place['location'];
 
     return Scaffold(
       appBar: AppBar(title: Text(place['name'] ?? 'No name')),
@@ -34,18 +33,10 @@ class DetailScreen extends StatelessWidget {
             SizedBox(height: 8),
             Text(place['description'] ?? 'No description'),
             SizedBox(height: 16),
-            if (latitude != null && longitude != null)
-              FutureBuilder<double>(
-                future: _calculateDistance(latitude, longitude),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error calculating distance');
-                  } else {
-                    return Text('Distance: ${snapshot.data?.toStringAsFixed(2)} km');
-                  }
-                },
+            if (location != null)
+              Text(
+                'Location: $location',
+                style: TextStyle(color: Colors.grey[600]), // Optional styling
               )
             else
               Text('Location information is not available'),
@@ -53,16 +44,5 @@ class DetailScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<double> _calculateDistance(double lat, double lon) async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    double distanceInMeters = Geolocator.distanceBetween(
-      position.latitude,
-      position.longitude,
-      lat,
-      lon,
-    );
-    return distanceInMeters / 1000; // Convert to kilometers
   }
 }
