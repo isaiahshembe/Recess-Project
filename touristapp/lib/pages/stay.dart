@@ -223,6 +223,7 @@ class _StaysPageState extends State<StaysPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Column(
         children: [
           Padding(

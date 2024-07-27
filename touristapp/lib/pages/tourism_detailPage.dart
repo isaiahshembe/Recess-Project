@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:touristapp/tourism_place.dart'; // Import your TourismPlace class
+import 'package:touristapp/tourism_place.dart';
 
 class TourismDetailsPage extends StatelessWidget {
   final TourismPlace place;
