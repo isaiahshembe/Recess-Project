@@ -35,7 +35,7 @@ class _EditingPageState extends State<EditingPage> {
                       minimumSize: const Size(double.infinity, 70),
                       backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
                   onPressed: () {
-                    Get.to(HostelsPage());
+                    Get.to(const HostelsPage());
                   },
                   child: const Text('Hotels'))
             ],

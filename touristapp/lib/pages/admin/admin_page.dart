@@ -43,7 +43,7 @@ class _AdminPageState extends State<AdminPage> {
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 70),
                     backgroundColor: const Color.fromARGB(255, 114, 197, 118)),
-                onPressed: () {Get.to(HotelAdd());},
+                onPressed: () {Get.to(const HotelAdd());},
                 child: const Text('Add a hotel')),
             const SizedBox(
               height: 20,
