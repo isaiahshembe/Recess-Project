@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'dart:math';
 
 class StaysPage extends StatefulWidget {
@@ -21,11 +22,11 @@ class _StaysPageState extends State<StaysPage> {
 
   Future<void> _fetchStays() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Places').get();
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('hotels').get();
       List<Map<String, dynamic>> fetchedStays = querySnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
-        final latitude = _getDoubleFromField(data['location']['latitude']);
-        final longitude = _getDoubleFromField(data['location']['longitude']);
+        final latitude = _getDoubleFromField(data['location']?['latitude']);
+        final longitude = _getDoubleFromField(data['location']?['longitude']);
         return {
           'id': doc.id,
           ...data,
@@ -71,39 +72,47 @@ class _StaysPageState extends State<StaysPage> {
     return distance;
   }
 
-  Future<List<Map<String, dynamic>>> _fetchNearbyStays(double lat, double lon) async {
+  Future<void> _updateHotelRating(String hotelId, double rating) async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Places').get();
-      List<Map<String, dynamic>> allStays = querySnapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        final stayLat = _getDoubleFromField(data['location']['latitude']);
-        final stayLon = _getDoubleFromField(data['location']['longitude']);
-        return {
-          'id': doc.id,
-          ...data,
-          'location': {
-            'latitude': stayLat,
-            'longitude': stayLon,
-          },
-        };
-      }).toList();
+      DocumentReference hotelRef = FirebaseFirestore.instance.collection('hotels').doc(hotelId);
+      DocumentSnapshot hotelDoc = await hotelRef.get();
 
-      // Filter stays based on distance
-      List<Map<String, dynamic>> nearbyStays = allStays.where((stay) {
-        double stayLat = stay['location']['latitude'];
-        double stayLon = stay['location']['longitude'];
-        double distance = _calculateDistance(lat, lon, stayLat, stayLon);
-        return distance <= 10; // Example: filter stays within 10 km
-      }).toList();
+      if (hotelDoc.exists) {
+        final data = hotelDoc.data() as Map<String, dynamic>;
 
-      return nearbyStays;
+        // Ensure the ratings field is always a list
+        List<dynamic> currentRatings = data['ratings'] is List
+            ? List<dynamic>.from(data['ratings'])
+            : [];
+
+        currentRatings.add(rating);
+
+        double averageRating = currentRatings.isNotEmpty
+            ? currentRatings.cast<double>().reduce((a, b) => a + b) / currentRatings.length
+            : 0.0;
+        int ratingCount = currentRatings.length;
+
+        await hotelRef.update({
+          'ratings': currentRatings,
+          'averageRating': averageRating,
+          'ratingCount': ratingCount,
+        });
+
+        print('Hotel rating updated successfully');
+      } else {
+        print('Hotel document does not exist');
+      }
     } catch (e) {
-      print('Error fetching nearby stays: $e');
-      return [];
+      print('Error updating hotel rating: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating hotel rating: $e')),
+      );
     }
   }
 
   void _showStayDetails(BuildContext context, Map<String, dynamic> stay) {
+    double rating = 0.0;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -125,7 +134,7 @@ class _StaysPageState extends State<StaysPage> {
                             child: const Icon(Icons.image_not_supported, size: 100),
                           ),
                     const SizedBox(height: 16),
-                    Text(stay['name'] ?? 'No name', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    Text(stay['hotel_name'] ?? 'No name', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     Text(stay['description'] ?? 'No description'),
                     const SizedBox(height: 8),
@@ -134,66 +143,48 @@ class _StaysPageState extends State<StaysPage> {
                         const Icon(Icons.star, color: Colors.yellow, size: 16),
                         Text(
                           (stay['averageRating'] != null
-                                  ? double.tryParse(stay['averageRating'].toString()) ?? 0.0
-                                  : 0.0)
-                              .toStringAsFixed(1),
+                                  ? stay['averageRating'].toStringAsFixed(1)
+                                  : '0.0'),
                         ),
+                        const SizedBox(width: 8),
+                        Text('(${stay['ratingCount'] ?? 0} ratings)'),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text('\$${stay['price']?.toString() ?? 'No price'} per night'),
+                    Text('\$${stay['room_cost']?.toString() ?? 'No price'} per night'),
                     const SizedBox(height: 16),
-                    const Text('Nearby Stays:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    FutureBuilder<List<Map<String, dynamic>>>(
-                      future: _fetchNearbyStays(stay['location']['latitude'], stay['location']['longitude']),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Text('No nearby stays found');
-                        } else {
-                          return Column(
-                            children: snapshot.data!.map((nearbyStay) {
-                              return ListTile(
-                                leading: nearbyStay['image'] != null
-                                    ? Image.network(
-                                        nearbyStay['image'],
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (context, error, stackTrace) {
-                                          return const Icon(Icons.broken_image, size: 50);
-                                        },
-                                      )
-                                    : const Icon(Icons.image_not_supported, size: 50),
-                                title: Text(nearbyStay['name'] ?? 'No name'),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(nearbyStay['description'] ?? 'No description'),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.star, color: Colors.yellow, size: 16),
-                                        Text(
-                                          (nearbyStay['averageRating'] != null
-                                                  ? double.tryParse(nearbyStay['averageRating'].toString()) ?? 0.0
-                                                  : 0.0)
-                                              .toStringAsFixed(1),
-                                        ),
-                                      ],
-                                    ),
-                                    Text('\$${nearbyStay['price']?.toString() ?? 'No price'} per night'),
-                                  ],
-                                ),
-                                trailing: const Icon(Icons.arrow_forward),
-                              );
-                            }).toList(),
-                          );
-                        }
+                    Text('Rate this hotel:', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    RatingBar.builder(
+                      initialRating: rating,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 40,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      onRatingUpdate: (newRating) {
+                        setState(() {
+                          rating = newRating;
+                        });
                       },
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        // Update Firestore with the new rating
+                        await _updateHotelRating(stay['id'], rating);
+
+                        // Refresh the stay details to reflect the updated rating
+                        Navigator.pop(context);
+                        setState(() {
+                          _fetchStays(); // Reload the stays list
+                        });
+                      },
+                      child: const Text('Submit Rating'),
                     ),
                   ],
                 ),
@@ -211,7 +202,7 @@ class _StaysPageState extends State<StaysPage> {
         filteredStays = stays;
       } else {
         filteredStays = stays.where((stay) {
-          final name = stay['name']?.toLowerCase() ?? '';
+          final name = stay['hotel_name']?.toLowerCase() ?? '';
           final description = stay['description']?.toLowerCase() ?? '';
           final lowerQuery = query.toLowerCase();
           return name.contains(lowerQuery) || description.contains(lowerQuery);
@@ -253,7 +244,7 @@ class _StaysPageState extends State<StaysPage> {
                           },
                         )
                       : const Icon(Icons.image_not_supported, size: 50),
-                  title: Text(stay['name'] ?? 'No name'),
+                  title: Text(stay['hotel_name'] ?? 'No name'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -263,13 +254,12 @@ class _StaysPageState extends State<StaysPage> {
                           const Icon(Icons.star, color: Colors.yellow, size: 16),
                           Text(
                             (stay['averageRating'] != null
-                                    ? double.tryParse(stay['averageRating'].toString()) ?? 0.0
-                                    : 0.0)
-                                .toStringAsFixed(1),
+                                    ? stay['averageRating'].toStringAsFixed(1)
+                                    : '0.0'),
                           ),
                         ],
                       ),
-                      Text('\$${stay['price']?.toString() ?? 'No price'} per night'),
+                      Text('\$${stay['room_cost']?.toString() ?? 'No price'} per night'),
                     ],
                   ),
                   onTap: () => _showStayDetails(context, stay),
