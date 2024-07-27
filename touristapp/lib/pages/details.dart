@@ -4,12 +4,11 @@ import 'package:geolocator/geolocator.dart';
 class DetailScreen extends StatelessWidget {
   final Map<String, dynamic> place;
 
-  const DetailScreen({required this.place, super.key});
+  const DetailScreen({required this.place, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final double? latitude = place['latitude'];
-    final double? longitude = place['longitude'];
+    final String? location = place['location'];
 
     return Scaffold(
       appBar: AppBar(title: Text(place['name'] ?? 'No name')),
@@ -26,43 +25,24 @@ class DetailScreen extends StatelessWidget {
                     height: 200,
                   )
                 : Container(width: double.infinity, height: 200, color: Colors.grey), // Placeholder for missing images
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               place['name'] ?? 'No name',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(place['description'] ?? 'No description'),
-            const SizedBox(height: 16),
-            if (latitude != null && longitude != null)
-              FutureBuilder<double>(
-                future: _calculateDistance(latitude, longitude),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return const Text('Error calculating distance');
-                  } else {
-                    return Text('Distance: ${snapshot.data?.toStringAsFixed(2)} km');
-                  }
-                },
+            SizedBox(height: 16),
+            if (location != null)
+              Text(
+                'Location: $location',
+                style: TextStyle(color: Colors.grey[600]), // Optional styling
               )
             else
-              const Text('Location information is not available'),
+              Text('Location information is not available'),
           ],
         ),
       ),
     );
-  }
-
-  Future<double> _calculateDistance(double lat, double lon) async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    double distanceInMeters = Geolocator.distanceBetween(
-      position.latitude,
-      position.longitude,
-      lat,
-      lon,
-    );
-    return distanceInMeters / 1000; // Convert to kilometers
   }
 }

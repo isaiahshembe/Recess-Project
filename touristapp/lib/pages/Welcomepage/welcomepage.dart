@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:touristapp/pages/car_rentals.dart';
 import 'package:touristapp/pages/preference.dart'; // Updated import for PreferencesScreen
 import 'package:touristapp/pages/stay.dart';
-import 'package:touristapp/add.dart'; // Import for AddCategoriesPage
+// Import for AddCategoriesPage
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
