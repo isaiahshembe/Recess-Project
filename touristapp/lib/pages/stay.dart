@@ -153,7 +153,7 @@ class _StaysPageState extends State<StaysPage> {
                     const SizedBox(height: 8),
                     Text('\$${stay['room_cost']?.toString() ?? 'No price'} per night'),
                     const SizedBox(height: 16),
-                    Text('Rate this hotel:', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Text('Rate this hotel:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     RatingBar.builder(
                       initialRating: rating,
                       minRating: 1,

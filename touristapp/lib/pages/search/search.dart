@@ -5,12 +5,14 @@ import 'package:touristapp/pages/search/result.dart';
 
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  TextEditingController _preferenceController = TextEditingController();
+  final TextEditingController _preferenceController = TextEditingController();
   bool _isLoading = false;
 
   Future<void> _search() async {
@@ -89,7 +91,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search for Places'),
+        title: const Text('Search for Places'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -97,15 +99,15 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             TextField(
               controller: _preferenceController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Enter your preferences',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _isLoading ? null : _search,
-              child: _isLoading ? CircularProgressIndicator() : Text('Search'),
+              child: _isLoading ? const CircularProgressIndicator() : const Text('Search'),
             ),
           ],
         ),
