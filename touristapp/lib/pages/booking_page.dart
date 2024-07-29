@@ -274,7 +274,11 @@ class _BookingPageState extends State<BookingPage> {
           .collection('Places')
           .get();
 
-      final stays = querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      final stays = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .where((stay) => stay.containsKey('location') && stay['location'].containsKey('latitude') && stay['location'].containsKey('longitude'))
+          .toList();
+
       final nearbyStays = stays.where((stay) {
         final stayLatitude = stay['location']['latitude'];
         final stayLongitude = stay['location']['longitude'];
@@ -283,6 +287,7 @@ class _BookingPageState extends State<BookingPage> {
       }).toList();
 
       setState(() {
+        _nearbyStays.clear();
         _nearbyStays.addAll(nearbyStays);
       });
     } catch (e) {
@@ -292,9 +297,9 @@ class _BookingPageState extends State<BookingPage> {
 
   double _calculateDistance(double lat1, double lon1, double lat2, double lon2) {
     const double p = 0.017453292519943295; // Pi / 180
-    final double a = 0.5 - 
+    final double a = 0.5 -
       cos((lat2 - lat1) * p) / 2 +
-      cos(lat1 * p) * cos(lat2 * p) * 
+      cos(lat1 * p) * cos(lat2 * p) *
       (1 - cos((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a)); // 2 * R * asin...
   }
@@ -303,7 +308,7 @@ class _BookingPageState extends State<BookingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.stay['name']),
+        title: Text(widget.stay['name'] ?? 'Unknown Stay'),
       ),
       body: Column(
         children: [
@@ -313,8 +318,8 @@ class _BookingPageState extends State<BookingPage> {
               itemBuilder: (context, index) {
                 final stay = _nearbyStays[index];
                 return ListTile(
-                  title: Text(stay['name']),
-                  subtitle: Text('${stay['description']} - ${stay['price']}'),
+                  title: Text(stay['name'] ?? 'Unknown Name'),
+                  subtitle: Text('${stay['description'] ?? 'No description'} - ${stay['price']?.toString() ?? 'N/A'}'),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -332,4 +337,3 @@ class _BookingPageState extends State<BookingPage> {
     );
   }
 }
-
