@@ -32,6 +32,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
+<<<<<<< HEAD
               // Assuming the place is passed from the context or use a placeholder
               // Example placeholder
               TourismPlace placeholderPlace = TourismPlace(
@@ -47,6 +48,9 @@ class BottomNav extends StatelessWidget {
               );
 
               Get.to(BookingPage());
+=======
+              Get.to(const BookingPage());
+>>>>>>> b030437d5a3dbe09fa600ea9b19caa5033aeb35b
             },
             icon: const Icon(Icons.place),
           ),

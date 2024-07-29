@@ -8,12 +8,14 @@ import 'package:touristapp/pages/main_page.dart';
 class SignInScreen extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+   SignInScreen({super.key});
+
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
       if (kIsWeb) {
         // Web-specific code
-        GoogleSignIn _googleSignIn = GoogleSignIn();
-        GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+        GoogleSignIn googleSignIn = GoogleSignIn();
+        GoogleSignInAccount? googleUser = await googleSignIn.signIn();
         if (googleUser != null) {
           final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
           final AuthCredential credential = GoogleAuthProvider.credential(
@@ -28,11 +30,11 @@ class SignInScreen extends StatelessWidget {
         }
       } else {
         // Non-web code
-        final GoogleSignIn _googleSignIn = GoogleSignIn();
-        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+        final GoogleSignIn googleSignIn = GoogleSignIn();
+        final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
         if (googleUser == null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Sign in aborted by user')),
+            const SnackBar(content: Text('Sign in aborted by user')),
           );
           return;
         }
@@ -57,11 +59,11 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Sign In")),
+      appBar: AppBar(title: const Text("Sign In")),
       body: Center(
         child: ElevatedButton(
           onPressed: () => _signInWithGoogle(context),
-          child: Text("Sign in with Google"),
+          child: const Text("Sign in with Google"),
         ),
       ),
     );
