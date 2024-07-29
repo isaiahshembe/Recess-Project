@@ -22,8 +22,8 @@ android {
         applicationId = "com.example.touristapp"
         minSdk = 23
         targetSdk = 34
-        versionCode = 1 // Or use flutterVersionCode if it's defined correctly
-        versionName = "1.0" // Or use flutterVersionName if it's defined correctly
+        versionCode = 1 
+        versionName = "1.0" 
     }
 
     buildTypes {
@@ -38,12 +38,11 @@ flutter {
 }
 
 dependencies {
-    // Import the BoM for the Firebase platform
+
     implementation platform("com.google.firebase:firebase-bom:33.1.2")
 
-    // Add the dependency for the Firebase Authentication library
+
     implementation "com.google.firebase:firebase-auth"
 
-    // Also add the dependency for the Google Play services library and specify its version
     implementation "com.google.android.gms:play-services-auth:21.2.0"
 }
