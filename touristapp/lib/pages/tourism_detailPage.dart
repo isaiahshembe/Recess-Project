@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:touristapp/pages/book/booking_page.dart';
 import 'package:touristapp/tourism_place.dart';
 
 class TourismDetailsPage extends StatelessWidget {
@@ -105,6 +106,18 @@ class TourismDetailsPage extends StatelessWidget {
               },
               child: const Text('Book Now'),
             ),
+
+            ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookingPage(),
+                        ),
+                      );
+                    },
+                    child: const Text('View on Map'),
+                  ),
           ],
         ),
       ),

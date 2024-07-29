@@ -1,57 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
-import 'package:touristapp/pages/booking_page.dart';
+import 'package:touristapp/pages/book/booking_page.dart';
 import 'package:touristapp/pages/profile/profile_page.dart';
-import 'package:touristapp/pages/settings/localprovider.dart';
-import 'package:touristapp/pages/settings/themeprovider.dart';
-import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
-import 'package:touristapp/l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:touristapp/pages/stay.dart';
-
-void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => LocaleProvider()),
-      ],
-      child: const MyApp(),
-    ),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    final localeProvider = Provider.of<LocaleProvider>(context);
-
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Tourist App',
-      theme: ThemeData(
-        brightness: themeProvider.isDarkMode ? Brightness.dark : Brightness.light,
-        primarySwatch: Colors.blue,
-      ),
-      locale: localeProvider.locale,
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('es', 'ES'),
-      ],
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      home: const SplashScreen(),
-    );
-  }
-}
+import 'package:touristapp/tourism_place.dart';
 
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key});
@@ -73,13 +26,27 @@ class BottomNav extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-              Get.to( const StaysPage());
+              Get.to(const StaysPage());
             },
             icon: const Icon(Icons.search),
           ),
           IconButton(
             onPressed: () {
-              Get.to(const BookingPage(stay: {},));
+              // Assuming the place is passed from the context or use a placeholder
+              // Example placeholder
+              TourismPlace placeholderPlace = TourismPlace(
+                id: '1',
+                name: 'Placeholder',
+                image: 'https://via.placeholder.com/150',
+                location: 'Placeholder Location',
+                rating: 4.5,
+                price: 100.0,
+                description: 'Description',
+                latitude: 37.7749,
+                longitude: -122.4194,
+              );
+
+              Get.to(BookingPage());
             },
             icon: const Icon(Icons.place),
           ),
@@ -91,7 +58,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to( const ProfilePage());
+              Get.to(const ProfilePage());
             },
             icon: const Icon(Icons.person),
           ),
@@ -100,3 +67,4 @@ class BottomNav extends StatelessWidget {
     );
   }
 }
+
