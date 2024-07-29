@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:touristapp/pages/book/booking_page.dart';
+import 'package:touristapp/pages/booking_page.dart';
 import 'package:touristapp/tourism_place.dart';
 
 class TourismDetailsPage extends StatelessWidget {
