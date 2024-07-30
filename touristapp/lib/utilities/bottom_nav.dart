@@ -31,7 +31,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to(const BookingPage());
+              Get.to(BookingPage(latitude: null!, longitude: null!,));
             },
             icon: const Icon(Icons.place),
           ),

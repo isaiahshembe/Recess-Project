@@ -10,7 +10,7 @@ class TourismDetailsPage extends StatelessWidget {
   const TourismDetailsPage({
     super.key,
     required this.place,
-    required this.onRate, required List<TourismPlace> nearbyPlaces,
+    required this.onRate, required List<TourismPlace> nearbyPlaces, 
   });
 
   @override
@@ -106,18 +106,20 @@ class TourismDetailsPage extends StatelessWidget {
               },
               child: const Text('Book Now'),
             ),
-
             ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookingPage(),
-                        ),
-                      );
-                    },
-                    child: const Text('View on Map'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookingPage(
+                      latitude: place.latitude,
+                      longitude: place.longitude,
+                    ),
                   ),
+                );
+              },
+              child: const Text('View on Map'),
+            ),
           ],
         ),
       ),
