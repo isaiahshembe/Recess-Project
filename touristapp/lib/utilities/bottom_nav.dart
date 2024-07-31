@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
 import 'package:touristapp/pages/booking_page.dart';
 import 'package:touristapp/pages/profile/profile_page.dart';
-import 'package:touristapp/pages/settings/localprovider.dart';
-import 'package:touristapp/pages/settings/themeprovider.dart';
-import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
-import 'package:touristapp/l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:touristapp/pages/stay.dart';
 
+<<<<<<< HEAD
 void main() {
   runApp(
     MultiProvider(
@@ -68,6 +63,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+=======
+>>>>>>> 3c05d1494ae80e78c0b3f91699d9c273f006b0e2
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key});
 
@@ -94,7 +91,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to(const BookingPage());
+              Get.to(BookingPage(latitude: null!, longitude: null!,));
             },
             icon: const Icon(Icons.place, color: Colors.green),
           ),
@@ -115,3 +112,4 @@ class BottomNav extends StatelessWidget {
     );
   }
 }
+

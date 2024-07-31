@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class BookingPage extends StatefulWidget {
-  const BookingPage({super.key});
+  const BookingPage({super.key, required double latitude, required double longitude});
 
   @override
   _BookingPageState createState() => _BookingPageState();
@@ -16,7 +16,7 @@ class _BookingPageState extends State<BookingPage> {
   final TextEditingController _addressController = TextEditingController();
   final MapController _mapController = MapController();
   final LatLng _initialPosition =
-      const LatLng(37.7749, -122.4194); // Default to San Francisco
+      const LatLng(0.347596, 32.582520);
   LatLng? _selectedPosition;
   double? _latitude;
   double? _longitude;
@@ -222,13 +222,13 @@ class _BookingPageState extends State<BookingPage> {
               ),
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: _addressController,
-              decoration: const InputDecoration(labelText: 'Address'),
-            ),
+            // TextField(
+            //   controller: _addressController,
+            //   decoration: const InputDecoration(labelText: 'Address'),
+            // ),
             const SizedBox(height: 10),
-            ElevatedButton(
-                onPressed: _searchPlace, child: const Text('Search')),
+            // ElevatedButton(
+            //     onPressed: _searchPlace, child: const Text('Search')),
             ElevatedButton(
                 onPressed: _bookPlace, child: const Text('Book Place')),
             if (_latitude != null && _longitude != null)
