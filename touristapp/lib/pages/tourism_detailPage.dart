@@ -5,12 +5,14 @@ import 'package:touristapp/tourism_place.dart';
 
 class TourismDetailsPage extends StatelessWidget {
   final TourismPlace place;
+  final List<TourismPlace> nearbyPlaces; // Add this line
   final Function(double) onRate;
 
   const TourismDetailsPage({
     super.key,
     required this.place,
-    required this.onRate, required List<TourismPlace> nearbyPlaces, 
+    required this.nearbyPlaces, // Add this line
+    required this.onRate,
   });
 
   @override
@@ -120,6 +122,7 @@ class TourismDetailsPage extends StatelessWidget {
               },
               child: const Text('View on Map'),
             ),
+            // Optional: Display nearby places if needed
           ],
         ),
       ),

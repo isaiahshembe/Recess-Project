@@ -183,144 +183,143 @@ class _MainPageState extends State<MainPage> {
         title: const Text('Tourism Places'),
         backgroundColor: Colors.green,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              color: Colors.green,
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: ListView(
+        children: [
+          // Top Banner Section
+          Container(
+            color: Colors.green,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(child: _buildBannerButton('Hotels')),
+                    const SizedBox(width: 10),
+                    Expanded(child: _buildBannerButton('Things to Do')),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(child: _buildBannerButton('Restaurants')),
+                    const SizedBox(width: 10),
+                    Expanded(child: _buildBannerButton('More')),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 200,
+                  child: PageView(
+                    controller: _pageController,
                     children: [
-                      Expanded(child: _buildBannerButton('Hotels')),
-                      const SizedBox(width: 10),
-                      Expanded(child: _buildBannerButton('Things to Do')),
+                      _buildCarouselItem('images/murchison falls np.jpg', 'Discover Hidden Gems'),
+                      _buildCarouselItem('images/camping 2.jpg', 'Adventure Awaits'),
+                      _buildCarouselItem('images/murchision.jpg', 'Relax and Enjoy'),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Banners Section
+          Container(
+            height: 300, // Adjust height as needed
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: ListView(
+              children: [
+                _buildBanner('images/westnile.jpeg', 'Experience the Best'),
+                _buildBanner('images/kampala-sheraton-hotel.jpg', 'Top Rated Destinations'),
+                _buildBanner('images/kidepo.jpeg', 'Hidden Treasures'),
+                _buildBanner('images/muchison.jpg', 'Must-See Places'),
+                const SizedBox(height: 10),
+                // Explore Section
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: _buildBannerButton('Restaurants')),
-                      const SizedBox(width: 10),
-                      Expanded(child: _buildBannerButton('More')),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 200,
-                    child: PageView(
-                      controller: _pageController,
-                      children: [
-                        _buildCarouselItem('images/murchison falls np.jpg', 'Discover Hidden Gems'),
-                        _buildCarouselItem('images/camping 2.jpg', 'Adventure Awaits'),
-                        _buildCarouselItem('images/murchision.jpg', 'Relax and Enjoy'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Banners Section
-            SizedBox(
-              height: 300, // Adjust height as needed
-              child: Column(
-                children: [
-                  _buildBanner('images/westnile.jpeg', 'Experience the Best'),
-                  _buildBanner('images/kampala-sheraton-hotel.jpg', 'Top Rated Destinations'),
-                  _buildBanner('images/kidepo.jpeg', 'Hidden Treasures'),
-                  _buildBanner('images/muchison.jpg', 'Must-See Places'),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Explore Section
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Explore',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.green),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 200, // Adjust height as needed
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: filteredItems.length,
-                      itemBuilder: (context, index) {
-                        final place = filteredItems[index];
-                        return GestureDetector(
-                          onTap: () => _navigateToDetails(place),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade100,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                            ),
-                            margin: const EdgeInsets.only(right: 10),
-                            width: 200,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                                    child: Image.network(
-                                      place.image,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
+                      const Text(
+                        'Explore',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.green),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 200, // Adjust height as needed
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: filteredItems.length,
+                          itemBuilder: (context, index) {
+                            final place = filteredItems[index];
+                            return GestureDetector(
+                              onTap: () => _navigateToDetails(place),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade100,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 5),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        place.name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Colors.green,
+                                margin: const EdgeInsets.only(right: 10),
+                                width: 200,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                                        child: Image.network(
+                                          place.image,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        place.location,
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 14,
-                                        ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            place.name,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            place.location,
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: const BottomNav(),
     );

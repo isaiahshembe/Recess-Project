@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:touristapp/pages/Welcomepage/welcomepage.dart';
 import 'package:touristapp/pages/booking_page.dart';
 import 'package:touristapp/pages/profile/profile_page.dart';
+import 'package:touristapp/pages/settings/localprovider.dart';
+import 'package:touristapp/pages/settings/themeprovider.dart';
+import 'package:touristapp/pages/splash%20screen/splashscreen.dart';
 import 'package:touristapp/pages/stay.dart';
+ // Assuming you have this
+import 'package:touristapp/localization/app_localizations.dart'; // Assuming you have this
 
-<<<<<<< HEAD
 void main() {
   runApp(
     MultiProvider(
@@ -26,7 +32,7 @@ class MyApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
 
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tourist App',
       theme: ThemeData(
@@ -58,13 +64,11 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      home: const SplashScreen(),
+      home: const SplashScreen(), // Assuming you have this page
     );
   }
 }
 
-=======
->>>>>>> 3c05d1494ae80e78c0b3f91699d9c273f006b0e2
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key});
 
@@ -91,7 +95,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to(BookingPage(latitude: null!, longitude: null!,));
+              Get.to(BookingPage(latitude: 0.0, longitude: 0.0)); // Provide default values or handle null case
             },
             icon: const Icon(Icons.place, color: Colors.green),
           ),
@@ -112,4 +116,3 @@ class BottomNav extends StatelessWidget {
     );
   }
 }
-
