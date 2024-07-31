@@ -21,6 +21,7 @@ class _BookingPageState extends State<BookingPage> {
   double? _latitude;
   double? _longitude;
   LatLng? _currentPosition;
+  List<String> _nearbyPlaces = []; // List to store nearby places
 
   final List<Map<String, dynamic>> carouselItems = [
     {'image': 'images/kampala-sheraton-hotel.jpg', 'caption': 'Cozy Hotels'},
@@ -45,6 +46,7 @@ class _BookingPageState extends State<BookingPage> {
         _mapController.move(
             _currentPosition!, 13.0); // Move the map to the current position
         _getAddressFromLatLng(_latitude!, _longitude!);
+        _fetchNearbyPlaces(_latitude!, _longitude!); // Fetch nearby places
       });
     } catch (e) {
       print(e);
@@ -116,6 +118,7 @@ class _BookingPageState extends State<BookingPage> {
         _longitude = location.longitude;
         _mapController.move(latlng, 15.0);
         _getAddressFromLatLng(_latitude!, _longitude!);
+        _fetchNearbyPlaces(_latitude!, _longitude!); // Fetch nearby places
       });
     } catch (e) {
       print('Error searching place: $e');
@@ -155,6 +158,19 @@ class _BookingPageState extends State<BookingPage> {
       _latitude = position.latitude;
       _longitude = position.longitude;
       _getAddressFromLatLng(_latitude!, _longitude!);
+      _fetchNearbyPlaces(_latitude!, _longitude!); // Fetch nearby places
+    });
+  }
+
+  Future<void> _fetchNearbyPlaces(double latitude, double longitude) async {
+    // Replace this with actual API call
+    // For now, we're just using dummy data
+    setState(() {
+      _nearbyPlaces = [
+        'Attraction 1 - ${latitude.toStringAsFixed(2)}, ${longitude.toStringAsFixed(2)}',
+        'Attraction 2 - ${latitude.toStringAsFixed(2)}, ${longitude.toStringAsFixed(2)}',
+        'Attraction 3 - ${latitude.toStringAsFixed(2)}, ${longitude.toStringAsFixed(2)}',
+      ];
     });
   }
 
@@ -191,6 +207,14 @@ class _BookingPageState extends State<BookingPage> {
                           point: _currentPosition!,
                           child:
                               const Icon(Icons.my_location, color: Colors.blue),
+                        ),
+                      if (_selectedPosition != null)
+                        Marker(
+                          width: 30.0,
+                          height: 30.0,
+                          point: _selectedPosition!,
+                          child:
+                              const Icon(Icons.location_on, color: Colors.red),
                         ),
                     ],
                   ),
@@ -249,6 +273,18 @@ class _BookingPageState extends State<BookingPage> {
                 },
               ),
             ),
+            const SizedBox(height: 10),
+            if (_nearbyPlaces.isNotEmpty)
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _nearbyPlaces.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(_nearbyPlaces[index]),
+                    );
+                  },
+                ),
+              ),
           ],
         ),
       ),

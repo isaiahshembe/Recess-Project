@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,42 +18,41 @@ class _MainPageState extends State<MainPage> {
   List<TourismPlace> allItems = [];
   List<TourismPlace> filteredItems = [];
 
+  final PageController _pageController = PageController();
+  Timer? _carouselTimer;
+  int _currentPage = 0;
+
   @override
   void initState() {
     super.initState();
     fetchTourismPlaces();
+    _startCarouselTimer();
+  }
+
+  @override
+  void dispose() {
+    _carouselTimer?.cancel(); // Cancel the timer when the widget is disposed
+    _pageController.dispose();
+    super.dispose();
   }
 
   Future<void> fetchTourismPlaces() async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('tourism_places').get();
-
-      List<TourismPlace> places = [];
-      for (var doc in querySnapshot.docs) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
-        String name = data['name'] ?? 'Unknown Name';
-        String image = data['image'] ?? 'https://via.placeholder.com/150';
-        String location = data['location'] ?? 'Unknown Location';
-        double rating = data['rating']?.toDouble() ?? 0.0;
-        double price = data['price']?.toDouble() ?? 0.0;
-        String description = data['description'] ?? '';
-        double lat = data['latitude']?.toDouble() ?? 0.0;
-        double lon = data['longitude']?.toDouble() ?? 0.0;
-
-        TourismPlace place = TourismPlace(
+      List<TourismPlace> places = querySnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return TourismPlace(
           id: doc.id,
-          name: name,
-          image: image,
-          location: location,
-          rating: rating,
-          price: price,
-          description: description,
-          latitude: lat,
-          longitude: lon,
+          name: data['name'] ?? 'Unknown Name',
+          image: data['image'] ?? 'https://via.placeholder.com/150',
+          location: data['location'] ?? 'Unknown Location',
+          rating: (data['rating'] as num?)?.toDouble() ?? 0.0,
+          price: (data['price'] as num?)?.toDouble() ?? 0.0,
+          description: data['description'] ?? '',
+          latitude: (data['latitude'] as num?)?.toDouble() ?? 0.0,
+          longitude: (data['longitude'] as num?)?.toDouble() ?? 0.0,
         );
-        places.add(place);
-      }
+      }).toList();
 
       setState(() {
         allItems = places;
@@ -66,8 +66,8 @@ class _MainPageState extends State<MainPage> {
 
   Future<List<TourismPlace>> _findNearbyPlaces(double latitude, double longitude) async {
     try {
-      double latitudeRange = 0.2;  // Adjust this range based on your needs
-      double longitudeRange = 0.2; // Adjust this range based on your needs
+      const double latitudeRange = 0.2; // Adjust based on your needs
+      const double longitudeRange = 0.2; // Adjust based on your needs
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('tourism_places')
         .where('latitude', isGreaterThan: latitude - latitudeRange)
@@ -76,32 +76,20 @@ class _MainPageState extends State<MainPage> {
         .where('longitude', isLessThan: longitude + longitudeRange)
         .get();
 
-      List<TourismPlace> places = [];
-      for (var doc in querySnapshot.docs) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
-        String name = data['name'] ?? 'Unknown Name';
-        String image = data['image'] ?? 'https://via.placeholder.com/150';
-        String location = data['location'] ?? 'Unknown Location';
-        double rating = data['rating']?.toDouble() ?? 0.0;
-        double price = data['price']?.toDouble() ?? 0.0;
-        String description = data['description'] ?? '';
-        double lat = data['latitude']?.toDouble() ?? 0.0;
-        double lon = data['longitude']?.toDouble() ?? 0.0;
-
-        TourismPlace nearbyPlace = TourismPlace(
+      List<TourismPlace> places = querySnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return TourismPlace(
           id: doc.id,
-          name: name,
-          image: image,
-          location: location,
-          rating: rating,
-          price: price,
-          description: description,
-          latitude: lat,
-          longitude: lon,
+          name: data['name'] ?? 'Unknown Name',
+          image: data['image'] ?? 'https://via.placeholder.com/150',
+          location: data['location'] ?? 'Unknown Location',
+          rating: (data['rating'] as num?)?.toDouble() ?? 0.0,
+          price: (data['price'] as num?)?.toDouble() ?? 0.0,
+          description: data['description'] ?? '',
+          latitude: (data['latitude'] as num?)?.toDouble() ?? 0.0,
+          longitude: (data['longitude'] as num?)?.toDouble() ?? 0.0,
         );
-        places.add(nearbyPlace);
-      }
+      }).toList();
 
       return places;
     } catch (e) {
@@ -111,14 +99,11 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _filterResults(String query) {
-    List<TourismPlace> results = [];
-    if (query.isEmpty) {
-      results = allItems;
-    } else {
-      results = allItems.where((place) =>
-        place.name.toLowerCase().contains(query.toLowerCase()) ||
-        place.location.toLowerCase().contains(query.toLowerCase())).toList();
-    }
+    List<TourismPlace> results = query.isEmpty
+      ? allItems
+      : allItems.where((place) =>
+          place.name.toLowerCase().contains(query.toLowerCase()) ||
+          place.location.toLowerCase().contains(query.toLowerCase())).toList();
 
     setState(() {
       filteredItems = _rankResults(results);
@@ -131,7 +116,6 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _navigateToDetails(TourismPlace place) async {
-    // Example: Fetch nearby places based on the selected place's coordinates
     List<TourismPlace> nearbyPlaces = await _findNearbyPlaces(place.latitude, place.longitude);
 
     Navigator.push(
@@ -154,10 +138,7 @@ class _MainPageState extends State<MainPage> {
       if (placeDoc.exists) {
         final data = placeDoc.data() as Map<String, dynamic>;
 
-        List<dynamic> currentRatings = data['ratings'] is List
-          ? List<dynamic>.from(data['ratings'])
-          : [];
-
+        List<dynamic> currentRatings = List<dynamic>.from(data['ratings'] ?? []);
         currentRatings.add(rating);
 
         double averageRating = currentRatings.isNotEmpty
@@ -182,129 +163,247 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  void _startCarouselTimer() {
+    _carouselTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_pageController.hasClients) {
+        _currentPage = (_currentPage + 1) % 3; // Change 3 to the number of items in your carousel
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tourism Places'),
+        backgroundColor: Colors.green,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Image.asset(
-                'images/display_image1.jpg', // Update path if necessary
-                width: double.infinity,
-                height: 150, // Adjust height as needed
-                fit: BoxFit.cover,
-              ),
-              Positioned(
-                top: 10,
-                left: 10,
-                right: 10,
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: const OutlineInputBorder(),
-                    hintText: 'What are you looking for?',
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        _filterResults(_searchController.text);
-                      },
-                      icon: const Icon(Icons.search),
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              color: Colors.green,
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(child: _buildBannerButton('Hotels')),
+                      const SizedBox(width: 10),
+                      Expanded(child: _buildBannerButton('Things to Do')),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(child: _buildBannerButton('Restaurants')),
+                      const SizedBox(width: 10),
+                      Expanded(child: _buildBannerButton('More')),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 200,
+                    child: PageView(
+                      controller: _pageController,
+                      children: [
+                        _buildCarouselItem('images/murchison falls np.jpg', 'Discover Hidden Gems'),
+                        _buildCarouselItem('images/camping 2.jpg', 'Adventure Awaits'),
+                        _buildCarouselItem('images/murchision.jpg', 'Relax and Enjoy'),
+                      ],
                     ),
                   ),
-                  onChanged: (text) {
-                    _filterResults(text);
-                  },
-                ),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: Container(
+            ),
+            const SizedBox(height: 10),
+            // Banners Section
+            SizedBox(
+              height: 300, // Adjust height as needed
+              child: Column(
+                children: [
+                  _buildBanner('images/westnile.jpeg', 'Experience the Best'),
+                  _buildBanner('images/kampala-sheraton-hotel.jpg', 'Top Rated Destinations'),
+                  _buildBanner('images/kidepo.jpeg', 'Hidden Treasures'),
+                  _buildBanner('images/muchison.jpg', 'Must-See Places'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Explore Section
+            Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     'Explore',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.green),
                   ),
                   const SizedBox(height: 10),
-                  Expanded(
-                    child: SingleChildScrollView(
+                  SizedBox(
+                    height: 200, // Adjust height as needed
+                    child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: filteredItems.map((place) {
-                          return GestureDetector(
-                            onTap: () => _navigateToDetails(place),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(17),
-                              ),
-                              height: 200,
-                              width: 200,
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
+                      itemCount: filteredItems.length,
+                      itemBuilder: (context, index) {
+                        final place = filteredItems[index];
+                        return GestureDetector(
+                          onTap: () => _navigateToDetails(place),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade100,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            margin: const EdgeInsets.only(right: 10),
+                            width: 200,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
                                     child: Image.network(
                                       place.image,
                                       width: double.infinity,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          place.name,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        place.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.green,
                                         ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          place.location,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 14,
-                                          ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        place.location,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 14,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          );
-                        }).toList(),
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: const BottomNav(),
+    );
+  }
+
+  Widget _buildBannerButton(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.green),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCarouselItem(String imagePath, String caption) {
+    return Stack(
+      children: [
+        Image.asset(
+          imagePath,
+          fit: BoxFit.cover,
+          width: double.infinity,
+        ),
+        Positioned(
+          bottom: 10,
+          left: 10,
+          child: Container(
+            color: Colors.black.withOpacity(0.5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Text(
+              caption,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBanner(String imagePath, String caption) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Stack(
+        children: [
+          Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 150,
+          ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text(
+                caption,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         ],
       ),
-      bottomNavigationBar: const BottomNav(),
     );
   }
 }

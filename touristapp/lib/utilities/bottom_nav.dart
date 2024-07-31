@@ -36,7 +36,22 @@ class MyApp extends StatelessWidget {
       title: 'Tourist App',
       theme: ThemeData(
         brightness: themeProvider.isDarkMode ? Brightness.dark : Brightness.light,
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.green,  // Primary color set to green
+        hintColor: Colors.blue,    // Accent color set to blue
+        buttonTheme: const ButtonThemeData(
+          buttonColor: Colors.green,
+          textTheme: ButtonTextTheme.primary,
+        ),
+        appBarTheme: const AppBarTheme(
+          color: Colors.green,
+          iconTheme: IconThemeData(color: Colors.white),
+          toolbarTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: const ColorScheme.light(
+          primary: Colors.green,
+          secondary: Colors.blue,
+        ),
       ),
       locale: localeProvider.locale,
       supportedLocales: const [
@@ -61,7 +76,7 @@ class BottomNav extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade300,
+        color: Colors.grey.shade200,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -73,27 +88,27 @@ class BottomNav extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-              Get.to( const StaysPage());
+              Get.to(const StaysPage());
             },
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.search, color: Colors.green),
           ),
           IconButton(
             onPressed: () {
               Get.to(const BookingPage());
             },
-            icon: const Icon(Icons.place),
+            icon: const Icon(Icons.place, color: Colors.green),
           ),
           IconButton(
             onPressed: () {
               Get.to(const WelcomePage());
             },
-            icon: const Icon(Icons.home),
+            icon: const Icon(Icons.home, color: Colors.green),
           ),
           IconButton(
             onPressed: () {
-              Get.to( const ProfilePage());
+              Get.to(const ProfilePage());
             },
-            icon: const Icon(Icons.person),
+            icon: const Icon(Icons.person, color: Colors.green),
           ),
         ],
       ),
