@@ -2,7 +2,10 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:touristapp/pages/preference.dart';
+import 'package:touristapp/pages/stay.dart';
 import 'package:touristapp/pages/tourism_detailPage.dart';
+
 import 'package:touristapp/utilities/bottom_nav.dart';
 import 'package:touristapp/tourism_place.dart';
 
@@ -38,7 +41,8 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> fetchTourismPlaces() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('tourism_places').get();
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('tourism_places').get();
       List<TourismPlace> places = querySnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return TourismPlace(
@@ -64,17 +68,19 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  Future<List<TourismPlace>> _findNearbyPlaces(double latitude, double longitude) async {
+  Future<List<TourismPlace>> _findNearbyPlaces(
+      double latitude, double longitude) async {
     try {
       const double latitudeRange = 0.2; // Adjust based on your needs
       const double longitudeRange = 0.2; // Adjust based on your needs
 
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('tourism_places')
-        .where('latitude', isGreaterThan: latitude - latitudeRange)
-        .where('latitude', isLessThan: latitude + latitudeRange)
-        .where('longitude', isGreaterThan: longitude - longitudeRange)
-        .where('longitude', isLessThan: longitude + longitudeRange)
-        .get();
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('tourism_places')
+          .where('latitude', isGreaterThan: latitude - latitudeRange)
+          .where('latitude', isLessThan: latitude + latitudeRange)
+          .where('longitude', isGreaterThan: longitude - longitudeRange)
+          .where('longitude', isLessThan: longitude + longitudeRange)
+          .get();
 
       List<TourismPlace> places = querySnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -100,10 +106,12 @@ class _MainPageState extends State<MainPage> {
 
   void _filterResults(String query) {
     List<TourismPlace> results = query.isEmpty
-      ? allItems
-      : allItems.where((place) =>
-          place.name.toLowerCase().contains(query.toLowerCase()) ||
-          place.location.toLowerCase().contains(query.toLowerCase())).toList();
+        ? allItems
+        : allItems
+            .where((place) =>
+                place.name.toLowerCase().contains(query.toLowerCase()) ||
+                place.location.toLowerCase().contains(query.toLowerCase()))
+            .toList();
 
     setState(() {
       filteredItems = _rankResults(results);
@@ -116,7 +124,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _navigateToDetails(TourismPlace place) async {
-    List<TourismPlace> nearbyPlaces = await _findNearbyPlaces(place.latitude, place.longitude);
+    List<TourismPlace> nearbyPlaces =
+        await _findNearbyPlaces(place.latitude, place.longitude);
 
     Navigator.push(
       context,
@@ -132,18 +141,21 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _ratePlace(String placeId, double rating) async {
     try {
-      DocumentReference placeRef = FirebaseFirestore.instance.collection('tourism_places').doc(placeId);
+      DocumentReference placeRef =
+          FirebaseFirestore.instance.collection('tourism_places').doc(placeId);
       DocumentSnapshot placeDoc = await placeRef.get();
 
       if (placeDoc.exists) {
         final data = placeDoc.data() as Map<String, dynamic>;
 
-        List<dynamic> currentRatings = List<dynamic>.from(data['ratings'] ?? []);
+        List<dynamic> currentRatings =
+            List<dynamic>.from(data['ratings'] ?? []);
         currentRatings.add(rating);
 
         double averageRating = currentRatings.isNotEmpty
-          ? currentRatings.cast<double>().reduce((a, b) => a + b) / currentRatings.length
-          : 0.0;
+            ? currentRatings.cast<double>().reduce((a, b) => a + b) /
+                currentRatings.length
+            : 0.0;
 
         await placeRef.update({
           'ratings': currentRatings,
@@ -166,7 +178,8 @@ class _MainPageState extends State<MainPage> {
   void _startCarouselTimer() {
     _carouselTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (_pageController.hasClients) {
-        _currentPage = (_currentPage + 1) % 3; // Change 3 to the number of items in your carousel
+        _currentPage = (_currentPage + 1) %
+            3; // Change 3 to the number of items in your carousel
         _pageController.animateToPage(
           _currentPage,
           duration: const Duration(milliseconds: 300),
@@ -194,18 +207,37 @@ class _MainPageState extends State<MainPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Expanded(child: _buildBannerButton('Hotels')),
+                    Expanded(
+                        child: _buildBannerButton(
+                            'Hotels',
+                            () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => StaysPage())))),
                     const SizedBox(width: 10),
-                    Expanded(child: _buildBannerButton('Things to Do')),
+                    Expanded(
+                        child: _buildBannerButton(
+                            'Things to Do',
+                            () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PreferencesScreen())))),
                   ],
                 ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Expanded(child: _buildBannerButton('Restaurants')),
+                    Expanded(
+                        child: _buildBannerButton('Restaurants', () {
+                      // Implement navigation for Restaurants if needed
+                    })),
                     const SizedBox(width: 10),
-                    Expanded(child: _buildBannerButton('More')),
+                    Expanded(
+                        child: _buildBannerButton('More', () {
+                      // Implement navigation for More if needed
+                    })),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -214,9 +246,12 @@ class _MainPageState extends State<MainPage> {
                   child: PageView(
                     controller: _pageController,
                     children: [
-                      _buildCarouselItem('images/murchison falls np.jpg', 'Discover Hidden Gems'),
-                      _buildCarouselItem('images/camping 2.jpg', 'Adventure Awaits'),
-                      _buildCarouselItem('images/murchision.jpg', 'Relax and Enjoy'),
+                      _buildCarouselItem('images/murchison falls np.jpg',
+                          'Discover Hidden Gems'),
+                      _buildCarouselItem(
+                          'images/camping 2.jpg', 'Adventure Awaits'),
+                      _buildCarouselItem(
+                          'images/murchision.jpg', 'Relax and Enjoy'),
                     ],
                   ),
                 ),
@@ -231,19 +266,24 @@ class _MainPageState extends State<MainPage> {
             child: ListView(
               children: [
                 _buildBanner('images/westnile.jpeg', 'Experience the Best'),
-                _buildBanner('images/kampala-sheraton-hotel.jpg', 'Top Rated Destinations'),
+                _buildBanner('images/kampala-sheraton-hotel.jpg',
+                    'Top Rated Destinations'),
                 _buildBanner('images/kidepo.jpeg', 'Hidden Treasures'),
                 _buildBanner('images/muchison.jpg', 'Must-See Places'),
                 const SizedBox(height: 10),
                 // Explore Section
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Explore',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.green),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            color: Colors.green),
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
@@ -274,7 +314,9 @@ class _MainPageState extends State<MainPage> {
                                   children: [
                                     Expanded(
                                       child: ClipRRect(
-                                        borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                                top: Radius.circular(10)),
                                         child: Image.network(
                                           place.image,
                                           width: double.infinity,
@@ -285,7 +327,8 @@ class _MainPageState extends State<MainPage> {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             place.name,
@@ -325,21 +368,24 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildBannerButton(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.green),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.green,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+  Widget _buildBannerButton(String text, VoidCallback onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.green),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
         ),
       ),
