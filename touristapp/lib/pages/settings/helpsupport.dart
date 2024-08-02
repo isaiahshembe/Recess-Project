@@ -53,7 +53,7 @@ class HelpSupportPage extends StatelessWidget {
             leading: const Icon(Icons.web),
             title: const Text('Visit our support website'),
             onTap: () {
-              _launchWebsite('https://github.com/isaiahshembe/Recess-Project');
+              _launchWebsite('https://ofwonojohn.github.io/recess-project-website');
             },
           ),
         ],
