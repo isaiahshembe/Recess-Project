@@ -80,7 +80,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:touristapp/pages/resultpref.dart'; 
+import 'package:touristapp/pages/resultpref.dart';
 
 class PreferencesScreen extends StatefulWidget {
   const PreferencesScreen({super.key});
@@ -112,21 +112,48 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tailor Your Experiences'),
+        backgroundColor: Colors.green[800], // Darker green for the AppBar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: categories.map((category) {
-            return CheckboxListTile(
-              title: Text(category.name),
-              value: category.isSelected,
-              onChanged: (bool? value) {
-                setState(() {
-                  category.isSelected = value!;
-                });
-              },
-            );
-          }).toList(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Select your preferences to find the best experiences for you!',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: ListView(
+                children: categories.map((category) {
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: CheckboxListTile(
+                      contentPadding: const EdgeInsets.all(16),
+                      title: Text(
+                        category.name,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      value: category.isSelected,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          category.isSelected = value!;
+                        });
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -146,6 +173,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           );
         },
         child: _isLoading ? const CircularProgressIndicator() : const Icon(Icons.arrow_forward),
+        backgroundColor: Colors.green[800], // Match FloatingActionButton with AppBar
       ),
     );
   }

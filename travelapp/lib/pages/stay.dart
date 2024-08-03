@@ -116,6 +116,7 @@ class _StaysPageState extends State<StaysPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.white,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
@@ -134,26 +135,50 @@ class _StaysPageState extends State<StaysPage> {
                             child: const Icon(Icons.image_not_supported, size: 100),
                           ),
                     const SizedBox(height: 16),
-                    Text(stay['hotel_name'] ?? 'No name', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    Text(
+                      stay['hotel_name'] ?? 'No name',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
                     const SizedBox(height: 8),
-                    Text(stay['description'] ?? 'No description'),
+                    Text(
+                      stay['description'] ?? 'No description',
+                      style: TextStyle(color: Colors.black87),
+                    ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
                         const Icon(Icons.star, color: Colors.yellow, size: 16),
                         Text(
                           (stay['averageRating'] != null
-                                  ? stay['averageRating'].toStringAsFixed(1)
-                                  : '0.0'),
+                              ? stay['averageRating'].toStringAsFixed(1)
+                              : '0.0'),
+                          style: TextStyle(color: Colors.black87),
                         ),
                         const SizedBox(width: 8),
-                        Text('(${stay['ratingCount'] ?? 0} ratings)'),
+                        Text(
+                          '(${stay['ratingCount'] ?? 0} ratings)',
+                          style: TextStyle(color: Colors.black54),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text('\$${stay['room_cost']?.toString() ?? 'No price'} per night'),
+                    Text(
+                      '\$${stay['room_cost']?.toString() ?? 'No price'} per night',
+                      style: TextStyle(color: Colors.black87),
+                    ),
                     const SizedBox(height: 16),
-                    const Text('Rate this hotel:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Rate this hotel:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
                     RatingBar.builder(
                       initialRating: rating,
                       minRating: 1,
@@ -184,6 +209,9 @@ class _StaysPageState extends State<StaysPage> {
                           _fetchStays(); // Reload the stays list
                         });
                       },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white, backgroundColor: Colors.green, // White text color
+                      ),
                       child: const Text('Submit Rating'),
                     ),
                   ],
@@ -214,15 +242,19 @@ class _StaysPageState extends State<StaysPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Stays'),
+        backgroundColor: Colors.green, // Green background color for app bar
+      ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Search stays',
                 border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search, color: Colors.green),
               ),
               onChanged: _filterStays,
             ),
@@ -232,37 +264,51 @@ class _StaysPageState extends State<StaysPage> {
               itemCount: filteredStays.length,
               itemBuilder: (context, index) {
                 final stay = filteredStays[index];
-                return ListTile(
-                  leading: stay['image'] != null
-                      ? Image.network(
-                          stay['image'],
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.broken_image, size: 50);
-                          },
-                        )
-                      : const Icon(Icons.image_not_supported, size: 50),
-                  title: Text(stay['hotel_name'] ?? 'No name'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(stay['description'] ?? 'No description'),
-                      Row(
-                        children: [
-                          const Icon(Icons.star, color: Colors.yellow, size: 16),
-                          Text(
-                            (stay['averageRating'] != null
-                                    ? stay['averageRating'].toStringAsFixed(1)
-                                    : '0.0'),
-                          ),
-                        ],
-                      ),
-                      Text('\$${stay['room_cost']?.toString() ?? 'No price'} per night'),
-                    ],
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  onTap: () => _showStayDetails(context, stay),
+                  child: ListTile(
+                    leading: stay['image'] != null
+                        ? Image.network(
+                            stay['image'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.broken_image, size: 50);
+                            },
+                          )
+                        : const Icon(Icons.image_not_supported, size: 50),
+                    title: Text(
+                      stay['hotel_name'] ?? 'No name',
+                      style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(stay['description'] ?? 'No description', style: TextStyle(color: Colors.black87)),
+                        Row(
+                          children: [
+                            const Icon(Icons.star, color: Colors.yellow, size: 16),
+                            Text(
+                              (stay['averageRating'] != null
+                                  ? stay['averageRating'].toStringAsFixed(1)
+                                  : '0.0'),
+                              style: TextStyle(color: Colors.black87),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          '\$${stay['room_cost']?.toString() ?? 'No price'} per night',
+                          style: TextStyle(color: Colors.black87),
+                        ),
+                      ],
+                    ),
+                    onTap: () => _showStayDetails(context, stay),
+                  ),
                 );
               },
             ),
