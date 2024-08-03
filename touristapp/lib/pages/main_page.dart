@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:touristapp/pages/more/Events.dart';
 import 'package:touristapp/pages/preference.dart';
+import 'package:touristapp/pages/restuarants/restaurant.dart';
 import 'package:touristapp/pages/stay.dart';
 import 'package:touristapp/pages/tourism_detailPage.dart';
 
@@ -231,11 +233,21 @@ class _MainPageState extends State<MainPage> {
                   children: [
                     Expanded(
                         child: _buildBannerButton('Restaurants', () {
+                          Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        RestaurantsPage()));
                       // Implement navigation for Restaurants if needed
                     })),
                     const SizedBox(width: 10),
                     Expanded(
                         child: _buildBannerButton('More', () {
+                          Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EventsPage()));
                       // Implement navigation for More if needed
                     })),
                   ],

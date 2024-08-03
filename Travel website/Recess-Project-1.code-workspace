@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../../Recess-Project-1"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "website 1"
+	}
+}
