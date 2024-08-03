@@ -13,6 +13,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('About Us'),
+        backgroundColor: Colors.green[800], // Match the theme color
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -23,7 +24,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  'images/display_image1.jpg', 
+                  'images/display_image1.jpg',
                   height: 100,
                 ),
                 const SizedBox(height: 20),
@@ -32,6 +33,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Colors.green, // Match the theme color
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -42,25 +44,28 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
+                    color: Colors.black87, // Match the theme color
                   ),
                 ),
+                const SizedBox(height: 20),
                 const Text(
-                'Features:',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  'Features:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green, // Match the theme color
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                '- Comprehensive information about destinations, attractions, accommodations, and local services.\n'
-                '- Personalized recommendations based on your preferences and current location.\n'
-                '- Real-time updates on weather, events, transportation, and safety alerts.\n'
-                '- Secure user authentication and profile management.\n'
-                '- Offline access to essential information and maps.\n'
-                '- Support for multiple languages.',
-                style: TextStyle(fontSize: 16),
-              ),
+                const SizedBox(height: 8),
+                const Text(
+                  '- Comprehensive information about destinations, attractions, accommodations, and local services.\n'
+                  '- Personalized recommendations based on your preferences and current location.\n'
+                  '- Real-time updates on weather, events, transportation, and safety alerts.\n'
+                  '- Secure user authentication and profile management.\n'
+                  '- Offline access to essential information and maps.\n'
+                  '- Support for multiple languages.',
+                  style: TextStyle(fontSize: 16, color: Colors.black87), // Match the theme color
+                ),
                 const SizedBox(height: 20),
                 const Text(
                   'Download Go Safari today and embark on your next adventure!',
@@ -68,7 +73,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+                    color: Colors.blue, // Match the theme color
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -77,7 +82,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[600],
+                    color: Colors.grey[600], // Match the theme color
                   ),
                 ),
               ],
