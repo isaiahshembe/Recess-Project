@@ -9,6 +9,7 @@ class HelpSupportPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Help & Support'),
+        backgroundColor: Colors.green,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),

@@ -12,7 +12,10 @@ class DetailScreen extends StatelessWidget {
     final double? longitude = place['longitude'];
 
     return Scaffold(
-      appBar: AppBar(title: Text(place['name'] ?? 'No name')),
+      appBar: AppBar(
+        title: Text(place['name'] ?? 'No name'),
+        backgroundColor: Colors.green, // Green background color for app bar
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -25,14 +28,26 @@ class DetailScreen extends StatelessWidget {
                     width: double.infinity,
                     height: 200,
                   )
-                : Container(width: double.infinity, height: 200, color: Colors.grey), // Placeholder for missing images
+                : Container(
+                    width: double.infinity,
+                    height: 200,
+                    color: Colors.grey,
+                    child: const Icon(Icons.image_not_supported, size: 100, color: Colors.white),
+                  ), // Placeholder for missing images
             const SizedBox(height: 16),
             Text(
               place['name'] ?? 'No name',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.green, // Green text color for the place name
+              ),
             ),
             const SizedBox(height: 8),
-            Text(place['description'] ?? 'No description'),
+            Text(
+              place['description'] ?? 'No description',
+              style: TextStyle(color: Colors.black87),
+            ),
             const SizedBox(height: 16),
             if (latitude != null && longitude != null)
               FutureBuilder<double>(
@@ -41,14 +56,17 @@ class DetailScreen extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    return const Text('Error calculating distance');
+                    return const Text('Error calculating distance', style: TextStyle(color: Colors.red));
                   } else {
-                    return Text('Distance: ${snapshot.data?.toStringAsFixed(2)} km');
+                    return Text(
+                      'Distance: ${snapshot.data?.toStringAsFixed(2)} km',
+                      style: TextStyle(color: Colors.black87),
+                    );
                   }
                 },
               )
             else
-              const Text('Location information is not available'),
+              const Text('Location information is not available', style: TextStyle(color: Colors.black54)),
           ],
         ),
       ),

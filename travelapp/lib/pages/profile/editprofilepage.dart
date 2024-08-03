@@ -130,6 +130,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
+        backgroundColor: Colors.green[800], // Match the theme color
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
@@ -141,50 +142,81 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _image != null
-                          ? (kIsWeb
-                              ? MemoryImage(_image as Uint8List) // Web image
-                              : FileImage(_image as File)) // Mobile image
-                          : (user?.photoURL != null
-                                  ? NetworkImage(user!.photoURL!)
-                                  : const AssetImage(
-                                      'images/default_profile_image.jpg'))
-                              as ImageProvider<Object>?,
-                      child: _image == null
-                          ? const Icon(Icons.camera_alt,
-                              size: 50, color: Colors.white70)
-                          : null,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: CircleAvatar(
+                        radius: 70,
+                        backgroundColor: Colors.grey[200],
+                        backgroundImage: _image != null
+                            ? (kIsWeb
+                                ? MemoryImage(_image as Uint8List) // Web image
+                                : FileImage(_image as File)) // Mobile image
+                            : (user?.photoURL != null
+                                    ? NetworkImage(user!.photoURL!)
+                                    : const AssetImage(
+                                        'images/default_profile_image.jpg'))
+                                as ImageProvider<Object>?,
+                        child: _image == null
+                            ? const Icon(Icons.camera_alt,
+                                size: 50, color: Colors.grey)
+                            : null,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(labelText: 'Name'),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    readOnly: true, // Email is not editable
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _phoneController,
-                    decoration:
-                        const InputDecoration(labelText: 'Phone Number'),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _uploadImageAndSaveProfile,
-                    child: const Text('Save'),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                      readOnly: true, // Email is not editable
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _phoneController,
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _uploadImageAndSaveProfile,
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.green[800], backgroundColor: Colors.white, // Text color
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        side: BorderSide(color: Colors.green[800]!), // Border color
+                      ),
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
     );
