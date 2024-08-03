@@ -8,7 +8,6 @@ import 'package:touristapp/pages/preference.dart';
 import 'package:touristapp/pages/restuarants/restaurant.dart';
 import 'package:touristapp/pages/stay.dart';
 import 'package:touristapp/pages/tourism_detailPage.dart';
-
 import 'package:touristapp/utilities/bottom_nav.dart';
 import 'package:touristapp/tourism_place.dart';
 
@@ -37,7 +36,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
-    _carouselTimer?.cancel(); // Cancel the timer when the widget is disposed
+    _carouselTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -63,19 +62,18 @@ class _MainPageState extends State<MainPage> {
 
       setState(() {
         allItems = places;
-        filteredItems = allItems; // No filtering by category
+        filteredItems = allItems;
       });
     } catch (e) {
       print('Error fetching data: $e');
-      // Handle error
     }
   }
 
   Future<List<TourismPlace>> _findNearbyPlaces(
       double latitude, double longitude) async {
     try {
-      const double latitudeRange = 0.2; // Adjust based on your needs
-      const double longitudeRange = 0.2; // Adjust based on your needs
+      const double latitudeRange = 0.2;
+      const double longitudeRange = 0.2;
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('tourism_places')
@@ -199,268 +197,239 @@ class _MainPageState extends State<MainPage> {
         title: const Text('Tourism Places'),
         backgroundColor: Colors.green,
       ),
-      body: ListView(
-        children: [
-          // Top Banner Section
-          Container(
-            color: Colors.green,
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Top Banner Section
+            Container(
+              color: Colors.green,
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
                         child: _buildBannerButton(
                             'Hotels',
                             () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => StaysPage())))),
-                    const SizedBox(width: 10),
-                    Expanded(
+                                    builder: (context) => StaysPage()))),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
                         child: _buildBannerButton(
                             'Things to Do',
                             () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        PreferencesScreen())))),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                        child: _buildBannerButton('Restaurants', () {
-                          Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        RestaurantsPage()));
-                      
-                    })),
-                    const SizedBox(width: 10),
-                    Expanded(
-                        child: _buildBannerButton('More', () {
-                          Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                       CarRentalContentPage()));
-                      
-                    })),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 200,
-                  child: PageView(
-                    controller: _pageController,
-                    children: [
-                      _buildCarouselItem('images/murchison falls np.jpg',
-                          'Discover Hidden Gems'),
-                      _buildCarouselItem(
-                          'images/camping 2.jpg', 'Adventure Awaits'),
-                      _buildCarouselItem(
-                          'images/murchision.jpg', 'Relax and Enjoy'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Banners Section
-          Container(
-            height: 300, // Adjust height as needed
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: ListView(
-              children: [
-                _buildBanner('images/westnile.jpeg', 'Experience the Best'),
-                _buildBanner('images/kampala-sheraton-hotel.jpg',
-                    'Top Rated Destinations'),
-                _buildBanner('images/kidepo.jpeg', 'Hidden Treasures'),
-                _buildBanner('images/muchison.jpg', 'Must-See Places'),
-                const SizedBox(height: 10),
-                // Explore Section
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Explore',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                            color: Colors.green),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        height: 200, // Adjust height as needed
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: filteredItems.length,
-                          itemBuilder: (context, index) {
-                            final place = filteredItems[index];
-                            return GestureDetector(
-                              onTap: () => _navigateToDetails(place),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.shade100,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 5),
-                                    ),
-                                  ],
-                                ),
-                                margin: const EdgeInsets.only(right: 10),
-                                width: 200,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                                top: Radius.circular(10)),
-                                        child: Image.network(
-                                          place.image,
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            place.name,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: Colors.green,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            place.location,
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                                        PreferencesScreen()))),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildBannerButton(
+                            'Restaurants',
+                            () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RestaurantsPage()))),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _buildBannerButton(
+                            'More',
+                            () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CarRentalContentPage()))),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 200,
+                    child: PageView(
+                      controller: _pageController,
+                      children: [
+                        _buildCarouselItem(
+                            'images/murchison falls np.jpg',
+                            'Discover Hidden Gems'),
+                        _buildCarouselItem(
+                            'images/camping 2.jpg', 'Adventure Awaits'),
+                        _buildCarouselItem(
+                            'images/westnile.jpeg', 'Explore Nature'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            // Search Section
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 10),
+            //   child: TextField(
+            //     controller: _searchController,
+            //     decoration: InputDecoration(
+            //       labelText: 'Search',
+            //       border: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //       ),
+            //       suffixIcon: IconButton(
+            //         icon: const Icon(Icons.search),
+            //         onPressed: () {
+            //           _filterResults(_searchController.text);
+            //         },
+            //       ),
+            //     ),
+            //     onChanged: (value) {
+            //       _filterResults(value);
+            //     },
+            //   ),
+            // ),
+            const SizedBox(height: 10),
+            // Items List Section
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: filteredItems.length,
+              itemBuilder: (context, index) {
+                return _buildPlaceItem(filteredItems[index]);
+              },
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: const BottomNav(),
     );
   }
 
-  Widget _buildBannerButton(String text, VoidCallback onPressed) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
+  Widget _buildBannerButton(String title, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.green, backgroundColor: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.green),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.green,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
         ),
       ),
+      child: Text(title),
     );
   }
 
-  Widget _buildCarouselItem(String imagePath, String caption) {
+  Widget _buildCarouselItem(String imagePath, String text) {
     return Stack(
       children: [
-        Image.asset(
-          imagePath,
-          fit: BoxFit.cover,
-          width: double.infinity,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
         ),
-        Positioned(
-          bottom: 10,
-          left: 10,
-          child: Container(
-            color: Colors.black.withOpacity(0.5),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Text(
-              caption,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+        Container(
+          alignment: Alignment.center,
+          color: Colors.black.withOpacity(0.3),
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildBanner(String imagePath, String caption) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: Stack(
-        children: [
-          Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: 150,
-          ),
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: Container(
-              color: Colors.black.withOpacity(0.5),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text(
-                caption,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+  Widget _buildPlaceItem(TourismPlace place) {
+    return GestureDetector(
+      onTap: () => _navigateToDetails(place),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 3,
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: place.image.isNotEmpty
+                    ? Image.network(
+                        place.image,
+                        fit: BoxFit.cover,
+                        height: 70, // Adjust height as needed
+                        width: double.infinity, // Ensure width adjusts
+                      )
+                    : Container(
+                        color: Colors.grey,
+                        height: 70,
+                        width: double.infinity,
+                        child: const Icon(
+                          Icons.image,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 10),
+            Expanded(
+              flex: 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    place.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    place.location,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    place.description,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.black54,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
