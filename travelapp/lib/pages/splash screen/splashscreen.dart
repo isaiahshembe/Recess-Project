@@ -52,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
               children: <Widget>[
                 // Text and CircularProgressIndicator
                 Text(
-                  'Welcome to TouristApp',
+                  'Welcome to TravelApp',
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
