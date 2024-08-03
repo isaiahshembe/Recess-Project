@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:touristapp/pages/car_rentals.dart';
 import 'package:touristapp/pages/more/Events.dart';
 import 'package:touristapp/pages/preference.dart';
 import 'package:touristapp/pages/restuarants/restaurant.dart';
@@ -238,7 +239,7 @@ class _MainPageState extends State<MainPage> {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         RestaurantsPage()));
-                      // Implement navigation for Restaurants if needed
+                      
                     })),
                     const SizedBox(width: 10),
                     Expanded(
@@ -247,8 +248,8 @@ class _MainPageState extends State<MainPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        EventsPage()));
-                      // Implement navigation for More if needed
+                                       CarRentalContentPage()));
+                      
                     })),
                   ],
                 ),
