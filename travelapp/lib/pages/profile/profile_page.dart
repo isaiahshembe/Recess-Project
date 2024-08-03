@@ -5,7 +5,7 @@ import 'package:touristapp/pages/admin/admin_page.dart';
 import 'package:touristapp/pages/login_screen.dart';
 import 'package:touristapp/pages/profile/editprofilepage.dart';
 import 'package:touristapp/pages/settings/helpsupport.dart';
-import 'package:touristapp/pages/settings_page.dart';
+import 'package:touristapp/pages/settings/settings_page.dart';
 import 'package:touristapp/pages/userbooking.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -20,6 +20,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
+        backgroundColor: Colors.green[800], // Match the theme color
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -47,7 +48,7 @@ class ProfilePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 50,
+                    radius: 60,
                     backgroundImage: user.photoURL != null && user.photoURL!.isNotEmpty
                         ? NetworkImage(user.photoURL!)
                         : const AssetImage('images/profile.jpg') as ImageProvider,
@@ -57,44 +58,57 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    user.email ?? 'No email',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    user.displayName ?? 'No name',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    user.displayName ?? 'No name',
-                    style: const TextStyle(fontSize: 16),
+                    user.email ?? 'No email',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  ListTile(
-                    leading: const Icon(Icons.history),
-                    title: const Text('Booking History'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const UserBookingsPage()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.settings),
-                    title: const Text('Settings'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const SettingsPage()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.help),
-                    title: const Text('Help & Support'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const HelpSupportPage()),
-                      );
-                    },
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.history, color: Colors.green),
+                          title: const Text('Booking History'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const UserBookingsPage()),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.settings, color: Colors.green),
+                          title: const Text('Settings'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const SettingsPage()),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.help, color: Colors.green),
+                          title: const Text('Help & Support'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const HelpSupportPage()),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -106,6 +120,7 @@ class ProfilePage extends StatelessWidget {
                 Get.to(const AdminPage());
               },
               child: const Icon(Icons.add),
+              backgroundColor: Colors.green[800], // Match with AppBar color
             )
           : null,
     );

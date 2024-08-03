@@ -36,7 +36,8 @@ class _UserBookingsPageState extends State<UserBookingsPage> with SingleTickerPr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Bookings'),
+        title: const Text('My Bookings', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.green,
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -44,10 +45,12 @@ class _UserBookingsPageState extends State<UserBookingsPage> with SingleTickerPr
             Tab(text: 'Past'),
             Tab(text: 'Canceled'),
           ],
+          indicatorColor: Colors.white,
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
+            color: Colors.white,
             onPressed: _navigateToAddBooking,
           ),
         ],
@@ -69,7 +72,12 @@ class BookingsList extends StatelessWidget {
   final String emptyMessage;
   final String emptySubMessage;
 
-  const BookingsList({super.key, required this.status, required this.emptyMessage, required this.emptySubMessage});
+  const BookingsList({
+    super.key,
+    required this.status,
+    required this.emptyMessage,
+    required this.emptySubMessage,
+  });
 
   Future<void> _cancelBooking(DocumentSnapshot booking) async {
     await FirebaseFirestore.instance
@@ -102,13 +110,20 @@ class BookingsList extends StatelessWidget {
                 children: [
                   Text(
                     emptyMessage,
-                    style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade700,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16.0),
                   Text(
                     emptySubMessage,
-                    style: const TextStyle(fontSize: 16.0),
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.grey,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -125,26 +140,45 @@ class BookingsList extends StatelessWidget {
             final booking = bookings[index];
             final data = booking.data() as Map<String, dynamic>;
 
-            return ListTile(
-              title: Text('Pickup: ${data['pickup_location']}'),
-              subtitle: Text(
-                'Pickup Date: ${data['pickup_date']}\n'
-                'Pickup Time: ${data['pickup_time']}\n'
-                'Return Date: ${data['return_date']}\n'
-                'Return Time: ${data['return_time']}\n'
-                'Driver Age: ${data['driver_age_range']['start']}-${data['driver_age_range']['end']}',
+            return Card(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(16),
+                tileColor: Colors.green.shade50,
+                title: Text(
+                  'Pickup: ${data['pickup_location']}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green.shade700,
+                  ),
+                ),
+                subtitle: Text(
+                  'Pickup Date: ${data['pickup_date']}\n'
+                  'Pickup Time: ${data['pickup_time']}\n'
+                  'Return Date: ${data['return_date']}\n'
+                  'Return Time: ${data['return_time']}\n'
+                  'Driver Age: ${data['driver_age_range']['start']}-${data['driver_age_range']['end']}\n'
+                  'Destination: ${data['destination_address']}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+                trailing: status == 'Active'
+                    ? Tooltip(
+                        message: 'Cancel Trip',
+                        child: IconButton(
+                          icon: const Icon(Icons.cancel),
+                          color: Colors.red,
+                          onPressed: () async {
+                            await _cancelBooking(booking);
+                          },
+                        ),
+                      )
+                    : null,
               ),
-              trailing: status == 'Active' 
-                  ? Tooltip(
-                      message: 'Cancel Trip',
-                      child: IconButton(
-                        icon: const Icon(Icons.cancel),
-                        onPressed: () async {
-                          await _cancelBooking(booking);
-                        },
-                      ),
-                    )
-                  : null,
             );
           },
         );

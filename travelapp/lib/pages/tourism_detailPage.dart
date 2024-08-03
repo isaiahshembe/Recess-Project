@@ -20,6 +20,7 @@ class TourismDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(place.name),
+        backgroundColor: Colors.green, // Green background color for app bar
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -41,6 +42,7 @@ class TourismDetailsPage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+                color: Colors.green, // Green text color for place name
               ),
             ),
             const SizedBox(height: 8.0),
@@ -58,6 +60,7 @@ class TourismDetailsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                color: Colors.green, // Green text color for section headers
               ),
             ),
             const SizedBox(height: 8.0),
@@ -73,7 +76,7 @@ class TourismDetailsPage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.green,
+                color: Colors.green, // Green text color for price
               ),
             ),
             const SizedBox(height: 16.0),
@@ -106,8 +109,12 @@ class TourismDetailsPage extends StatelessWidget {
               onPressed: () {
                 // Implement any additional functionality if needed
               },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, backgroundColor: Colors.green, // White text color for the button
+              ),
               child: const Text('Book Now'),
             ),
+            const SizedBox(height: 8.0),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -120,6 +127,9 @@ class TourismDetailsPage extends StatelessWidget {
                   ),
                 );
               },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, backgroundColor: Colors.green, // White text color for the button
+              ),
               child: const Text('View on Map'),
             ),
             // Optional: Display nearby places if needed
