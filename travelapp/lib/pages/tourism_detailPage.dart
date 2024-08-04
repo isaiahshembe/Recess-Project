@@ -1,17 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/pages/booking_page.dart';
 import 'package:touristapp/tourism_place.dart';
 
 class TourismDetailsPage extends StatelessWidget {
   final TourismPlace place;
-  final List<TourismPlace> nearbyPlaces; // Add this line
+  final List<TourismPlace> nearbyPlaces;
   final Function(double) onRate;
 
   const TourismDetailsPage({
     super.key,
     required this.place,
-    required this.nearbyPlaces, // Add this line
+    required this.nearbyPlaces,
     required this.onRate,
   });
 
@@ -20,7 +22,7 @@ class TourismDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(place.name),
-        backgroundColor: Colors.green, // Green background color for app bar
+        backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -42,7 +44,7 @@ class TourismDetailsPage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.green, // Green text color for place name
+                color: Colors.green,
               ),
             ),
             const SizedBox(height: 8.0),
@@ -60,7 +62,7 @@ class TourismDetailsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.green, // Green text color for section headers
+                color: Colors.green,
               ),
             ),
             const SizedBox(height: 8.0),
@@ -76,7 +78,7 @@ class TourismDetailsPage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.green, // Green text color for price
+                color: Colors.green,
               ),
             ),
             const SizedBox(height: 16.0),
@@ -107,10 +109,11 @@ class TourismDetailsPage extends StatelessWidget {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                // Implement any additional functionality if needed
+                _navigateToBookingScreen(context, place);
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.green, // White text color for the button
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.green,
               ),
               child: const Text('Book Now'),
             ),
@@ -128,7 +131,8 @@ class TourismDetailsPage extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.green, // White text color for the button
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.green,
               ),
               child: const Text('View on Map'),
             ),
@@ -137,5 +141,150 @@ class TourismDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _navigateToBookingScreen(BuildContext context, TourismPlace place) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookingScreen(place: place),
+      ),
+    );
+  }
+}
+
+class BookingScreen extends StatefulWidget {
+  final TourismPlace place;
+
+  const BookingScreen({
+    super.key,
+    required this.place,
+  });
+
+  @override
+  _BookingScreenState createState() => _BookingScreenState();
+}
+
+class _BookingScreenState extends State<BookingScreen> {
+  final _amountController = TextEditingController();
+  String _selectedPaymentMethod = 'Debit Card';
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Booking Details'),
+        backgroundColor: Colors.green,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.place.name,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            Text(
+              'Location: ${widget.place.location}',
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            Text(
+              'Price: \$${widget.place.price.toStringAsFixed(2)}',
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _amountController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Enter amount to pay',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            DropdownButtonFormField<String>(
+              value: _selectedPaymentMethod,
+              items: <String>['Debit Card', 'Mobile Money'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedPaymentMethod = newValue!;
+                });
+              },
+              decoration: const InputDecoration(
+                labelText: 'Select Payment Method',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                _confirmBooking(context, widget.place, _amountController.text, _selectedPaymentMethod);
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.green,
+              ),
+              child: const Text('Confirm Booking'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _confirmBooking(BuildContext context, TourismPlace place, String amount, String paymentMethod) async {
+    double? paymentAmount = double.tryParse(amount);
+    if (paymentAmount != null && paymentAmount > 0) {
+      // Get the current user ID
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId != null) {
+        // Store booking details in Firestore under the user's document
+        await FirebaseFirestore.instance.collection('users').doc(userId).collection('bookings').add({
+          'place': place.name,
+          'location': place.location,
+          'price': place.price,
+          'amountPaid': paymentAmount,
+          'paymentMethod': paymentMethod,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Booking confirmed for ${place.name} with \$${paymentAmount.toStringAsFixed(2)} using $paymentMethod!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User not logged in.')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid amount')),
+      );
+    }
   }
 }
