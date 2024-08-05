@@ -96,7 +96,7 @@ class BottomNav extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.to(BookingPage(latitude: 0.0, longitude: 0.0)); // Provide default values or handle null case
+              // Get.to(BookingPage(latitude: 0.0, longitude: 0.0)); // Provide default values or handle null case
             },
             icon: const Icon(Icons.place, color: Colors.green),
           ),

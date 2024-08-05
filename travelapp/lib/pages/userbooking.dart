@@ -28,7 +28,7 @@ class _UserBookingsPageState extends State<UserBookingsPage> with SingleTickerPr
   void _navigateToAddBooking() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CarRentalContentPage()),
+      MaterialPageRoute(builder: (context) => const CarRentalContentPage(place: {},)),
     );
   }
 

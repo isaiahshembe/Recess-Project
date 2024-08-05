@@ -51,7 +51,7 @@ class _WelcomePageState extends State<WelcomePage> {
               children: const <Widget>[
                 StaysPage(),
                 PreferencesScreen(), // Replaced MainPage with PreferencesScreen
-                CarRentalContentPage(),
+                CarRentalContentPage(place: {},),
               ],
             ),
           ),
