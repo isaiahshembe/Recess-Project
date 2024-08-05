@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:touristapp/utilities/bottom_nav.dart';
 
 class CarRentalContentPage extends StatefulWidget {
-  const CarRentalContentPage({super.key});
+  final Map<String, dynamic> place;
+
+  const CarRentalContentPage({super.key, required this.place});
 
   @override
   _CarRentalContentPageState createState() => _CarRentalContentPageState();
@@ -99,6 +101,23 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                'Manage your trip to ${widget.place['name']}',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green.shade800,
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Text(
+                'Please provide the details below to arrange for your car rental service. Our drivers will pick you up from your current location and take you to ${widget.place['name']}.',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.green.shade600,
+                ),
+              ),
+              const SizedBox(height: 20.0),
               SwitchListTile(
                 title: const Text('Return to same location'),
                 value: returnToSameLocation,
@@ -109,6 +128,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                 },
                 activeColor: Colors.green,
               ),
+              const SizedBox(height: 10.0),
               TextField(
                 controller: pickupLocationController,
                 decoration: InputDecoration(
