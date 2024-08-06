@@ -194,7 +194,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tourism Places'),
+        title: const Text('TravelApp'),
         backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
