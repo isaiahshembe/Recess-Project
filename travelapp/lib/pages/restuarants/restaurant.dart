@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -49,7 +50,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
         ),
       );
     } catch (e) {
-      print(e);
+      print('Error getting current location: $e');
     }
   }
 
@@ -123,6 +124,7 @@ class _NearbyRestaurantsPageState extends State<NearbyRestaurantsPage> {
   final Set<Marker> _markers = {};
   GoogleMapController? _mapController;
   bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -134,54 +136,84 @@ class _NearbyRestaurantsPageState extends State<NearbyRestaurantsPage> {
     final String url =
         'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${widget.currentPosition.latitude},${widget.currentPosition.longitude}&radius=10000&type=restaurant&key=${widget.placesApiKey}';
 
-    final response = await http.get(Uri.parse(url));
-    final data = jsonDecode(response.body);
+    if (Platform.isAndroid || Platform.isIOS) {
+      // This block will run only on Android or iOS
+      try {
+        final response = await http.get(Uri.parse(url));
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+          if (data['status'] == 'OK') {
+            final List<Marker> markers = [];
+            for (var result in data['results']) {
+              final double lat = result['geometry']['location']['lat'];
+              final double lng = result['geometry']['location']['lng'];
+              final String name = result['name'];
+              final String address = result['vicinity'];
 
-    final List<Marker> markers = [];
-    for (var result in data['results']) {
-      final double lat = result['geometry']['location']['lat'];
-      final double lng = result['geometry']['location']['lng'];
-      final String name = result['name'];
-      final String address = result['vicinity'];
-
-      markers.add(
-        Marker(
-          markerId: MarkerId(result['place_id']),
-          position: LatLng(lat, lng),
-          infoWindow: InfoWindow(
-            title: name,
-            snippet: address,
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RestaurantDetailsPage(
-                  name: name,
-                  address: address,
-                  description: '',
-                  image: '',
+              markers.add(
+                Marker(
+                  markerId: MarkerId(result['place_id']),
+                  position: LatLng(lat, lng),
+                  infoWindow: InfoWindow(
+                    title: name,
+                    snippet: address,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RestaurantDetailsPage(
+                          name: name,
+                          address: address,
+                          description: '',
+                          image: '',
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-            );
-          },
-        ),
-      );
-    }
+              );
+            }
 
-    setState(() {
-      _markers.clear();
-      _markers.addAll(markers);
-      _isLoading = false;
-      if (_mapController != null) {
-        _mapController!.animateCamera(
-          CameraUpdate.newLatLngZoom(
-            LatLng(widget.currentPosition.latitude, widget.currentPosition.longitude),
-            12.0,
-          ),
-        );
+            setState(() {
+              _markers.clear();
+              _markers.addAll(markers);
+              _isLoading = false;
+              if (_mapController != null) {
+                _mapController!.animateCamera(
+                  CameraUpdate.newLatLngZoom(
+                    LatLng(widget.currentPosition.latitude, widget.currentPosition.longitude),
+                    12.0,
+                  ),
+                );
+              }
+            });
+          } else {
+            setState(() {
+              _errorMessage = data['error_message'] ?? 'Error fetching data';
+              _isLoading = false;
+            });
+          }
+        } else {
+          setState(() {
+            _errorMessage = 'Failed to fetch data: ${response.reasonPhrase}';
+            _isLoading = false;
+          });
+        }
+      } catch (e) {
+        setState(() {
+          _errorMessage = 'Error: $e';
+          _isLoading = false;
+        });
+        print('Client exception: $e');
       }
-    });
+    } else {
+      // This block will run on other platforms (like Web)
+      setState(() {
+        _errorMessage = 'This feature is not supported on this platform';
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -192,19 +224,21 @@ class _NearbyRestaurantsPageState extends State<NearbyRestaurantsPage> {
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  widget.currentPosition.latitude,
-                  widget.currentPosition.longitude,
+          : _errorMessage != null
+              ? Center(child: Text(_errorMessage!))
+              : GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                      widget.currentPosition.latitude,
+                      widget.currentPosition.longitude,
+                    ),
+                    zoom: 12.0,
+                  ),
+                  markers: _markers,
+                  onMapCreated: (GoogleMapController controller) {
+                    _mapController = controller;
+                  },
                 ),
-                zoom: 12.0,
-              ),
-              markers: _markers,
-              onMapCreated: (GoogleMapController controller) {
-                _mapController = controller;
-              },
-            ),
     );
   }
 }
