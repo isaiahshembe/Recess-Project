@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touristapp/pages/car_rentals.dart';
 
 class DetailScreen extends StatelessWidget {
   final Map<String, dynamic> place;
@@ -77,6 +78,30 @@ class DetailScreen extends StatelessWidget {
                   color: Colors.red,
                 ),
               ),
+            const Spacer(), // This will push the button to the bottom
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CarRentalContentPage(place: place),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green[800], // Match the theme color
+                  minimumSize: const Size(200, 50), // Set a specific button size
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                child: const Text(
+                  'Visit Place',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
           ],
         ),
       ),
