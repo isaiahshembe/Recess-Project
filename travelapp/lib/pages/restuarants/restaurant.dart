@@ -1,5 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class RestaurantsPage extends StatefulWidget {
   @override
@@ -7,19 +10,78 @@ class RestaurantsPage extends StatefulWidget {
 }
 
 class _RestaurantsPageState extends State<RestaurantsPage> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<DocumentSnapshot> restaurants = [];
+  final Set<Marker> _markers = {};
+  GoogleMapController? _mapController;
+  Position? _currentPosition;
+  final String _placesApiKey = 'AIzaSyBqFSXCGCI-kbhD66qO34OqMNbtClURZLw'; // API key here
 
   @override
   void initState() {
     super.initState();
-    fetchRestaurants();
+    _getCurrentLocation();
   }
 
-  Future<void> fetchRestaurants() async {
-    QuerySnapshot querySnapshot = await _firestore.collection('restaurants').get();
+  Future<void> _getCurrentLocation() async {
+    try {
+      _currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      fetchNearbyRestaurants();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchNearbyRestaurants() async {
+    if (_currentPosition == null) return;
+
+    final String url =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${_currentPosition!.latitude},${_currentPosition!.longitude}&radius=10000&type=restaurant&key=$_placesApiKey';
+
+    final response = await http.get(Uri.parse(url));
+    final data = jsonDecode(response.body);
+
+    final List<Marker> markers = [];
+    for (var result in data['results']) {
+      final double lat = result['geometry']['location']['lat'];
+      final double lng = result['geometry']['location']['lng'];
+      final String name = result['name'];
+      final String address = result['vicinity'];
+
+      markers.add(
+        Marker(
+          markerId: MarkerId(result['place_id']),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(
+            title: name,
+            snippet: address,
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RestaurantDetailsPage(
+                  name: name,
+                  address: address,
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+
     setState(() {
-      restaurants = querySnapshot.docs;
+      _markers.clear();
+      _markers.addAll(markers);
+      if (_mapController != null && _currentPosition != null) {
+        _mapController!.animateCamera(
+          CameraUpdate.newLatLngZoom(
+            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+            12.0,
+          ),
+        );
+      }
     });
   }
 
@@ -29,82 +91,50 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
       appBar: AppBar(
         title: Text('Restaurants'),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search Restaurants',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+      body: _currentPosition == null
+          ? Center(child: CircularProgressIndicator())
+          : GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  _currentPosition!.latitude,
+                  _currentPosition!.longitude,
                 ),
+                zoom: 12.0,
               ),
-              onChanged: (value) {
-                // Implement search functionality here
+              markers: _markers,
+              onMapCreated: (GoogleMapController controller) {
+                _mapController = controller;
               },
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: restaurants.length,
-              itemBuilder: (context, index) {
-                var restaurant = restaurants[index].data() as Map<String, dynamic>;
-                return ListTile(
-                  leading: Image.network(restaurant['image']),
-                  title: Text(restaurant['name']),
-                  subtitle: Text(restaurant['description']),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RestaurantDetailsPage(restaurant: restaurant),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
 
 class RestaurantDetailsPage extends StatelessWidget {
-  final Map<String, dynamic> restaurant;
+  final String name;
+  final String address;
 
-  RestaurantDetailsPage({required this.restaurant});
+  RestaurantDetailsPage({required this.name, required this.address});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(restaurant['name']),
+        title: Text(name),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(restaurant['image']),
-            SizedBox(height: 16),
             Text(
-              restaurant['name'],
+              name,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             Text(
-              restaurant['description'],
+              'Address: $address',
               style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16),
-            Text(
-              'Address: ${restaurant['address']}',
-              style: TextStyle(fontSize: 16),
-            ),
-            // Add more details and actions like booking a table or viewing on map
           ],
         ),
       ),
