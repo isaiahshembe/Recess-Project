@@ -6,6 +6,8 @@ import 'package:touristapp/pages/main_page.dart';
 
 //AIzaSyBqFSXCGCI-kbhD66qO34OqMNbtClURZLw
 //AIzaSyCcs_KhUAJpz1gkbIXOKUhl7Yqs18zk-zQ
+//mtnapi 96b57942e65c4e8e9fa8169f723f9745
+//UUID f21889a8-0fcf-42d1-b762-0c84738c7547
 class SignInScreen extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
