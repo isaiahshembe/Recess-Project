@@ -50,11 +50,11 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
     }
   }
 
- Future<void> fetchNearbyRestaurants() async {
+Future<void> fetchNearbyRestaurants() async {
   if (_currentPosition == null) return;
 
   final String url =
-      'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${_currentPosition!.latitude},${_currentPosition!.longitude}&radius=10000&type=restaurant&key=AIzaSyBqFSXCGCI-kbhD66qO34OqMNbtClURZLw';
+      'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${_currentPosition!.latitude},${_currentPosition!.longitude}&radius=10000&type=restaurant&key=$_placesApiKey';
 
   try {
     final response = await http.get(Uri.parse(url));
