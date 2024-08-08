@@ -102,7 +102,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Manage your trip to ${widget.place['hotel_name']}',
+                'Manage your trip to ${widget.place['name']}',
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -111,7 +111,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
               ),
               const SizedBox(height: 10.0),
               Text(
-                'Please provide the details below to arrange for your car rental service. Our drivers will pick you up from your current location and take you to ${widget.place['hotel_name']}.',
+                'Please provide the details below to arrange for your car rental service. Our drivers will pick you up from your current location and take you to ${widget.place['name']}.',
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.green.shade600,

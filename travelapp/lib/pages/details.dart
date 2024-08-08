@@ -8,12 +8,17 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String placeName = place.containsKey('hotel_name')
+        ? place['hotel_name']
+        : place.containsKey('name')
+            ? place['name']
+            : 'No name';
     final String? location = place['location'];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(place['name'] ?? 'No name'),
-        backgroundColor: Colors.green[800], // Match the theme color
+        title: Text(placeName),
+        backgroundColor: Colors.green[800], 
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -45,7 +50,7 @@ class DetailScreen extends StatelessWidget {
                   ),
             const SizedBox(height: 16),
             Text(
-              place['name'] ?? 'No name',
+              placeName,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
