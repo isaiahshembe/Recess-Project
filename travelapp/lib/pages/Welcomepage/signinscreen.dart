@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:touristapp/pages/main_page.dart';
 
-
+//AIzaSyBqFSXCGCI-kbhD66qO34OqMNbtClURZLw
+//AIzaSyCcs_KhUAJpz1gkbIXOKUhl7Yqs18zk-zQ
 class SignInScreen extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
