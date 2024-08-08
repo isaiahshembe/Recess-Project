@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
 
 class StaysPage extends StatefulWidget {
   const StaysPage({super.key});
@@ -14,11 +17,14 @@ class StaysPage extends StatefulWidget {
 class _StaysPageState extends State<StaysPage> {
   List<Map<String, dynamic>> stays = [];
   List<Map<String, dynamic>> filteredStays = [];
+  double userLatitude = 0.0;
+  double userLongitude = 0.0;
 
   @override
   void initState() {
     super.initState();
     _fetchStays();
+    _fetchUserLocation();
   }
 
   Future<void> _fetchStays() async {
@@ -46,6 +52,91 @@ class _StaysPageState extends State<StaysPage> {
       print('Error fetching stays: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error fetching stays: $e')),
+      );
+    }
+  }
+
+  Future<void> _fetchUserLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Geolocator.requestPermission();
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+          return;
+        }
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        userLatitude = position.latitude;
+        userLongitude = position.longitude;
+      });
+
+      print('User location: $userLatitude, $userLongitude');
+    } catch (e) {
+      print('Error fetching user location: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching user location: $e')),
+      );
+    }
+  }
+
+  Future<void> _fetchNearbyHotels() async {
+    final apiKey = 'AIzaSyBqFSXCGCI-kbhD66qO34OqMNbtClURZLw';
+    final radius = 5000; // Radius in meters
+    final type = 'hotel';
+
+    final url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
+        '?location=$userLatitude,$userLongitude'
+        '&radius=$radius'
+        '&type=$type'
+        '&key=$apiKey';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final results = data['results'] as List;
+
+        List<Map<String, dynamic>> nearbyHotels = results.map((hotel) {
+          return {
+            'id': hotel['place_id'],
+            'hotel_name': hotel['name'],
+            'description': hotel['vicinity'],
+            'image': hotel['photos'] != null
+                ? 'https://maps.googleapis.com/maps/api/place/photo'
+                  '?maxwidth=400'
+                  '&photoreference=${hotel['photos'][0]['photo_reference']}'
+                  '&key=$apiKey'
+                : null,
+            'averageRating': hotel['rating'] ?? 0.0,
+            'ratingCount': hotel['user_ratings_total'] ?? 0,
+            'room_cost': 100.0, // Dummy value
+          };
+        }).toList();
+
+        setState(() {
+          filteredStays = nearbyHotels;
+        });
+      } else {
+        print('Failed to load nearby hotels');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load nearby hotels')),
+        );
+      }
+    } catch (e) {
+      print('Error fetching nearby hotels: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching nearby hotels: $e')),
       );
     }
   }
@@ -188,48 +279,30 @@ class _StaysPageState extends State<StaysPage> {
                       itemCount: 5,
                       itemSize: 40,
                       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.green,
+                      ),
                       onRatingUpdate: (newRating) {
                         setState(() {
                           rating = newRating;
                         });
                       },
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
                     ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () async {
-                        // Update Firestore with the new rating
-                        await _updateHotelRating(stay['id'], rating);
-
-                        // Refresh the stay details to reflect the updated rating
-                        Navigator.pop(context);
-                        setState(() {
-                          _fetchStays(); // Reload the stays list
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.green, // White text color
-                      ),
-                      child: const Text('Submit Rating'),
-                    ),
-                    const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
-                        // Navigate to the booking page for the specific hotel
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BookingPage(hotel: stay),
-                          ),
-                        );
+                        if (rating > 0) {
+                          _updateHotelRating(stay['id'], rating);
+                          Navigator.pop(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please provide a rating'),
+                            ),
+                          );
+                        }
                       },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.green, // White text color
-                      ),
-                      child: const Text('Book Your Room'),
+                      child: const Text('Submit Rating'),
                     ),
                   ],
                 ),
@@ -241,309 +314,45 @@ class _StaysPageState extends State<StaysPage> {
     );
   }
 
-  void _filterStays(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        filteredStays = stays;
-      } else {
-        filteredStays = stays.where((stay) {
-          final name = stay['hotel_name']?.toLowerCase() ?? '';
-          final description = stay['description']?.toLowerCase() ?? '';
-          final lowerQuery = query.toLowerCase();
-          return name.contains(lowerQuery) || description.contains(lowerQuery);
-        }).toList();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Stays'),
-        backgroundColor: Colors.green, // Green background color for app bar
+        backgroundColor: Colors.green,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: 'Search stays',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search, color: Colors.green),
-              ),
-              onChanged: _filterStays,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
+      body: stays.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
               itemCount: filteredStays.length,
               itemBuilder: (context, index) {
                 final stay = filteredStays[index];
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
                   child: ListTile(
                     leading: stay['image'] != null
-                        ? Image.network(
-                      stay['image'],
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.broken_image, size: 50);
-                      },
-                    )
-                        : const Icon(Icons.image_not_supported, size: 50),
-                    title: Text(
-                      stay['hotel_name'] ?? 'No name',
+                        ? Image.network(stay['image'], width: 100, fit: BoxFit.cover)
+                        : Container(
+                            width: 100,
+                            color: Colors.grey,
+                            child: const Icon(Icons.image_not_supported, size: 40),
+                          ),
+                    title: Text(stay['hotel_name'] ?? 'No name'),
+                    subtitle: Text(stay['description'] ?? 'No description'),
+                    trailing: Text(
+                      '\$${stay['room_cost']?.toString() ?? 'No price'}',
                       style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(stay['description'] ?? 'No description', style: const TextStyle(color: Colors.black87)),
-                        Row(
-                          children: [
-                            const Icon(Icons.star, color: Colors.yellow, size: 16),
-                            Text(
-                              (stay['averageRating'] != null
-                                  ? stay['averageRating'].toStringAsFixed(1)
-                                  : '0.0'),
-                              style: const TextStyle(color: Colors.black87),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '\$${stay['room_cost']?.toString() ?? 'No price'} per night',
-                          style: const TextStyle(color: Colors.black87),
-                        ),
-                      ],
                     ),
                     onTap: () => _showStayDetails(context, stay),
                   ),
                 );
               },
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BookingPage extends StatefulWidget {
-  final Map<String, dynamic> hotel;
-
-  const BookingPage({super.key, required this.hotel});
-
-  @override
-  _BookingPageState createState() => _BookingPageState();
-}
-
-class _BookingPageState extends State<BookingPage> {
-  final _formKey = GlobalKey<FormState>();
-  late DateTime _checkInDate;
-  late DateTime _checkOutDate;
-  int _numberOfNights = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkInDate = DateTime.now();
-    _checkOutDate = DateTime.now().add(const Duration(days: 1));
-  }
-
-  Future<void> _bookRoom() async {
-  if (_formKey.currentState?.validate() ?? false) {
-    try {
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-      if (userId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('User not authenticated.')),
-        );
-        return;
-      }
-
-      final hotelBookingRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('hotelBookings')
-          .doc(); // Automatically generates a unique ID for the document
-
-      await hotelBookingRef.set({
-        'hotelId': widget.hotel['id'],
-        'hotelName': widget.hotel['hotel_name'],
-        'checkInDate': _checkInDate.toIso8601String(), // Use ISO8601 format
-        'checkOutDate': _checkOutDate.toIso8601String(), // Use ISO8601 format
-        'numberOfNights': _numberOfNights,
-        'roomCost': widget.hotel['room_cost'],
-        'totalCost': _numberOfNights * (widget.hotel['room_cost'] ?? 0),
-        'status': 'Booked', // or 'Pending', 'Confirmed', etc.
-      });
-
-      // Show a success dialog or snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Booking confirmed for ${widget.hotel['hotel_name']}')),
-      );
-
-      // Optionally, you could use a dialog to give more detailed feedback
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Booking Confirmed'),
-          content: Text('Your booking at ${widget.hotel['hotel_name']} has been confirmed.'),
-          actions: [
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.pop(context); // Navigate back to the previous screen
-              },
-            ),
-          ],
-        ),
-      );
-    } catch (e) {
-      print('Error booking room: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error booking room: ${e.toString()}')),
-      );
-    }
-  }
-}
-
-
-  void _incrementNights() {
-    setState(() {
-      _numberOfNights++;
-      _checkOutDate = _checkInDate.add(Duration(days: _numberOfNights));
-    });
-  }
-
-  void _decrementNights() {
-    if (_numberOfNights > 1) {
-      setState(() {
-        _numberOfNights--;
-        _checkOutDate = _checkInDate.add(Duration(days: _numberOfNights));
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Book Room at ${widget.hotel['hotel_name']}'),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _fetchNearbyHotels,
+        child: const Icon(Icons.hotel),
         backgroundColor: Colors.green,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Check-In Date:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                readOnly: true,
-                controller: TextEditingController(
-                  text: '${_checkInDate.toLocal()}'.split(' ')[0],
-                ),
-                onTap: () async {
-                  final selectedDate = await showDatePicker(
-                    context: context,
-                    initialDate: _checkInDate,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2100),
-                  );
-                  if (selectedDate != null && selectedDate != _checkInDate) {
-                    setState(() {
-                      _checkInDate = selectedDate;
-                      if (_checkOutDate.isBefore(_checkInDate)) {
-                        _checkOutDate = _checkInDate.add(const Duration(days: 1));
-                      }
-                    });
-                  }
-                },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Select Check-In Date',
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Check-Out Date:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                readOnly: true,
-                controller: TextEditingController(
-                  text: '${_checkOutDate.toLocal()}'.split(' ')[0],
-                ),
-                onTap: () async {
-                  final selectedDate = await showDatePicker(
-                    context: context,
-                    initialDate: _checkOutDate,
-                    firstDate: _checkInDate.add(const Duration(days: 1)),
-                    lastDate: DateTime(2100),
-                  );
-                  if (selectedDate != null && selectedDate != _checkOutDate) {
-                    setState(() {
-                      _checkOutDate = selectedDate;
-                      _numberOfNights = _checkOutDate.difference(_checkInDate).inDays;
-                    });
-                  }
-                },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Select Check-Out Date',
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Number of Nights: $_numberOfNights',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.remove, color: Colors.red),
-                    onPressed: _decrementNights,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.add, color: Colors.green),
-                    onPressed: _incrementNights,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Total Cost: \$${_numberOfNights * (widget.hotel['room_cost'] ?? 0)}',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _bookRoom,
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.green,
-                ),
-                child: const Text('Confirm Booking'),
-              ),
-            ],
-          ),
-        ),
+        tooltip: 'Find Hotels Near Me',
       ),
     );
   }
