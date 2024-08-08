@@ -172,8 +172,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             MaterialPageRoute(builder: (context) => ResultsScreen(results: results)),
           );
         },
-        child: _isLoading ? const CircularProgressIndicator() : const Icon(Icons.arrow_forward),
-        backgroundColor: Colors.green[800], // Match FloatingActionButton with AppBar
+        backgroundColor: Colors.green[800],
+        child: _isLoading ? const CircularProgressIndicator() : const Icon(Icons.arrow_forward), // Match FloatingActionButton with AppBar
       ),
     );
   }

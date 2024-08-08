@@ -138,7 +138,7 @@ class _StaysPageState extends State<StaysPage> {
                     const SizedBox(height: 16),
                     Text(
                       stay['hotel_name'] ?? 'No name',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
@@ -147,7 +147,7 @@ class _StaysPageState extends State<StaysPage> {
                     const SizedBox(height: 8),
                     Text(
                       stay['description'] ?? 'No description',
-                      style: TextStyle(color: Colors.black87),
+                      style: const TextStyle(color: Colors.black87),
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -157,19 +157,19 @@ class _StaysPageState extends State<StaysPage> {
                           (stay['averageRating'] != null
                               ? stay['averageRating'].toStringAsFixed(1)
                               : '0.0'),
-                          style: TextStyle(color: Colors.black87),
+                          style: const TextStyle(color: Colors.black87),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           '(${stay['ratingCount'] ?? 0} ratings)',
-                          style: TextStyle(color: Colors.black54),
+                          style: const TextStyle(color: Colors.black54),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '\$${stay['room_cost']?.toString() ?? 'No price'} per night',
-                      style: TextStyle(color: Colors.black87),
+                      style: const TextStyle(color: Colors.black87),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -268,10 +268,10 @@ class _StaysPageState extends State<StaysPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search stays',
                 border: OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.search, color: Colors.green),
+                prefixIcon: Icon(Icons.search, color: Colors.green),
               ),
               onChanged: _filterStays,
             ),
@@ -301,12 +301,12 @@ class _StaysPageState extends State<StaysPage> {
                         : const Icon(Icons.image_not_supported, size: 50),
                     title: Text(
                       stay['hotel_name'] ?? 'No name',
-                      style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(stay['description'] ?? 'No description', style: TextStyle(color: Colors.black87)),
+                        Text(stay['description'] ?? 'No description', style: const TextStyle(color: Colors.black87)),
                         Row(
                           children: [
                             const Icon(Icons.star, color: Colors.yellow, size: 16),
@@ -314,13 +314,13 @@ class _StaysPageState extends State<StaysPage> {
                               (stay['averageRating'] != null
                                   ? stay['averageRating'].toStringAsFixed(1)
                                   : '0.0'),
-                              style: TextStyle(color: Colors.black87),
+                              style: const TextStyle(color: Colors.black87),
                             ),
                           ],
                         ),
                         Text(
                           '\$${stay['room_cost']?.toString() ?? 'No price'} per night',
-                          style: TextStyle(color: Colors.black87),
+                          style: const TextStyle(color: Colors.black87),
                         ),
                       ],
                     ),
@@ -339,7 +339,7 @@ class _StaysPageState extends State<StaysPage> {
 class BookingPage extends StatefulWidget {
   final Map<String, dynamic> hotel;
 
-  const BookingPage({Key? key, required this.hotel}) : super(key: key);
+  const BookingPage({super.key, required this.hotel});
 
   @override
   _BookingPageState createState() => _BookingPageState();
@@ -355,7 +355,7 @@ class _BookingPageState extends State<BookingPage> {
   void initState() {
     super.initState();
     _checkInDate = DateTime.now();
-    _checkOutDate = DateTime.now().add(Duration(days: 1));
+    _checkOutDate = DateTime.now().add(const Duration(days: 1));
   }
 
   Future<void> _bookRoom() async {
@@ -364,7 +364,7 @@ class _BookingPageState extends State<BookingPage> {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User not authenticated.')),
+          const SnackBar(content: Text('User not authenticated.')),
         );
         return;
       }
@@ -395,11 +395,11 @@ class _BookingPageState extends State<BookingPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Booking Confirmed'),
+          title: const Text('Booking Confirmed'),
           content: Text('Your booking at ${widget.hotel['hotel_name']} has been confirmed.'),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 Navigator.pop(context); // Navigate back to the previous screen
@@ -448,11 +448,11 @@ class _BookingPageState extends State<BookingPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Check-In Date:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextFormField(
                 readOnly: true,
                 controller: TextEditingController(
@@ -469,22 +469,22 @@ class _BookingPageState extends State<BookingPage> {
                     setState(() {
                       _checkInDate = selectedDate;
                       if (_checkOutDate.isBefore(_checkInDate)) {
-                        _checkOutDate = _checkInDate.add(Duration(days: 1));
+                        _checkOutDate = _checkInDate.add(const Duration(days: 1));
                       }
                     });
                   }
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Select Check-In Date',
                 ),
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Check-Out Date:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextFormField(
                 readOnly: true,
                 controller: TextEditingController(
@@ -494,7 +494,7 @@ class _BookingPageState extends State<BookingPage> {
                   final selectedDate = await showDatePicker(
                     context: context,
                     initialDate: _checkOutDate,
-                    firstDate: _checkInDate.add(Duration(days: 1)),
+                    firstDate: _checkInDate.add(const Duration(days: 1)),
                     lastDate: DateTime(2100),
                   );
                   if (selectedDate != null && selectedDate != _checkOutDate) {
@@ -504,35 +504,35 @@ class _BookingPageState extends State<BookingPage> {
                     });
                   }
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Select Check-Out Date',
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 'Number of Nights: $_numberOfNights',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.remove, color: Colors.red),
+                    icon: const Icon(Icons.remove, color: Colors.red),
                     onPressed: _decrementNights,
                   ),
                   IconButton(
-                    icon: Icon(Icons.add, color: Colors.green),
+                    icon: const Icon(Icons.add, color: Colors.green),
                     onPressed: _incrementNights,
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 'Total Cost: \$${_numberOfNights * (widget.hotel['room_cost'] ?? 0)}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _bookRoom,
                 style: ElevatedButton.styleFrom(

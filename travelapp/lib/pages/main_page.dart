@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:touristapp/pages/car_rentals.dart';
-import 'package:touristapp/pages/more/Events.dart';
 import 'package:touristapp/pages/preference.dart';
 import 'package:touristapp/pages/restuarants/restaurant.dart';
 import 'package:touristapp/pages/stay.dart';
@@ -214,7 +213,7 @@ class _MainPageState extends State<MainPage> {
                             () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => StaysPage()))),
+                                    builder: (context) => const StaysPage()))),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -224,7 +223,7 @@ class _MainPageState extends State<MainPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        PreferencesScreen()))),
+                                        const PreferencesScreen()))),
                       ),
                     ],
                   ),
@@ -237,7 +236,7 @@ class _MainPageState extends State<MainPage> {
                             () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => RestaurantsPage()))),
+                                    builder: (context) => const RestaurantsPage()))),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -247,7 +246,7 @@ class _MainPageState extends State<MainPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        CarRentalContentPage(place: {},)))),
+                                        const CarRentalContentPage(place: {},)))),
                       ),
                     ],
                   ),

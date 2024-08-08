@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // Navigate to MainPage or any other screen after successful login
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => MainPage()),
+            MaterialPageRoute(builder: (_) => const MainPage()),
           );
           print('User logged in: ${userCredential.user!.uid}');
         } else {

@@ -46,7 +46,7 @@ class DetailScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               place['description'] ?? 'No description',
-              style: TextStyle(color: Colors.black87),
+              style: const TextStyle(color: Colors.black87),
             ),
             const SizedBox(height: 16),
             if (latitude != null && longitude != null)
@@ -60,7 +60,7 @@ class DetailScreen extends StatelessWidget {
                   } else {
                     return Text(
                       'Distance: ${snapshot.data?.toStringAsFixed(2)} km',
-                      style: TextStyle(color: Colors.black87),
+                      style: const TextStyle(color: Colors.black87),
                     );
                   }
                 },
