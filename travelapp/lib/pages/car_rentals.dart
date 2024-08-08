@@ -133,9 +133,9 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                 controller: pickupLocationController,
                 decoration: InputDecoration(
                   labelText: 'Pickup location',
-                  prefixIcon: Icon(Icons.location_on, color: Colors.green),
+                  prefixIcon: const Icon(Icons.location_on, color: Colors.green),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green),
+                    borderSide: const BorderSide(color: Colors.green),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
@@ -145,9 +145,9 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                 controller: destinationAddressController,
                 decoration: InputDecoration(
                   labelText: 'Destination address',
-                  prefixIcon: Icon(Icons.location_on, color: Colors.green),
+                  prefixIcon: const Icon(Icons.location_on, color: Colors.green),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green),
+                    borderSide: const BorderSide(color: Colors.green),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
@@ -161,7 +161,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                       title: const Text('Pickup date'),
                       subtitle: Text(DateFormat.yMMMd().format(pickupDate)),
                       trailing: IconButton(
-                        icon: Icon(Icons.calendar_today, color: Colors.green),
+                        icon: const Icon(Icons.calendar_today, color: Colors.green),
                         onPressed: () => _selectDate(context, true),
                       ),
                     ),
@@ -173,7 +173,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                       title: const Text('Time'),
                       subtitle: Text(pickupTime.format(context)),
                       trailing: IconButton(
-                        icon: Icon(Icons.access_time, color: Colors.green),
+                        icon: const Icon(Icons.access_time, color: Colors.green),
                         onPressed: () => _selectTime(context, true),
                       ),
                     ),
@@ -189,7 +189,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                       title: const Text('Return date'),
                       subtitle: Text(DateFormat.yMMMd().format(returnDate)),
                       trailing: IconButton(
-                        icon: Icon(Icons.calendar_today, color: Colors.green),
+                        icon: const Icon(Icons.calendar_today, color: Colors.green),
                         onPressed: () => _selectDate(context, false),
                       ),
                     ),
@@ -201,7 +201,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                       title: const Text('Time'),
                       subtitle: Text(returnTime.format(context)),
                       trailing: IconButton(
-                        icon: Icon(Icons.access_time, color: Colors.green),
+                        icon: const Icon(Icons.access_time, color: Colors.green),
                         onPressed: () => _selectTime(context, false),
                       ),
                     ),

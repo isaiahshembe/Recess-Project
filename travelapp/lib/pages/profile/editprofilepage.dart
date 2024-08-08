@@ -1,14 +1,9 @@
-import 'dart:typed_data' if (kIsWeb) 'dart:typed_data';
-import 'dart:io' if (dart.library.io) 'dart:io';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:image_picker/image_picker.dart'
-    if (dart.library.io) 'package:image_picker/image_picker.dart' as mobile;
-import 'package:image_picker_web/image_picker_web.dart'
-    if (kIsWeb) 'package:image_picker_web/image_picker_web.dart' as web;
+import 'package:image_picker/image_picker.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -22,7 +17,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   TextEditingController? _nameController;
   TextEditingController? _emailController;
   TextEditingController? _phoneController;
-  dynamic _image; // Use dynamic type to handle both web and mobile
+  File? _image; // Use File type for mobile
   bool _isLoading = false;
 
   @override
@@ -36,26 +31,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
   Future<void> _pickImage() async {
     try {
-      if (kIsWeb) {
-        final pickedFile = await web.ImagePickerWeb
-            .getImageAsBytes(); // Use getImageAsBytes for web
-        if (pickedFile != null) {
-          setState(() {
-            _image = pickedFile;
-          });
-        }
-      } else {
-        final pickedFile = await mobile.ImagePicker()
-            .pickImage(source: mobile.ImageSource.gallery);
-        if (pickedFile != null) {
-          setState(() {
-            _image = File(pickedFile.path);
-          });
-        }
+      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Failed to pick image: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to pick image: $e')));
     }
   }
 
@@ -66,58 +49,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     try {
       String? downloadURL;
       if (_image != null) {
-        if (kIsWeb) {
-          // Web: Upload image data
-          final bytes = _image as Uint8List; // Directly use Uint8List
-          String fileName = 'profile_pictures/${user!.uid}.jpg';
-          final uploadTask =
-              FirebaseStorage.instance.ref(fileName).putData(bytes);
-          final snapshot = await uploadTask;
-          downloadURL = await snapshot.ref.getDownloadURL();
-        } else {
-          // Mobile: Upload file
-          String fileName = 'profile_pictures/${user!.uid}.jpg';
-          final uploadTask =
-              FirebaseStorage.instance.ref(fileName).putFile(_image as File);
-          final snapshot = await uploadTask;
-          downloadURL = await snapshot.ref.getDownloadURL();
-        }
-
-        // Update Firestore user document
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user!.uid)
-            .update({
-          'displayName': _nameController!.text,
-          'email': _emailController!.text,
-          'phoneNumber': _phoneController!.text,
-          'photoURL': downloadURL,
-        });
-
-        // Update FirebaseAuth user profile
-        await user!.updateProfile(
-            displayName: _nameController!.text, photoURL: downloadURL);
-      } else {
-        // If no new image, just update the profile information
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user!.uid)
-            .update({
-          'displayName': _nameController!.text,
-          'email': _emailController!.text,
-          'phoneNumber': _phoneController!.text,
-        });
-
-        await user!.updateProfile(displayName: _nameController!.text);
+        downloadURL = await _uploadImage();
       }
 
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')));
+      await _updateUserProfile(downloadURL);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profile updated successfully')));
     } catch (e) {
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update profile: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile: $e')));
     } finally {
       setState(() {
         _isLoading = false;
@@ -125,12 +63,34 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     }
   }
 
+  Future<String?> _uploadImage() async {
+    String fileName = 'profile_pictures/${user!.uid}.jpg';
+    final uploadTask = FirebaseStorage.instance.ref(fileName).putFile(_image!);
+    final snapshot = await uploadTask;
+    return await snapshot.ref.getDownloadURL();
+  }
+
+  Future<void> _updateUserProfile(String? downloadURL) async {
+    final userData = {
+      'displayName': _nameController!.text,
+      'email': _emailController!.text,
+      'phoneNumber': _phoneController!.text,
+    };
+
+    if (downloadURL != null) {
+      userData['photoURL'] = downloadURL;
+    }
+
+    await FirebaseFirestore.instance.collection('users').doc(user!.uid).update(userData);
+    await user!.updateProfile(displayName: _nameController!.text, photoURL: downloadURL);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
-        backgroundColor: Colors.green[800], // Match the theme color
+        backgroundColor: Colors.green[800],
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
@@ -151,17 +111,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         radius: 70,
                         backgroundColor: Colors.grey[200],
                         backgroundImage: _image != null
-                            ? (kIsWeb
-                                ? MemoryImage(_image as Uint8List) // Web image
-                                : FileImage(_image as File)) // Mobile image
+                            ? FileImage(_image!)
                             : (user?.photoURL != null
-                                    ? NetworkImage(user!.photoURL!)
-                                    : const AssetImage(
-                                        'images/default_profile_image.jpg'))
+                                ? NetworkImage(user!.photoURL!)
+                                : const AssetImage('images/default_profile_image.jpg'))
                                 as ImageProvider<Object>?,
                         child: _image == null
-                            ? const Icon(Icons.camera_alt,
-                                size: 50, color: Colors.grey)
+                            ? const Icon(Icons.camera_alt, size: 50, color: Colors.grey)
                             : null,
                       ),
                     ),
@@ -186,7 +142,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                       ),
-                      readOnly: true, // Email is not editable
+                      readOnly: true,
                     ),
                     const SizedBox(height: 16),
                     TextField(
@@ -203,12 +159,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     ElevatedButton(
                       onPressed: _uploadImageAndSaveProfile,
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.green[800], backgroundColor: Colors.white, // Text color
+                        foregroundColor: Colors.green[800],
+                        backgroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
-                        side: BorderSide(color: Colors.green[800]!), // Border color
+                        side: BorderSide(color: Colors.green[800]!),
                       ),
                       child: const Text(
                         'Save',

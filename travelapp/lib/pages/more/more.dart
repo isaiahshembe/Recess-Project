@@ -2,48 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:touristapp/pages/more/Events.dart';
 
 class MorePage extends StatelessWidget {
+  const MorePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('More Options'),
+        title: const Text('More Options'),
       ),
       body: ListView(
         children: [
           ListTile(
-            leading: Icon(Icons.event),
-            title: Text('Events'),
+            leading: const Icon(Icons.event),
+            title: const Text('Events'),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EventsPage()),
+                MaterialPageRoute(builder: (context) => const EventsPage()),
               );
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Shopping'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Shopping'),
             onTap: () {
               // Navigate to Shopping Page
             },
           ),
           ListTile(
-            leading: Icon(Icons.local_parking),
-            title: Text('Parking'),
+            leading: const Icon(Icons.local_parking),
+            title: const Text('Parking'),
             onTap: () {
               // Navigate to Parking Page
             },
           ),
           ListTile(
-            leading: Icon(Icons.map),
-            title: Text('Tour Guides'),
+            leading: const Icon(Icons.map),
+            title: const Text('Tour Guides'),
             onTap: () {
               // Navigate to Tour Guides Page
             },
           ),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text('Information'),
+            leading: const Icon(Icons.info),
+            title: const Text('Information'),
             onTap: () {
               // Navigate to Information Page
             },

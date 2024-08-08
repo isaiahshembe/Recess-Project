@@ -119,8 +119,8 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 Get.to(const AdminPage());
               },
-              child: const Icon(Icons.add),
-              backgroundColor: Colors.green[800], // Match with AppBar color
+              backgroundColor: Colors.green[800],
+              child: const Icon(Icons.add), // Match with AppBar color
             )
           : null,
     );
