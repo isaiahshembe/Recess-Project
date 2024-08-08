@@ -102,7 +102,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Manage your trip to ${widget.place['name']}',
+                'Manage your trip to ${widget.place['hotel_name']}',
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -111,7 +111,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
               ),
               const SizedBox(height: 10.0),
               Text(
-                'Please provide the details below to arrange for your car rental service. Our drivers will pick you up from your current location and take you to ${widget.place['name']}.',
+                'Please provide the details below to arrange for your car rental service. Our drivers will pick you up from your current location and take you to ${widget.place['hotel_name']}.',
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.green.shade600,
@@ -133,9 +133,9 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                 controller: pickupLocationController,
                 decoration: InputDecoration(
                   labelText: 'Pickup location',
-                  prefixIcon: const Icon(Icons.location_on, color: Colors.green),
+                  prefixIcon: Icon(Icons.location_on, color: Colors.green),
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.green),
+                    borderSide: BorderSide(color: Colors.green),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
@@ -145,9 +145,9 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                 controller: destinationAddressController,
                 decoration: InputDecoration(
                   labelText: 'Destination address',
-                  prefixIcon: const Icon(Icons.location_on, color: Colors.green),
+                  prefixIcon: Icon(Icons.location_on, color: Colors.green),
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.green),
+                    borderSide: BorderSide(color: Colors.green),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
@@ -161,7 +161,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                       title: const Text('Pickup date'),
                       subtitle: Text(DateFormat.yMMMd().format(pickupDate)),
                       trailing: IconButton(
-                        icon: const Icon(Icons.calendar_today, color: Colors.green),
+                        icon: Icon(Icons.calendar_today, color: Colors.green),
                         onPressed: () => _selectDate(context, true),
                       ),
                     ),
@@ -173,7 +173,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                       title: const Text('Time'),
                       subtitle: Text(pickupTime.format(context)),
                       trailing: IconButton(
-                        icon: const Icon(Icons.access_time, color: Colors.green),
+                        icon: Icon(Icons.access_time, color: Colors.green),
                         onPressed: () => _selectTime(context, true),
                       ),
                     ),
@@ -189,7 +189,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                       title: const Text('Return date'),
                       subtitle: Text(DateFormat.yMMMd().format(returnDate)),
                       trailing: IconButton(
-                        icon: const Icon(Icons.calendar_today, color: Colors.green),
+                        icon: Icon(Icons.calendar_today, color: Colors.green),
                         onPressed: () => _selectDate(context, false),
                       ),
                     ),
@@ -201,7 +201,7 @@ class _CarRentalContentPageState extends State<CarRentalContentPage> {
                       title: const Text('Time'),
                       subtitle: Text(returnTime.format(context)),
                       trailing: IconButton(
-                        icon: const Icon(Icons.access_time, color: Colors.green),
+                        icon: Icon(Icons.access_time, color: Colors.green),
                         onPressed: () => _selectTime(context, false),
                       ),
                     ),

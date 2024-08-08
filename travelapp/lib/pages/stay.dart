@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -6,6 +5,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
+import 'package:touristapp/pages/car_rentals.dart';
 
 class StaysPage extends StatefulWidget {
   const StaysPage({super.key});
@@ -222,10 +222,10 @@ class _StaysPageState extends State<StaysPage> {
                     stay['image'] != null
                         ? Image.network(stay['image'], fit: BoxFit.cover)
                         : Container(
-                      height: 200,
-                      color: Colors.grey,
-                      child: const Icon(Icons.image_not_supported, size: 100),
-                    ),
+                            height: 200,
+                            color: Colors.grey,
+                            child: const Icon(Icons.image_not_supported, size: 100),
+                          ),
                     const SizedBox(height: 16),
                     Text(
                       stay['hotel_name'] ?? 'No name',
@@ -304,6 +304,20 @@ class _StaysPageState extends State<StaysPage> {
                       },
                       child: const Text('Submit Rating'),
                     ),
+                    SizedBox(height: 10.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CarRentalContentPage(
+                              place: stay, // Pass the selected hotel information
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text('Visit Place'),
+                    )
                   ],
                 ),
               ),

@@ -194,6 +194,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('TravelApp'),
+        centerTitle: true,
         backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(

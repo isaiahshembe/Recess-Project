@@ -118,24 +118,24 @@ class TourismDetailsPage extends StatelessWidget {
               child: const Text('Book Now'),
             ),
             const SizedBox(height: 8.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BookingPage(
-                      latitude: place.latitude,
-                      longitude: place.longitude,
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.green,
-              ),
-              child: const Text('View on Map'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => BookingPage(
+            //           latitude: place.latitude,
+            //           longitude: place.longitude, hotel: {},
+            //         ),
+            //       ),
+            //     );
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     foregroundColor: Colors.white,
+            //     backgroundColor: Colors.green,
+            //   ),
+            //   child: const Text('View on Map'),
+            // ),
             // Optional: Display nearby places if needed
           ],
         ),

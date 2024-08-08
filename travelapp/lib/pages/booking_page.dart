@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class BookingPage extends StatefulWidget {
-  const BookingPage({super.key, required double latitude, required double longitude});
+  const BookingPage({super.key, required double latitude, required double longitude, required Map<String, dynamic> hotel});
 
   @override
   _BookingPageState createState() => _BookingPageState();
