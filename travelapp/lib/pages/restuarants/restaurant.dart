@@ -153,6 +153,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nearby Restaurants'),
+        centerTitle: true,
         backgroundColor: Colors.green[800],
         actions: [
           IconButton(
